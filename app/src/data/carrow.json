@@ -1,0 +1,144 @@
+{
+  "positions": [
+    {
+      "ticker": "dal",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 40.21,
+          "count": 8
+        }
+      ]
+    },
+    {
+      "ticker": "etsy",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 177.91,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "ticker": "dis",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 181.18,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "ticker": "sbux",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 106.98,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "ticker": "blnk",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 42.75,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "ticker": "t",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 28.26,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "ticker": "k",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 62.23,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "ticker": "aapl",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 132.69,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "ticker": "nke",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 141.47,
+          "count": 8
+        }
+      ]
+    },
+    {
+      "ticker": "arvn",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 84.93,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "ticker": "kymr",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 62.00,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "ticker": "tgt",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 176.53,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "ticker": "brk-b",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 231.87,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "ticker": "tak",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 18.20,
+          "count": 10
+        }
+      ]
+    }
+  ]
+}

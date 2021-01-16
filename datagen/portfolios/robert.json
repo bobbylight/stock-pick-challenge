@@ -1,0 +1,74 @@
+{
+  "positions": [
+    {
+      "ticker": "amzn",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 3256.93,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "ticker": "baba",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 232.73,
+          "count": 6
+        }
+      ]
+    },
+    {
+      "ticker": "dkng",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 46.56,
+          "count": 19
+        }
+      ]
+    },
+    {
+      "ticker": "icln",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 28.24,
+          "count": 38
+        }
+      ]
+    },
+    {
+      "ticker": "ntdoy",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 80.52,
+          "count": 14
+        }
+      ]
+    },
+    {
+      "ticker": "pltr",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 23.55,
+          "count": 41
+        }
+      ]
+    },
+    {
+      "ticker": "sq",
+      "contributions": [
+        {
+          "date": "2021-01-03",
+          "price": 217.64,
+          "count": 6
+        }
+      ]
+    }
+  ]
+}

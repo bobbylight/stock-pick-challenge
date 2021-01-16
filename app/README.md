@@ -1,5 +1,4 @@
 # stock-pick-challenge
-A simple application to see who is the better stock picker, me or my wife.
 
 ## Project setup
 ```
