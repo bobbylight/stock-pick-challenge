@@ -1,0 +1,31 @@
+/*.theme--light.v-application {*/
+/*    background: linear-gradient(0deg, white calc(100% - 200px), #458a50 200px);*/
+/*}*/
+
+.primary-delta-gain {
+    color: #1b5e20;
+    font-weight: bold;
+}
+
+.primary-delta-loss {
+    color: #bf360c;
+    font-weight: bold;
+}
+
+.primary-delta-none {
+    font-weight: bold;
+}
+
+.secondary-delta-gain {
+    color: #1b5e20;
+    font-size: smaller;
+}
+
+.secondary-delta-loss {
+    color: #bf360c;
+    font-size: smaller;
+}
+
+.secondary-delta-none {
+    font-size: smaller;
+}

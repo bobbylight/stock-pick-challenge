@@ -1,25 +1,153 @@
 <template>
-  <div class="home">
 
-    <div v-for="position in portfolio" :key="position.ticker">
-      {{ position.ticker }}: {{ position.shareCount }}
-    </div>
+  <v-container>
 
-    <div class="chart-wrapper">
-      <portfolio-growth-chart :history="userData.history"/>
-    </div>
-  </div>
+    <v-row>
+
+      <v-col cols="12" sm="6">
+        <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
+        <v-card class="user-card" v-if="!$store.state.loading">
+
+          <v-card-title>Summary</v-card-title>
+
+          <v-card-text>
+            <user-overview :portfolio-name="portfolioName" :user-data="userData"/>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <v-col cols="12" sm="6">
+        <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
+        <v-card class="user-card" v-if="!$store.state.loading">
+
+          <v-card-title>Today's Changes</v-card-title>
+
+          <v-card-text>
+            <user-summary :portfolio-name="portfolioName" :user-data="userData"/>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col>
+        <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
+        <v-card class="user-card" v-if="!$store.state.loading">
+
+          <v-card-title>
+            YTD Growth
+            <v-spacer/>
+            <v-menu
+                :close-on-content-click="false"
+                offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon>mdi-settings</v-icon>
+                </v-btn>
+              </template>
+              <v-card>
+                <v-card-title>Options</v-card-title>
+                <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-switch v-model="chartType" true-value="area" false-value="line" label="Area Chart"/>
+                    </v-row>
+                    <v-row>
+                      <v-switch v-model="chartDataType" true-value="dollars" false-value="percent" label="Show Investment Growth"/>
+                    </v-row>
+                    <v-row>
+                      <v-select chips v-model="chartComparisons" :items="benchmarks"
+                                label="Compare to..."
+                                item-text="name"
+                                item-value="ticker"
+                                multiple/>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
+              </v-card>
+            </v-menu>
+          </v-card-title>
+          <v-card-text>
+            <div class="chart-wrapper">
+              <portfolio-growth-chart :history="userData.history"
+                                      :type="chartType"
+                                      :data-type="chartDataType"
+                                      :comparisons="chartComparisons"/>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col>
+        <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="table"/>
+        <v-card class="user-card" v-if="!$store.state.loading">
+
+          <v-card-title>Current Holdings</v-card-title>
+          <v-card-text class="pa-0">
+            <lot-table v-if="!$vuetify.breakpoint.xs"
+                       :portfolio-name="portfolioName" :user-data="userData"/>
+            <lot-listing v-if="$vuetify.breakpoint.xs"
+                         :portfolio-name="portfolioName" :user-data="userData"/>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
+import LotListing from '@/lot-listing'
+import LotTable from '@/lot-table'
+import PortfolioGrowthChart from '@/portfolio-growth-chart'
+import UserOverview from '@/user-overview'
+import UserSummary from '@/user-summary'
 
-import PortfolioGrowthChart from '@/portfolio-growth-chart';
 export default {
 
   name: 'User',
 
   components: {
-    PortfolioGrowthChart
+    LotListing,
+    LotTable,
+    PortfolioGrowthChart,
+    UserOverview,
+    UserSummary,
+  },
+
+  data() {
+    return {
+      chartType: 'line',
+      chartDataType: 'dollars',
+      chartComparisons: [],
+      benchmarks: [
+        {
+          ticker: '^gspc',
+          name: 'S&P 500',
+        },
+        {
+          ticker: '^ixic',
+          name: 'Nasdaq',
+        },
+        {
+          ticker: '^dji',
+          name: 'Dow Jones Industrial',
+        },
+        {
+          ticker: '^rut',
+          name: 'Russel 2000',
+        },
+        {
+          ticker: 'arkg',
+          name: 'ARK Genomic ETF',
+        },
+        {
+          ticker: 'arkk',
+          name: 'ARK Innovation ETF',
+        }
+      ],
+    }
   },
 
   computed: {
@@ -41,19 +169,29 @@ export default {
       return portfolio
     },
 
+    portfolioName() {
+      return this.$route.params.user
+    },
+
     userData() {
-      const user = this.$route.params.user
-      return this.$store.state[user]
-    }
+      return this.$store.state[this.portfolioName]
+    },
   },
 
   methods: {
 
+    getLabelForBenchmark(ticker) {
+      return this.$store.state.history[ticker].name || ticker
+    }
   }
 }
 </script>
 
 <style scoped>
+.user-card {
+  height: 100%;
+}
+
 .chart-wrapper {
   max-width: 800px;
   margin: 0 auto;
