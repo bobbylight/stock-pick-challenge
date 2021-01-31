@@ -18,30 +18,32 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
-// import carrow from '../data/carrow.json'
-// import carrowHistory from '../data/portfolio-history-carrow.json'
-// import robert from '../data/robert.json'
-// import robertHistory from '../data/portfolio-history-robert.json'
-// import tickerHistory from '../data/ticker-history.json'
-import('./data/carrow.json').then(carrow => {
-    import('./data/portfolio-history-carrow.json').then(carrowHistory => {
-        import ('./data/robert.json').then(robert => {
-            import ('./data/portfolio-history-robert.json').then(robertHistory => {
-                import('./data/ticker-history.json').then(tickerHistory => {
-                    store.replaceState({
-                        loading: false,
-                        carrow: {
-                            ...carrow.default,
-                            history: carrowHistory.default,
-                        },
-                        robert: {
-                            ...robert.default,
-                            history: robertHistory.default,
-                        },
-                        history: tickerHistory.default,
-                    })
-                })
-            })
+const urls = [
+    '/data/carrow.json',
+    '/data/portfolio-history-carrow.json',
+    '/data/robert.json',
+    '/data/portfolio-history-robert.json',
+    '/data/ticker-history.json',
+]
+Promise.all(urls.map(url => fetch(url).then(response => response.json())))
+    .then(responses => {
+
+        const carrow = responses[0]
+        const carrowHistory = responses[1]
+        const robert = responses[2]
+        const robertHistory = responses[3]
+        const tickerHistory = responses[4]
+
+        store.replaceState({
+            loading: false,
+            carrow: {
+                ...carrow,
+                history: carrowHistory,
+            },
+            robert: {
+                ...robert,
+                history: robertHistory,
+            },
+            history: tickerHistory,
         })
     })
-})
