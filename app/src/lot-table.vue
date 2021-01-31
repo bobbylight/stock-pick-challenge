@@ -84,8 +84,6 @@ import Utils from './utils';
 
 export default {
 
-  name: 'LotTable',
-
   props: {
     portfolioName: String,
     userData: Object,

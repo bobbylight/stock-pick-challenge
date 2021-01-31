@@ -50,16 +50,21 @@
                 <v-card-text>
                   <v-container>
                     <v-row>
-                      <v-switch v-model="chartType" true-value="area" false-value="line" label="Area Chart"/>
+                      <v-switch v-model="chartType" true-value="area" false-value="line"
+                                @change="storePreferences"
+                                label="Area Chart"/>
                     </v-row>
                     <v-row>
-                      <v-switch v-model="chartDataType" true-value="dollars" false-value="percent" label="Show Investment Growth"/>
+                      <v-switch v-model="chartDataType" true-value="dollars" false-value="percent"
+                                @change="storePreferences"
+                                label="Show Investment Growth"/>
                     </v-row>
                     <v-row>
                       <v-select chips v-model="chartComparisons" :items="benchmarks"
                                 label="Compare to..."
                                 item-text="name"
                                 item-value="ticker"
+                                @change="storePreferences"
                                 multiple/>
                     </v-row>
                   </v-container>
@@ -104,9 +109,9 @@ import PortfolioGrowthChart from '@/portfolio-growth-chart'
 import UserOverview from '@/user-overview'
 import UserSummary from '@/user-summary'
 
-export default {
+const LATEST_PREFERENCES_VERSION = 1
 
-  name: 'User',
+export default {
 
   components: {
     LotListing,
@@ -178,10 +183,55 @@ export default {
     },
   },
 
+  mounted() {
+    this.loadPreferences()
+  },
+
   methods: {
 
     getLabelForBenchmark(ticker) {
       return this.$store.state.history[ticker].name || ticker
+    },
+
+    loadPreferences() {
+
+      const key = `portfolio-${this.portfolioName}`
+      console.log('Loading preferences: ' + key)
+      const temp = localStorage.getItem(key)
+
+      if (temp) {
+        try {
+
+          const json = JSON.parse(temp)
+
+          const version = json.v || 0
+          if (version !== LATEST_PREFERENCES_VERSION) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          this.chartType = json.chartType || 'line'
+          this.chartDataType = json.chartDataType || 'dollars'
+          this.chartComparisons = json.benchmarks || []
+        } catch (e) {
+          console.error('Error loading preferences', e)
+          localStorage.removeItem(key)
+        }
+      }
+    },
+
+    storePreferences() {
+
+      const key = `portfolio-${this.portfolioName}`
+      const value = {
+        v: LATEST_PREFERENCES_VERSION,
+        chartType: this.chartType,
+        chartDataType: this.chartDataType,
+        benchmarks: this.chartComparisons,
+      }
+
+      localStorage.setItem(key, JSON.stringify(value))
+      console.log('Preferences updated!')
     }
   }
 }

@@ -30,7 +30,7 @@ export default {
     return {
       chart: null,
       percentages: false,
-      comparisonColors: [ '#9e9519', '#f5e616', '#27ba67', '#e6439f', '#494f9c', '#d1871f' ],
+      comparisonColors: [ '#e6439f', '#27ba67', '#494f9c', '#d1871f', '#893168', '#f5e616' ],
     }
   },
 
@@ -50,9 +50,10 @@ export default {
         data = tickerHistory
       }
 
+      const color = this.getUnusedColor(index)
       return {
-        backgroundColor: `${this.comparisonColors[index]}90`,
-        borderColor: this.comparisonColors[index],
+        backgroundColor: `${color}90`,
+        borderColor: color,
         data,
         label: ticker,
         fill: this.doFill,
@@ -61,6 +62,20 @@ export default {
 
     generateLabels() {
       return this.history.map(entry => entry.date)
+    },
+
+    getUnusedColor(index) {
+
+      if (this.chart) {
+        for (let color of this.comparisonColors) {
+          if (this.chart.data.datasets.findIndex(dataset => color === dataset.borderColor) === -1) {
+            return color
+          }
+        }
+      }
+
+      // Only happens when the chart doesn't yet exist - just go in index order
+      return this.comparisonColors[index]
     },
 
     updateBenchmarkData() {
@@ -83,12 +98,13 @@ export default {
           this.chart.data.datasets[index].data = data
         }
         else {
-          this.chart.data.datasets.push(this.createBenchmarkDataset(ticker, this.comparisons.length))
+          this.chart.data.datasets.push(this.createBenchmarkDataset(ticker, this.chart.data.datasets.length - 1))
         }
       })
 
       // Remove any benchmarks that are no longer in our comparisons array
-      this.chart.data.datasets = this.chart.data.datasets.filter((dataset, index) => index === 0 || this.comparisons.indexOf(dataset.label) > -1)
+      this.chart.data.datasets = this.chart.data.datasets
+          .filter((dataset, index) => index === 0 || this.comparisons.indexOf(dataset.label) > -1)
     },
 
     updateChartDataForNewDataType() {
@@ -169,7 +185,7 @@ export default {
     const canvas = this.$refs.canvas
 
     this.chart = new Chart(canvas, {
-      type: this.type,
+      type: 'line',
       data: {
         labels: this.generateLabels(),
         datasets,
