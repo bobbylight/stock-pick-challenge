@@ -61,6 +61,10 @@ export default new Vuex.Store({
             return change
         },
 
+        displayName: state => (ticker) => {
+            return state.history[ticker].name || ticker
+        },
+
         yesterdaysValue: state => (portfolioName) => {
 
             let currentValue = 0

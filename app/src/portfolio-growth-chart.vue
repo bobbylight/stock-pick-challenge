@@ -28,6 +28,8 @@ export default {
 
   data() {
     return {
+      armedX: 0,
+      armedY: 0,
       chart: null,
       percentages: false,
       comparisonColors: [ '#e6439f', '#27ba67', '#494f9c', '#d1871f', '#893168', '#f5e616' ],
@@ -55,7 +57,8 @@ export default {
         backgroundColor: `${color}90`,
         borderColor: color,
         data,
-        label: ticker,
+        ticker,
+        label: this.$store.getters.displayName(ticker),
         fill: this.doFill,
       }
     },
@@ -78,11 +81,24 @@ export default {
       return this.comparisonColors[index]
     },
 
+    refreshChartAnnotations(e) {
+
+      const xAxis = this.chart.scales['x-axis-0']
+      if (e.offsetX < xAxis.left || e.offsetX > xAxis.right) {
+        this.armedX = this.armedY = 0
+        return
+      }
+
+      const elem = this.chart.getElementsAtXAxis(e)[0]
+      this.armedX = elem?._model?.x || 0
+      this.armedY = elem?._model?.y || 0
+    },
+
     updateBenchmarkData() {
 
       // Add new benchmarks, and update existing ones
       this.comparisons.forEach(ticker => {
-        const index = this.chart.data.datasets.findIndex(dataset => dataset.label === ticker)
+        const index = this.chart.data.datasets.findIndex(dataset => dataset.ticker === ticker)
         if (index > -1) {
           let data
           const tickerHistory = this.$store.getters.securityHistory(ticker, this.history[0].value)
@@ -104,7 +120,7 @@ export default {
 
       // Remove any benchmarks that are no longer in our comparisons array
       this.chart.data.datasets = this.chart.data.datasets
-          .filter((dataset, index) => index === 0 || this.comparisons.indexOf(dataset.label) > -1)
+          .filter((dataset, index) => index === 0 || this.comparisons.indexOf(dataset.ticker) > -1)
     },
 
     updateChartDataForNewDataType() {
@@ -131,7 +147,7 @@ export default {
           return;
         }
 
-        const ticker = dataset.label
+        const ticker = dataset.ticker
         const tickerHistory = this.$store.getters.securityHistory(ticker, this.history[0].value)
         let data
         if (this.percentages) {
@@ -190,7 +206,31 @@ export default {
         labels: this.generateLabels(),
         datasets,
       },
-      options: Chart.helpers.merge({}, {
+      plugins: [
+        {
+          afterDatasetsDraw: (chart) => {
+            if (this.armedX) {
+
+              const xAxis = this.chart.scales['x-axis-0']
+              const yAxis = this.chart.scales['y-axis-0']
+              const ctx = chart.canvas.getContext('2d')
+              ctx.strokeStyle = '#606060'
+
+              const origCompositionOperation = ctx.globalCompositeOperation
+              ctx.globalCompositeOperation = 'xor'
+              ctx.setLineDash([ 3, 3 ])
+              ctx.beginPath()
+              ctx.moveTo(this.armedX, yAxis.top)
+              ctx.lineTo(this.armedX, yAxis.bottom)
+              ctx.moveTo(xAxis.left, this.armedY)
+              ctx.lineTo(xAxis.right, this.armedY)
+              ctx.stroke()
+              ctx.globalCompositeOperation = origCompositionOperation
+            }
+          },
+        },
+      ],
+      options: {
 
         scales: {
           yAxes: [{
@@ -201,15 +241,24 @@ export default {
         },
 
         tooltips: {
-          mode: 'x',
+          mode: 'index', // Show all dataset values for this x-coordinate
+          intersect: false,
           callbacks: {
             label: (toolTipItem, data) => {
               const valueFunc = this.percentages ? percentage : currency
               return `${data.datasets[toolTipItem.datasetIndex].label}: ${valueFunc(toolTipItem.yLabel)}`
             },
           },
-        }
-      }),
+        },
+
+        onHover: (e) => {
+          this.refreshChartAnnotations(e)
+        },
+
+        annotation: {
+          annotations: [],
+        },
+      },
     })
   },
 
