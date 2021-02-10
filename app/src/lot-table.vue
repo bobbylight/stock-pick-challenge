@@ -6,7 +6,7 @@
       :single-expand="true"
       :expand.sync="expanded"
       item-key="name"
-      :show-expand="!$vuetify.breakpoint.mobile"
+      :show-expand="!$vuetify.breakpoint.xs"
       dense
       :items-per-page="100"
       hide-default-footer
@@ -51,7 +51,7 @@
     </template>
 
     <template v-slot:body.append="{ }">
-      <tr class="text--primary lot-table-footer-row" v-if="!$vuetify.breakpoint.mobile">
+      <tr class="text--primary lot-table-footer-row" v-if="!$vuetify.breakpoint.xs">
         <td></td>
         <td class="text-start">Total</td>
         <td></td>

@@ -8,11 +8,6 @@
 import Chart from 'chart.js'
 import {currency, percentage} from './app-filters'
 
-const currencyYAxisLabelCallback = (value) => {
-  const str = currency(value)
-  return str.substring(0, str.length - 3)
-}
-
 const percentageYAxisLabelCallback = (value) => {
   return percentage(value)
 }
@@ -63,8 +58,28 @@ export default {
       }
     },
 
+    currencyYAxisLabelCallback(value) {
+      // We assume our value will never drop below $1000 or go above $1 million
+      let str = currency(value)
+      if (this.$vuetify.breakpoint.xs) {
+        const lastComma = str.lastIndexOf(',')
+        if (lastComma > -1) {
+          str = str.substr(0, lastComma) + '.' + str.charAt(lastComma + 1) + 'K'
+        }
+      }
+      else {
+        str = str.substring(0, str.length - 3)
+      }
+      return str
+    },
+
     generateLabels() {
-      return this.history.map(entry => entry.date)
+      //return this.history.map(entry => entry.date)
+      return this.history.map(entry => {
+        // Use close of the market to avoid timezone drift of date
+        const date = new Date(`${entry.date}T16:00:00-05:00`)
+        return date.toLocaleDateString('en', {dateStyle: 'medium'})
+      })
     },
 
     getUnusedColor(index) {
@@ -137,7 +152,7 @@ export default {
       }
       else {
         this.history.forEach(entry => portfolioData.push(entry.value))
-        this.chart.options.scales.yAxes[0].ticks.callback = currencyYAxisLabelCallback
+        this.chart.options.scales.yAxes[0].ticks.callback = this.currencyYAxisLabelCallback
       }
 
       // Update benchmark data
@@ -233,9 +248,14 @@ export default {
       options: {
 
         scales: {
+          xAxes: [{
+            ticks: {
+              maxTicksLimit: 10,
+            },
+          }],
           yAxes: [{
             ticks: {
-              callback: currencyYAxisLabelCallback,
+              callback: this.currencyYAxisLabelCallback,
             },
           }],
         },
