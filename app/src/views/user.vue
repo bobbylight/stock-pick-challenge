@@ -6,24 +6,24 @@
 
       <v-col cols="12" sm="6">
         <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
-        <v-card class="user-card" v-if="!$store.state.loading">
+        <v-card class="user-card" v-if="!$store.state.loading && userData">
 
           <v-card-title>Summary</v-card-title>
 
           <v-card-text>
-            <user-overview :portfolio-name="portfolioName" :user-data="userData"/>
+            <user-summary :portfolio-name="portfolioName" :user-data="userData"/>
           </v-card-text>
         </v-card>
       </v-col>
 
       <v-col cols="12" sm="6">
         <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
-        <v-card class="user-card" v-if="!$store.state.loading">
+        <v-card class="user-card" v-if="!$store.state.loading && userData">
 
           <v-card-title>Today's Changes</v-card-title>
 
           <v-card-text>
-            <user-summary :portfolio-name="portfolioName" :user-data="userData"/>
+            <todays-changes :portfolio-name="portfolioName" :user-data="userData"/>
           </v-card-text>
         </v-card>
       </v-col>
@@ -32,7 +32,7 @@
     <v-row>
       <v-col>
         <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
-        <v-card class="user-card" v-if="!$store.state.loading">
+        <v-card class="user-card" v-if="!$store.state.loading && userData">
 
           <v-card-title>
             YTD Growth
@@ -87,7 +87,7 @@
     <v-row>
       <v-col>
         <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="table"/>
-        <v-card class="user-card" v-if="!$store.state.loading">
+        <v-card class="user-card" v-if="!$store.state.loading && userData">
 
           <v-card-title>Current Holdings</v-card-title>
           <v-card-text class="pa-0">
@@ -106,8 +106,8 @@
 import LotListing from '@/lot-listing'
 import LotTable from '@/lot-table'
 import PortfolioGrowthChart from '@/portfolio-growth-chart'
-import UserOverview from '@/user-overview'
 import UserSummary from '@/user-summary'
+import TodaysChanges from '@/todays-changes'
 
 const LATEST_PREFERENCES_VERSION = 1
 
@@ -117,7 +117,7 @@ export default {
     LotListing,
     LotTable,
     PortfolioGrowthChart,
-    UserOverview,
+    TodaysChanges,
     UserSummary,
   },
 

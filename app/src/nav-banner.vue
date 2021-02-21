@@ -1,8 +1,16 @@
 <template functional>
-  <div id="nav">
-    <router-link to="/users/robert">Robert</router-link> |
-    <router-link to="/users/carrow">Carrow</router-link> |
-    <router-link to="/about">About</router-link>
+  <div class="app-banner">
+    <div>
+      <img src="/stock-pick-challenge-logo.png" alt="logo">
+    </div>
+    <div>
+      <h1>Stock Market Challenge!</h1>
+      <div id="nav">
+        <router-link to="/users/robert">Robert</router-link> |
+        <router-link to="/users/carrow">Carrow</router-link> |
+        <router-link to="/about">About</router-link>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -12,14 +20,43 @@ export default {
 </script>
 
 <style>
+.app-banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+h1 {
+  font-size: 48px;
+  color: #2c3e50;
+}
+
+.app-banner img {
+  width: 240px;
+  margin-inline-end: 2rem;
+}
+
+@media only screen and (max-width: 960px) {
+
+  .app-banner {
+    display: inherit;
+  }
+  h1 {
+    font-size: 32px;
+  }
+  .app-banner img {
+    width: 120px;
+    margin-inline-end: 2rem;
+  }
+}
 
 #nav {
-  text-align: center;
-  padding: 30px;
+  font-size: larger;
+  font-weight: bold;
 }
 
 #nav a {
-  font-weight: bold;
   color: #2c3e50;
 }
 

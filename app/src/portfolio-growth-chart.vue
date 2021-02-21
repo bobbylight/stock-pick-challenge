@@ -78,7 +78,7 @@ export default {
       return this.history.map(entry => {
         // Use close of the market to avoid timezone drift of date
         const date = new Date(`${entry.date}T16:00:00-05:00`)
-        return date.toLocaleDateString('en', {dateStyle: 'medium'})
+        return date.toLocaleDateString('en', {dateStyle: 'medium'}).replace('202', '2')
       })
     },
 

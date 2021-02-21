@@ -1,29 +1,38 @@
 <template>
-  <div class="user-summary">
+  <div class="user-summary text-left">
 
-    <div class="daily-summary">
-      <ul>
-        <li>
-          Today you <span class="emphasized">{{ todayVersusTheMarketVerb }}</span>
-          the market by <span :class="getAmountDeltaClass(todayBeatMarketBy)">{{ todayBeatMarketBy | percentage }}</span>
-        </li>
-        <li>
-          Your best performer today was <span class="emphasized ticker">{{ bestPerformer }}</span>,
-          which went {{ upOrDown(dailyChange(bestPerformer)) }}
-          <span :class="getAmountDeltaClass(dailyChange(bestPerformer))">{{ dailyChange(bestPerformer) | percentage }}</span>
-        </li>
-        <li>
-          Your worst performer today was <span class="emphasized ticker">{{ worstPerformer }}</span>,
-          which went {{ upOrDown(dailyChange(worstPerformer)) }}
-          <span :class="getAmountDeltaClass(dailyChange(worstPerformer))">{{ dailyChange(worstPerformer) | percentage }}</span>
-        </li>
-      </ul>
+      <div class="user-summary-header">
+        Initial investment:
+      </div>
+      <div class="user-summary-value">
+        {{ initialInvestment | currency }}
+      </div>
+
+      <div class="user-summary-header">
+        Current value:
+      </div>
+      <div class="user-summary-value">
+        {{ currentValue | currency }}
+      </div>
+
+      <div class="user-summary-header">
+        Today's gain:
+      </div>
+      <div class="user-summary-value" :class="getAmountDeltaClass(todaysGain)">
+        {{ todaysGain | currency }}
+      </div>
+
+      <div class="user-summary-header">
+        Net gain:
+      </div>
+      <div class="user-summary-value" :class="getAmountDeltaClass(currentValue - initialInvestment)">
+        {{ currentValue - initialInvestment | currency }}
+      </div>
     </div>
-  </div>
 </template>
 
 <script>
-import Utils from './utils'
+import Utils from './utils';
 
 export default {
 
@@ -43,77 +52,46 @@ export default {
 
   computed: {
 
-    bestPerformer() {
-
-      const positions = this.userData.positions.slice()
-      const best = positions.sort((a, b) => {
-        const dailyChangeA = this.dailyChange(a.ticker)
-        const dailyChangeB = this.dailyChange(b.ticker)
-        return dailyChangeB - dailyChangeA // Will never overflow with our values
-      })[0]
-      return best.ticker
-    },
-
-    worstPerformer() {
-
-      const positions = this.userData.positions.slice()
-      const best = positions.sort((a, b) => {
-        const dailyChangeA = this.dailyChange(a.ticker)
-        const dailyChangeB = this.dailyChange(b.ticker)
-        return dailyChangeA - dailyChangeB // Will never overflow with our values
-      })[0]
-      return best.ticker
-    },
-
     currentValue() {
       return this.$store.getters.currentValue(this.portfolioName)
     },
 
-    todayBeatMarketBy() {
+    initialInvestment() {
+      return this.$store.getters.initialInvestment(this.portfolioName)
+    },
 
+    todaysGain() {
       const yesterdaysValue = this.$store.getters.yesterdaysValue(this.portfolioName)
-      const todaysGain = (this.currentValue - yesterdaysValue) / yesterdaysValue
-
-      const gspcHistory = this.$store.state.history['^gspc'].history
-      const gspcYesterdaysValue = gspcHistory[gspcHistory.length - 2].close
-      const gspcTodaysValue = gspcHistory[gspcHistory.length - 1].close
-      const gspcTodaysGain = (gspcTodaysValue - gspcYesterdaysValue) / gspcYesterdaysValue
-
-      return todaysGain - gspcTodaysGain
-    },
-
-    todayVersusTheMarketVerb() {
-      return this.todayBeatMarketBy >= 0 ? 'beat' : 'underperformed'
-    },
+      return this.currentValue - yesterdaysValue
+    }
   },
 
   methods: {
 
-    dailyChange(ticker) {
-      return this.$store.getters.dailyChange(ticker, true)
-    },
-
     getAmountDeltaClass(value) {
       return Utils.getPrimaryDeltaClass(value)
     },
-
-    upOrDown(amount) {
-      // We're OK with 'went up 0%'
-      return amount < 0 ? 'down' : 'up'
-    }
   }
 }
 </script>
 
 <style scoped>
-.daily-summary {
-  margin: 0 auto;
+.user-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: minmax(min-content, max-content);
+  grid-column-gap: 0;
+  grid-row-gap: 0;
+  /*min-width:70%;*/
+  max-width: 80%;
+  margin: 0 auto 1rem;
 }
 
-.emphasized {
+.user-summary-header {
+  font-size: larger;
   font-weight: bold;
 }
-.ticker {
-  text-transform: uppercase;
+.user-summary-value {
+  text-align:right;
 }
 </style>
