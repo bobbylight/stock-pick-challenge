@@ -29,7 +29,7 @@ start=1609359200
 end=1815496000  # 2027-07-13T04:26:40Z
 
 for s in "${all_securities[@]}" ; do
-  ticker=${s^^}
+  ticker=$(echo "$s" | tr '[:lower:]' '[:upper:]')
   interval=1d
   url="https://query1.finance.yahoo.com/v7/finance/download/${ticker}?period1=${start}&period2=${end}&interval=${interval}&events=history&includeAdjustedClose=true"
   
