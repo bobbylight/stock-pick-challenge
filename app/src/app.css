@@ -1,3 +1,8 @@
+body {
+    /* Match font used by Vuetify for DOM elements programmatically-added to body */
+    font-family: 'Roboto', sans-serif;
+}
+
 .theme--light.v-application {
     background: #d7e0e0;
     /*background: linear-gradient(0deg, white calc(100% - 400px), #435562 400px);*/

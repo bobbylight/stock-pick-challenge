@@ -1,19 +1,27 @@
 <template>
-  <div>
+  <div class="stocky-chart-parent">
     <canvas ref="canvas" width="640" height="480" />
+    <portfolio-growth-chart-tooltip
+        :title="tipTitle"
+        :model="tooltipModel"
+        :datasets="datasets"
+        :percentages="percentages"
+        :canvas-rect="canvasRect"
+        :visible="visible"/>
   </div>
 </template>
 
 <script>
 import Chart from 'chart.js'
-import {currency, percentage} from './app-filters'
+import { currency, percentage } from './app-filters'
+import PortfolioGrowthChartTooltip from './portfolio-growth-chart-tooltip';
 
 const percentageYAxisLabelCallback = (value) => {
   return percentage(value)
 }
 
 export default {
-
+  components: {PortfolioGrowthChartTooltip},
   props: {
     history: Array,
     type: String,
@@ -27,6 +35,11 @@ export default {
       armedY: 0,
       chart: null,
       percentages: false,
+      tooltipModel: null,
+      tipTitle: null,
+      datasets: null,
+      visible: false,
+      canvasRect: null,
       comparisonColors: [ '#e6439f', '#27ba67', '#494f9c', '#d1871f', '#893168', '#f5e616' ],
     }
   },
@@ -78,7 +91,7 @@ export default {
       return this.history.map(entry => {
         // Use close of the market to avoid timezone drift of date
         const date = new Date(`${entry.date}T16:00:00-05:00`)
-        return date.toLocaleDateString('en', {dateStyle: 'medium'}).replace('202', '2')
+        return date.toLocaleDateString('en', {dateStyle: 'medium'})
       })
     },
 
@@ -180,6 +193,11 @@ export default {
       // Refresh the chart to show the changes
       this.chart.update()
     },
+
+    xAxisLabelCallback(value) {
+      // Abbreviate the year, but keep label array using 4-digit year for tooltip
+      return value.replace('202', '2')
+    },
   },
 
   watch: {
@@ -214,6 +232,7 @@ export default {
     this.comparisons.forEach((ticker, index) => datasets.push(this.createBenchmarkDataset(ticker, index)))
 
     const canvas = this.$refs.canvas
+    const thisVue = this
 
     this.chart = new Chart(canvas, {
       type: 'line',
@@ -251,6 +270,7 @@ export default {
           xAxes: [{
             ticks: {
               maxTicksLimit: 10,
+              callback: this.xAxisLabelCallback,
             },
           }],
           yAxes: [{
@@ -263,11 +283,23 @@ export default {
         tooltips: {
           mode: 'index', // Show all dataset values for this x-coordinate
           intersect: false,
-          callbacks: {
-            label: (toolTipItem, data) => {
-              const valueFunc = this.percentages ? percentage : currency
-              return `${data.datasets[toolTipItem.datasetIndex].label}: ${valueFunc(toolTipItem.yLabel)}`
-            },
+          enabled: false,
+          custom: function(tooltipModel) {
+
+            // Hide if no tool tip
+            if (tooltipModel.opacity === 0) {
+              thisVue.visible = false
+              return
+            }
+
+            thisVue.visible = true
+            thisVue.tipTitle = tooltipModel.dataPoints[0].label
+            thisVue.tooltipModel = tooltipModel
+            thisVue.datasets = this._chart.config.data.datasets
+
+            const position = this._chart.canvas.getBoundingClientRect()
+            thisVue.canvasRect = { top: position.top, left: position.left, width: position.width, height: position.height, }
+            thisVue.y = position.top + tooltipModel.caretY + 'px'
           },
         },
 
@@ -292,5 +324,7 @@ export default {
 </script>
 
 <style scoped>
-
+.stocky-chart-parent {
+  position: relative; /* To allow tool tip to position: absolute relative to it */
+}
 </style>
