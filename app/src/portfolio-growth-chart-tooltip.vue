@@ -1,19 +1,34 @@
 <template>
-  <div class="portfolio-growth-chart-tooltip animated-tooltip" :style="positionStyle()">
 
-    <div class="chart-tooltip-title">{{title()}}</div>
+  <div class="chart-tooltip-wrapper animated-tooltip" :style="positionStyle()">
 
-    <table class="tooltip-table">
-      <tr v-for="dataPoint of dataPoints()" :key="dataPoint.datasetIndex">
-        <td>
-          <span class="stocky-color-square" :style="getDataPointStyle(dataPoint)"></span>
-          {{ datasets[dataPoint.datasetIndex].label }}:
-        </td>
-        <td class="stocky-tooltip-value">
-          {{ getValue(dataPoint) }}
-        </td>
-      </tr>
-    </table>
+    <div class="arrow-wrapper" v-if="onRightSide">
+      <div class="chart-tooltip-arrow left-side"/>
+    </div>
+
+    <div class="portfolio-growth-chart-tooltip">
+
+      <div class="chart-tooltip-main-content">
+
+        <div class="chart-tooltip-title">{{title()}}</div>
+
+        <table class="tooltip-table">
+          <tr v-for="dataPoint of dataPoints()" :key="dataPoint.datasetIndex">
+            <td>
+              <span class="stocky-color-square" :style="getDataPointStyle(dataPoint)"></span>
+              <span class="stocky-dataset-label">{{ datasets[dataPoint.datasetIndex].label }}:</span>
+            </td>
+            <td class="stocky-tooltip-value">
+              {{ getValue(dataPoint) }}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="arrow-wrapper" v-if="!onRightSide">
+      <div class="chart-tooltip-arrow right-side"/>
+    </div>
   </div>
 </template>
 
@@ -39,11 +54,18 @@ export default {
     }
   },
 
+  computed: {
+
+    onRightSide() {
+      return this.model ? this.model.caretX < this.canvasRect.width / 2 : true
+    },
+  },
+
   methods: {
 
     getDataPointStyle(dataPoint) {
       return {
-        background: this.datasets[dataPoint.datasetIndex].borderColor
+        background: this.datasets[dataPoint.datasetIndex].borderColor,
       }
     },
 
@@ -66,13 +88,12 @@ export default {
         return this.lastX
       }
 
-      const onRight = this.model.caretX < this.canvasRect.width / 2
-      if (onRight) {
-        this.lastX = this.model.caretX + 20 + 'px'
+      if (this.onRightSide) {
+        this.lastX = this.model.caretX + 'px'
         return this.lastX
       }
       const tipWidth = this.$el.getBoundingClientRect().width
-      this.lastX = (this.model.caretX - tipWidth - 20) + 'px'
+      this.lastX = (this.model.caretX - tipWidth) + 'px'
       return this.lastX
     },
 
@@ -99,14 +120,35 @@ export default {
 
 
 <style scoped>
-.portfolio-growth-chart-tooltip {
-  background: #000000c0;
-  color: white;
+.chart-tooltip-wrapper {
   font-size: smaller;
   position: absolute;
+  pointer-events: none;
+  display: table;
+}
+
+.arrow-wrapper {
+  display:table-cell;
+  vertical-align: middle;
+}
+.chart-tooltip-arrow {
+  background: #000000c0;
+  width: 1rem;
+  height: 1rem;
+}
+.chart-tooltip-arrow.left-side {
+  clip-path: polygon(102% 10%, 102% 90%, 50% 50%); /* > 100% to avoid sub-pixel issues */
+}
+.chart-tooltip-arrow.right-side {
+  clip-path: polygon(-3% 10%, -3% 90%, 50% 50%); /* > -2% to avoid sub-pixel issues */
+}
+
+.portfolio-growth-chart-tooltip {
+  display:table-cell;
+  background: #000000c0;
+  color: white;
   padding: .5rem;
   border-radius: 4px;
-  pointer-events: none;
 }
 
 .animated-tooltip {
@@ -123,7 +165,12 @@ export default {
   height: 1rem;
   display: inline-block;
   vertical-align: text-bottom;
-  border: 1px solid white;
+  border: 1px solid #e0e0e0;
+}
+
+.stocky-dataset-label {
+  margin-left: 3px;
+  margin-right: .5rem; /* space between label and value */
 }
 
 .stocky-tooltip-value {
