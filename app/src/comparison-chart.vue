@@ -23,10 +23,9 @@ const percentageYAxisLabelCallback = (value) => {
 export default {
   components: {PortfolioGrowthChartTooltip},
   props: {
-    history: Array,
+    userInfos: Array,
     type: String,
     dataType: String,
-    comparisons: Array,
   },
 
   data() {
@@ -46,31 +45,6 @@ export default {
 
   methods: {
 
-    createBenchmarkDataset(ticker, index) {
-
-      let data
-      const tickerHistory = this.$store.getters.securityHistory(ticker, this.history[0].value)
-      if (this.percentages) {
-        data = []
-        tickerHistory.forEach(value => {
-          data.push((value - tickerHistory[0]) / tickerHistory[0])
-        })
-      }
-      else {
-        data = tickerHistory
-      }
-
-      const color = this.getUnusedColor(index)
-      return {
-        backgroundColor: `${color}90`,
-        borderColor: color,
-        data,
-        ticker,
-        label: this.$store.getters.displayName(ticker),
-        fill: this.doFill,
-      }
-    },
-
     currencyYAxisLabelCallback(value) {
       // We assume our value will never drop below $1000 or go above $1 million
       let str = currency(value)
@@ -87,26 +61,11 @@ export default {
     },
 
     generateLabels() {
-      //return this.history.map(entry => entry.date)
-      return this.history.map(entry => {
+      return this.userInfos[0].history.map(entry => {
         // Use close of the market to avoid timezone drift of date
         const date = new Date(`${entry.date}T16:00:00-05:00`)
         return date.toLocaleDateString('en', {dateStyle: 'medium'})
       })
-    },
-
-    getUnusedColor(index) {
-
-      if (this.chart) {
-        for (let color of this.comparisonColors) {
-          if (this.chart.data.datasets.findIndex(dataset => color === dataset.borderColor) === -1) {
-            return color
-          }
-        }
-      }
-
-      // Only happens when the chart doesn't yet exist - just go in index order
-      return this.comparisonColors[index]
     },
 
     refreshChartAnnotations(e) {
@@ -122,72 +81,24 @@ export default {
       this.armedY = elem?._model?.y || 0
     },
 
-    updateBenchmarkData() {
-
-      // Add new benchmarks, and update existing ones
-      this.comparisons.forEach(ticker => {
-        const index = this.chart.data.datasets.findIndex(dataset => dataset.ticker === ticker)
-        if (index > -1) {
-          let data
-          const tickerHistory = this.$store.getters.securityHistory(ticker, this.history[0].value)
-          if (this.percentages) {
-            data = []
-            tickerHistory.forEach(value => {
-              data.push((value - tickerHistory[0]) / tickerHistory[0])
-            })
-          }
-          else {
-            data = tickerHistory
-          }
-          this.chart.data.datasets[index].data = data
-        }
-        else {
-          this.chart.data.datasets.push(this.createBenchmarkDataset(ticker, this.chart.data.datasets.length - 1))
-        }
-      })
-
-      // Remove any benchmarks that are no longer in our comparisons array
-      this.chart.data.datasets = this.chart.data.datasets
-          .filter((dataset, index) => index === 0 || this.comparisons.indexOf(dataset.ticker) > -1)
-    },
-
     updateChartDataForNewDataType() {
 
-      const portfolioData = this.chart.data.datasets[0].data
-      portfolioData.length = 0
+      this.userInfos.forEach((userInfo, index) => {
 
-      // Update portfolio data and y-axis to reflect new scale
-      if (this.percentages) {
-        this.history.forEach(entry => {
-          portfolioData.push((entry.value - this.history[0].value) / this.history[0].value)
-        })
-        this.chart.options.scales.yAxes[0].ticks.callback = percentageYAxisLabelCallback
-      }
-      else {
-        this.history.forEach(entry => portfolioData.push(entry.value))
-        this.chart.options.scales.yAxes[0].ticks.callback = this.currencyYAxisLabelCallback
-      }
+        const history = userInfo.history
+        const portfolioData = this.chart.data.datasets[index].data
+        portfolioData.length = 0
 
-      // Update benchmark data
-      this.chart.data.datasets.forEach((dataset, index) => {
-
-        if (index === 0) {
-          return
-        }
-
-        const ticker = dataset.ticker
-        const tickerHistory = this.$store.getters.securityHistory(ticker, this.history[0].value)
-        let data
+        // Update portfolio data and y-axis to reflect new scale
         if (this.percentages) {
-          data = []
-          tickerHistory.forEach(value => {
-            data.push((value - tickerHistory[0]) / tickerHistory[0])
+          history.forEach(entry => {
+            portfolioData.push((entry.value - history[0].value) / history[0].value)
           })
+          this.chart.options.scales.yAxes[0].ticks.callback = percentageYAxisLabelCallback
+        } else {
+          history.forEach(entry => portfolioData.push(entry.value))
+          this.chart.options.scales.yAxes[0].ticks.callback = this.currencyYAxisLabelCallback
         }
-        else {
-          data = tickerHistory
-        }
-        dataset.data = data
       })
 
       // Refresh the chart to show the changes
@@ -211,25 +122,19 @@ export default {
       this.percentages = newVal === 'percent'
       this.updateChartDataForNewDataType()
     },
-
-    comparisons() {
-      this.updateBenchmarkData()
-      this.chart.update()
-    }
   },
 
   mounted() {
 
-    const datasets = [
-      {
-        backgroundColor: '#3e6ecf90',
-        borderColor: '#3e6ecf',
-        data: this.history.map(entry => entry.value),
-        label: 'Your Picks',
+    const datasets = this.userInfos.map((userInfo, index) => {
+      return {
+        backgroundColor: `${this.comparisonColors[index]}90`,
+        borderColor: this.comparisonColors[index],
+        data: userInfo.history.map(entry => entry.value),
+        label: userInfo.name,
         fill: this.doFill,
-      },
-    ]
-    this.comparisons.forEach((ticker, index) => datasets.push(this.createBenchmarkDataset(ticker, index)))
+      }
+    })
 
     const canvas = this.$refs.canvas
     const thisVue = this

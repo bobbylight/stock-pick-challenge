@@ -6,6 +6,7 @@
     <div>
       <h1>Stock Market Challenge!</h1>
       <div id="nav">
+        <router-link to="/head-to-head">Comparison</router-link> |
         <router-link to="/users/robert">Robert</router-link> |
         <router-link to="/users/carrow">Carrow</router-link> |
         <router-link to="/about">About</router-link>

@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import Utils from './utils';
+import Utils from './utils'
 
 export default {
 

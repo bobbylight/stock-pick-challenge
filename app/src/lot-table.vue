@@ -4,7 +4,6 @@
       :headers="headers"
       :items="items"
       :single-expand="true"
-      :expand.sync="expanded"
       item-key="name"
       :show-expand="!$vuetify.breakpoint.xs"
       dense
@@ -80,7 +79,7 @@
 </template>
 
 <script>
-import Utils from './utils';
+import Utils from './utils'
 
 export default {
 
@@ -92,8 +91,6 @@ export default {
   data() {
 
     return {
-
-      expanded: [],
 
       headers: [
         {
