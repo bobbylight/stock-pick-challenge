@@ -9,7 +9,7 @@ const data = {
 Vue.use(Vuex)
 
 // The day we made our picks
-const FIRST_DAY = '2021-01-03'
+const FIRST_DAY = '2022-01-03'
 
 export default new Vuex.Store({
     state: data,

@@ -1,12 +1,32 @@
 {
   "positions": [
     {
-      "ticker": "dal",
+      "ticker": "aapl",
       "contributions": [
         {
-          "date": "2021-01-03",
-          "price": 40.21,
-          "count": 8
+          "date": "2022-01-03",
+          "price": 177.57,
+          "count": 6
+        }
+      ]
+    },
+    {
+      "ticker": "abnb",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 166.49,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "ticker": "bcyc",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 60.87,
+          "count": 11
         }
       ]
     },
@@ -14,99 +34,59 @@
       "ticker": "etsy",
       "contributions": [
         {
-          "date": "2021-01-03",
-          "price": 177.91,
+          "date": "2022-01-03",
+          "price": 218.94,
           "count": 5
         }
       ]
     },
     {
-      "ticker": "dis",
+      "ticker": "lh",
       "contributions": [
         {
-          "date": "2021-01-03",
-          "price": 181.18,
+          "date": "2022-01-03",
+          "price": 314.21,
           "count": 5
         }
       ]
     },
     {
-      "ticker": "sbux",
+      "ticker": "low",
       "contributions": [
         {
-          "date": "2021-01-03",
-          "price": 106.98,
+          "date": "2022-01-03",
+          "price": 258.48,
+          "count": 4
+        }
+      ]
+    },
+    {
+      "ticker": "mq",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 17.17,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "ticker": "pton",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 35.76,
           "count": 10
         }
       ]
     },
     {
-      "ticker": "blnk",
+      "ticker": "shop",
       "contributions": [
         {
-          "date": "2021-01-03",
-          "price": 42.75,
-          "count": 5
-        }
-      ]
-    },
-    {
-      "ticker": "t",
-      "contributions": [
-        {
-          "date": "2021-01-03",
-          "price": 28.26,
-          "count": 5
-        }
-      ]
-    },
-    {
-      "ticker": "k",
-      "contributions": [
-        {
-          "date": "2021-01-03",
-          "price": 62.23,
-          "count": 10
-        }
-      ]
-    },
-    {
-      "ticker": "aapl",
-      "contributions": [
-        {
-          "date": "2021-01-03",
-          "price": 132.69,
-          "count": 10
-        }
-      ]
-    },
-    {
-      "ticker": "nke",
-      "contributions": [
-        {
-          "date": "2021-01-03",
-          "price": 141.47,
-          "count": 8
-        }
-      ]
-    },
-    {
-      "ticker": "arvn",
-      "contributions": [
-        {
-          "date": "2021-01-03",
-          "price": 84.93,
-          "count": 10
-        }
-      ]
-    },
-    {
-      "ticker": "kymr",
-      "contributions": [
-        {
-          "date": "2021-01-03",
-          "price": 62.00,
-          "count": 5
+          "date": "2022-01-03",
+          "price": 1377.39,
+          "count": 1
         }
       ]
     },
@@ -114,29 +94,19 @@
       "ticker": "tgt",
       "contributions": [
         {
-          "date": "2021-01-03",
-          "price": 176.53,
-          "count": 5
+          "date": "2022-01-03",
+          "price": 231.44,
+          "count": 11
         }
       ]
     },
     {
-      "ticker": "brk-b",
+      "ticker": "zm",
       "contributions": [
         {
-          "date": "2021-01-03",
-          "price": 231.87,
-          "count": 5
-        }
-      ]
-    },
-    {
-      "ticker": "tak",
-      "contributions": [
-        {
-          "date": "2021-01-03",
-          "price": 18.20,
-          "count": 10
+          "date": "2022-01-03",
+          "price": 183.91,
+          "count": 4
         }
       ]
     }

@@ -4,39 +4,49 @@
       "ticker": "amzn",
       "contributions": [
         {
-          "date": "2021-01-03",
-          "price": 3256.93,
+          "date": "2022-01-03",
+          "price": 3334.34,
           "count": 1
         }
       ]
     },
     {
-      "ticker": "baba",
+      "ticker": "cat",
       "contributions": [
         {
-          "date": "2021-01-03",
-          "price": 232.73,
-          "count": 6
+          "date": "2022-01-03",
+          "price": 206.74,
+          "count": 5
         }
       ]
     },
     {
-      "ticker": "dkng",
+      "ticker": "dks",
       "contributions": [
         {
-          "date": "2021-01-03",
-          "price": 46.56,
-          "count": 19
+          "date": "2022-01-03",
+          "price": 114.99,
+          "count": 10
         }
       ]
     },
     {
-      "ticker": "icln",
+      "ticker": "f",
       "contributions": [
         {
-          "date": "2021-01-03",
-          "price": 28.24,
-          "count": 38
+          "date": "2022-01-03",
+          "price": 20.77,
+          "count": 40
+        }
+      ]
+    },
+    {
+      "ticker": "low",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 258.48,
+          "count": 4
         }
       ]
     },
@@ -44,28 +54,38 @@
       "ticker": "ntdoy",
       "contributions": [
         {
-          "date": "2021-01-03",
-          "price": 80.52,
-          "count": 14
+          "date": "2022-01-03",
+          "price": 58.37,
+          "count": 7
         }
       ]
     },
     {
-      "ticker": "pltr",
+      "ticker": "pep",
       "contributions": [
         {
-          "date": "2021-01-03",
-          "price": 23.55,
-          "count": 41
+          "date": "2022-01-03",
+          "price": 173.71,
+          "count": 6
         }
       ]
     },
     {
-      "ticker": "sq",
+      "ticker": "uaa",
       "contributions": [
         {
-          "date": "2021-01-03",
-          "price": 217.64,
+          "date": "2022-01-03",
+          "price": 21.19,
+          "count": 53
+        }
+      ]
+    },
+    {
+      "ticker": "znga",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 6.40,
           "count": 6
         }
       ]

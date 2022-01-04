@@ -8,12 +8,12 @@
 #
 
 benchmarks=( "^gspc" "^ixic" "^dji" "^rut" "arkg" "arkk")
-investments_2021=("tdoc" "iova" "nvta" "twst" "pacb" "exas" "pstg" "vrtx" "edit" "ntla" "vcyt" "twlo")
-robert=("amzn" "baba" "dkng" "icln" "ntdoy" "pltr" "sq")
-carrow=("dal" "etsy" "dis" "sbux" "blnk" "t" "k" "aapl" "nke" "arvn" "kymr" "tgt" "brk-b" "tak")
+investments_2022=()
+robert=("amzn" "cat" "dks" "f" "low" "ntdoy" "pep" "uaa" "znga")
+carrow=("aapl" "abnb" "bcyc" "etsy" "lh" "low" "mq" "pton" "shop" "tgt" "zm")
 extra_interesting=("gthx" "pbw" "gld")
 
-all_securities=("${benchmarks[@]}" "${investments_2021[@]}" "${robert[@]}" "${carrow[@]}" "${extra_interesting[@]}")
+all_securities=("${benchmarks[@]}" "${investments_2022[@]}" "${robert[@]}" "${carrow[@]}" "${extra_interesting[@]}")
 
 # You probably don't want to edit past this line.
 echo "Security count: ${#all_securities[@]}"
@@ -25,7 +25,7 @@ dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 csv_dir="${dir}/../csv"
 mkdir "${csv_dir}"
 
-start=1609359200
+start=1640998800
 end=1815496000  # 2027-07-13T04:26:40Z
 
 for s in "${all_securities[@]}" ; do
