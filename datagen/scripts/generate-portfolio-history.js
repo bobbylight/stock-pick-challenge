@@ -27,8 +27,8 @@ const getNextTradingDay = (date) => {
     // Create a Date object representing midnight today.  The timezone shift ensures
     // we end up at midnight in our timezone and not off by a day by a few hours
     // since "date" is a UTC datestamp only
-    const timezoneOffset = new Date().getTimezoneOffset() * 60000
     const next = new Date(date)
+    const timezoneOffset = next.getTimezoneOffset() * 60000
     next.setMilliseconds(next.getMilliseconds() + timezoneOffset)
 
     // Return weekdays only, skip weekends
