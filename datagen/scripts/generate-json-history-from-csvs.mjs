@@ -19,10 +19,18 @@ const displayNames = {
 
 const dir = '../csv'
 
-let files = fs.readdirSync(dir).sort()
+const files = fs.readdirSync(dir).sort()
 
 for (const file of files) {
+
     let json = await csv().fromFile(`${dir}/${file}`)
+
+    // It seems sometimes Yahoo returns two records for the current date. Maybe after-hours data?
+    const recordCount = json.length
+    if (recordCount > 1 && json[recordCount - 1].date === json[recordCount - 2].date) {
+        console.warn(`[warn] File ${file} has two records for ${json[recordCount - 1].date}. Ignoring the second one`)
+        json.pop()
+    }
 
     const ticker = file.substr(0, file.lastIndexOf('.'))
     history[ticker] = {
