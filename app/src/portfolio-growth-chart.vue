@@ -15,6 +15,7 @@
 import Chart from 'chart.js'
 import { currency, percentage } from './app-filters'
 import PortfolioGrowthChartTooltip from './portfolio-growth-chart-tooltip'
+import benchmarkData from '@/benchmark-data';
 
 const percentageYAxisLabelCallback = (value) => {
   return percentage(value)
@@ -24,7 +25,7 @@ export default {
   components: {PortfolioGrowthChartTooltip},
   props: {
     history: Array,
-    type: String,
+    chartType: String,
     dataType: String,
     comparisons: Array,
   },
@@ -40,15 +41,19 @@ export default {
       datasets: null,
       visible: false,
       canvasRect: null,
-      comparisonColors: [ '#e6439f', '#27ba67', '#494f9c', '#d1871f', '#893168', '#f5e616' ],
     }
   },
 
   methods: {
 
-    createBenchmarkDataset(ticker, index) {
+    /**
+     * Creates a data array representing a benchmark's data, modified for the current scale
+     * (absolute dollar value vs. percentage growth).
+     */
+    getBenchmarkData(ticker) {
 
       let data
+
       const tickerHistory = this.$store.getters.securityHistory(ticker, this.history[0].value)
       if (this.percentages) {
         data = []
@@ -60,15 +65,66 @@ export default {
         data = tickerHistory
       }
 
-      const color = this.getUnusedColor(index)
+      return data
+    },
+
+    /**
+     * Creates a data array representing the current user's data, modified for the current scale
+     * (absolute dollar value vs. percentage growth).
+     */
+    getUserData() {
+
+      let result
+
+      if (this.percentages) {
+        const purchasePrice = this.history[0].value
+        result = this.history.map(entry => (entry.value - purchasePrice) / purchasePrice)
+      }
+      else {
+        result = this.history.map(entry => entry.value)
+      }
+
+      return result
+    },
+
+    /**
+     * Returns a data set for a benchmark, suitable for passing directly into the chart component.
+     */
+    createBenchmarkDataset(ticker) {
+      const color = benchmarkData.find(e => ticker === e.ticker).color;
       return {
         backgroundColor: `${color}90`,
         borderColor: color,
-        data,
+        data: this.getBenchmarkData(ticker),
         ticker,
         label: this.$store.getters.displayName(ticker),
         fill: this.doFill,
       }
+    },
+
+    /**
+     * Generates all data (user data + benchmarks) for this chart to display.
+     */
+    createAllDatasets() {
+
+      const datasets = [
+        {
+          backgroundColor: '#3e6ecf90',
+          borderColor: '#3e6ecf',
+          data: this.getUserData(),
+          label: 'Your Picks',
+          fill: this.doFill,
+        },
+      ]
+
+      this.comparisons.forEach(ticker => datasets.push(this.createBenchmarkDataset(ticker)))
+
+      return datasets
+    },
+
+    updateYAxis() {
+      this.chart.options.scales.yAxes[0].ticks.callback = this.percentages ? percentageYAxisLabelCallback :
+          this.currencyYAxisLabelCallback
     },
 
     currencyYAxisLabelCallback(value) {
@@ -95,20 +151,6 @@ export default {
       })
     },
 
-    getUnusedColor(index) {
-
-      if (this.chart) {
-        for (let color of this.comparisonColors) {
-          if (this.chart.data.datasets.findIndex(dataset => color === dataset.borderColor) === -1) {
-            return color
-          }
-        }
-      }
-
-      // Only happens when the chart doesn't yet exist - just go in index order
-      return this.comparisonColors[index]
-    },
-
     refreshChartAnnotations(e) {
 
       const xAxis = this.chart.scales['x-axis-0']
@@ -122,27 +164,20 @@ export default {
       this.armedY = elem?._model?.y || 0
     },
 
-    updateBenchmarkData() {
+    /**
+     * Updates the set of benchmark data sets displayed to reflect the
+     * specified comparisons. Used when a benchmark is added or removed.
+     */
+    updateBenchmarkDatasets() {
 
       // Add new benchmarks, and update existing ones
       this.comparisons.forEach(ticker => {
         const index = this.chart.data.datasets.findIndex(dataset => dataset.ticker === ticker)
         if (index > -1) {
-          let data
-          const tickerHistory = this.$store.getters.securityHistory(ticker, this.history[0].value)
-          if (this.percentages) {
-            data = []
-            tickerHistory.forEach(value => {
-              data.push((value - tickerHistory[0]) / tickerHistory[0])
-            })
-          }
-          else {
-            data = tickerHistory
-          }
-          this.chart.data.datasets[index].data = data
+          this.chart.data.datasets[index].data = this.getBenchmarkData(ticker)
         }
         else {
-          this.chart.data.datasets.push(this.createBenchmarkDataset(ticker, this.chart.data.datasets.length - 1))
+          this.chart.data.datasets.push(this.createBenchmarkDataset(ticker))
         }
       })
 
@@ -151,46 +186,25 @@ export default {
           .filter((dataset, index) => index === 0 || this.comparisons.indexOf(dataset.ticker) > -1)
     },
 
+    /**
+     * Toggles between "dollar view" and "percentage view".
+     */
     updateChartDataForNewDataType() {
 
+      // Update portfolio
       const portfolioData = this.chart.data.datasets[0].data
       portfolioData.length = 0
-
-      // Update portfolio data and y-axis to reflect new scale
-      if (this.percentages) {
-        this.history.forEach(entry => {
-          portfolioData.push((entry.value - this.history[0].value) / this.history[0].value)
-        })
-        this.chart.options.scales.yAxes[0].ticks.callback = percentageYAxisLabelCallback
-      }
-      else {
-        this.history.forEach(entry => portfolioData.push(entry.value))
-        this.chart.options.scales.yAxes[0].ticks.callback = this.currencyYAxisLabelCallback
-      }
+      portfolioData.push.apply(portfolioData, this.getUserData())
 
       // Update benchmark data
       this.chart.data.datasets.forEach((dataset, index) => {
-
-        if (index === 0) {
-          return
+        if (index > 0) { // Skip user's portfolio data
+          dataset.data = this.getBenchmarkData(dataset.ticker)
         }
-
-        const ticker = dataset.ticker
-        const tickerHistory = this.$store.getters.securityHistory(ticker, this.history[0].value)
-        let data
-        if (this.percentages) {
-          data = []
-          tickerHistory.forEach(value => {
-            data.push((value - tickerHistory[0]) / tickerHistory[0])
-          })
-        }
-        else {
-          data = tickerHistory
-        }
-        dataset.data = data
       })
 
       // Refresh the chart to show the changes
+      this.updateYAxis()
       this.chart.update()
     },
 
@@ -202,34 +216,38 @@ export default {
 
   watch: {
 
-    type() {
+    chartType() {
       this.chart.data.datasets.forEach(dataset => dataset.fill = this.doFill)
       this.chart.update()
     },
 
-    dataType(newVal) {
-      this.percentages = newVal === 'percent'
-      this.updateChartDataForNewDataType()
+    dataType: {
+      handler(newVal) {
+        this.percentages = newVal === 'percent'
+        if (this.chart) {
+          this.updateChartDataForNewDataType()
+        }
+      },
+      immediate: true, // Force handler to run with initial value
     },
 
     comparisons() {
-      this.updateBenchmarkData()
+      this.updateBenchmarkDatasets()
+      this.chart.update()
+    },
+
+    // We must watch for route updates since our chart isn't bound
+    // to data and won't know to rerender when switching between
+    // users' pages
+    $route() {
+      // Since chart styles & benchmarks are user-dependent, we'll
+      // just start from scratch
+      this.chart.data.datasets = this.createAllDatasets()
       this.chart.update()
     }
   },
 
   mounted() {
-
-    const datasets = [
-      {
-        backgroundColor: '#3e6ecf90',
-        borderColor: '#3e6ecf',
-        data: this.history.map(entry => entry.value),
-        label: 'Your Picks',
-        fill: this.doFill,
-      },
-    ]
-    this.comparisons.forEach((ticker, index) => datasets.push(this.createBenchmarkDataset(ticker, index)))
 
     const canvas = this.$refs.canvas
     const thisVue = this
@@ -238,7 +256,7 @@ export default {
       type: 'line',
       data: {
         labels: this.generateLabels(),
-        datasets,
+        datasets: this.createAllDatasets(),
       },
       plugins: [
         {
@@ -275,7 +293,8 @@ export default {
           }],
           yAxes: [{
             ticks: {
-              callback: this.currencyYAxisLabelCallback,
+              callback: this.percentages ? percentageYAxisLabelCallback :
+                  this.currencyYAxisLabelCallback
             },
           }],
         },
@@ -317,7 +336,7 @@ export default {
   computed: {
 
     doFill() {
-      return this.type === 'area'
+      return this.chartType === 'area'
     },
   },
 }

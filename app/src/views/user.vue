@@ -57,7 +57,7 @@
                     <v-row>
                       <v-switch v-model="chartDataType" true-value="dollars" false-value="percent"
                                 @change="storePreferences"
-                                label="Show Investment Growth"/>
+                                label="Show Investment Value"/>
                     </v-row>
                     <v-row>
                       <v-select chips v-model="chartComparisons" :items="benchmarks"
@@ -75,7 +75,7 @@
           <v-card-text>
             <div class="chart-wrapper">
               <portfolio-growth-chart :history="userData.history"
-                                      :type="chartType"
+                                      :chart-type="chartType"
                                       :data-type="chartDataType"
                                       :comparisons="chartComparisons"/>
             </div>
@@ -108,6 +108,7 @@ import LotTable from '@/lot-table'
 import PortfolioGrowthChart from '@/portfolio-growth-chart'
 import UserSummary from '@/user-summary'
 import TodaysChanges from '@/todays-changes'
+import benchmarkData from '@/benchmark-data';
 
 const LATEST_PREFERENCES_VERSION = 1
 
@@ -126,32 +127,7 @@ export default {
       chartType: 'line',
       chartDataType: 'dollars',
       chartComparisons: [],
-      benchmarks: [
-        {
-          ticker: '^gspc',
-          name: 'S&P 500',
-        },
-        {
-          ticker: '^ixic',
-          name: 'Nasdaq',
-        },
-        {
-          ticker: '^dji',
-          name: 'Dow Jones Industrial',
-        },
-        {
-          ticker: '^rut',
-          name: 'Russel 2000',
-        },
-        {
-          ticker: 'arkg',
-          name: 'ARK Genomic ETF',
-        },
-        {
-          ticker: 'arkk',
-          name: 'ARK Innovation ETF',
-        }
-      ],
+      benchmarks: benchmarkData,
     }
   },
 
@@ -183,7 +159,7 @@ export default {
     },
   },
 
-  mounted() {
+  beforeMount() {
     this.loadPreferences()
   },
 
