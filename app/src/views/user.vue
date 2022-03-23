@@ -34,6 +34,20 @@
         <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
         <v-card class="user-card" v-if="!$store.state.loading && userData">
 
+          <v-card-title>Notable Movers</v-card-title>
+
+          <v-card-text>
+            <notable-movers :portfolio-name="portfolioName" :user-data="userData"/>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col>
+        <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
+        <v-card class="user-card" v-if="!$store.state.loading && userData">
+
           <v-card-title>
             YTD Growth
             <v-spacer/>
@@ -109,12 +123,14 @@ import PortfolioGrowthChart from '@/portfolio-growth-chart'
 import UserSummary from '@/user-summary'
 import TodaysChanges from '@/todays-changes'
 import benchmarkData from '@/benchmark-data';
+import NotableMovers from '@/notable-movers';
 
 const LATEST_PREFERENCES_VERSION = 1
 
 export default {
 
   components: {
+    NotableMovers,
     LotListing,
     LotTable,
     PortfolioGrowthChart,

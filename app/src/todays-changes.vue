@@ -1,28 +1,25 @@
 <template>
-  <div class="user-summary">
-
-    <div class="daily-summary">
-      <ul>
-        <li>
-          Today the overall market went <span class="emphasized">{{ marketDirection }}</span>&nbsp;
-          <span :class="getAmountDeltaClass(gspcTodaysGain)">{{ gspcTodaysGain | percentage }}</span>
-        </li>
-        <li>
-          Today you <span class="emphasized">{{ todayVersusTheMarketVerb }}</span>
-          the market by <span :class="getAmountDeltaClass(todayBeatMarketBy)">{{ todayBeatMarketBy | percentage }}</span>
-        </li>
-        <li>
-          Your best performer today was <span class="emphasized ticker">{{ bestPerformer }}</span>,
-          which went {{ upOrDown(dailyChange(bestPerformer)) }}
-          <span :class="getAmountDeltaClass(dailyChange(bestPerformer))">{{ dailyChange(bestPerformer) | percentage }}</span>
-        </li>
-        <li>
-          Your worst performer today was <span class="emphasized ticker">{{ worstPerformer }}</span>,
-          which went {{ upOrDown(dailyChange(worstPerformer)) }}
-          <span :class="getAmountDeltaClass(dailyChange(worstPerformer))">{{ dailyChange(worstPerformer) | percentage }}</span>
-        </li>
-      </ul>
-    </div>
+  <div class="todays-changes">
+    <ul>
+      <li>
+        Today the overall market went <span class="emphasized">{{ marketDirection }}</span>&nbsp;
+        <span :class="getAmountDeltaClass(gspcTodaysGain)">{{ gspcTodaysGain | percentage }}</span>
+      </li>
+      <li>
+        Today you <span class="emphasized">{{ todayVersusTheMarketVerb }}</span>
+        the market by <span :class="getAmountDeltaClass(todayBeatMarketBy)">{{ todayBeatMarketBy | percentage }}</span>
+      </li>
+      <li>
+        Your best performer today was <span class="emphasized ticker">{{ bestPerformer }}</span>,
+        which went {{ upOrDown(dailyChange(bestPerformer)) }}
+        <span :class="getAmountDeltaClass(dailyChange(bestPerformer))">{{ dailyChange(bestPerformer) | percentage }}</span>
+      </li>
+      <li>
+        Your worst performer today was <span class="emphasized ticker">{{ worstPerformer }}</span>,
+        which went {{ upOrDown(dailyChange(worstPerformer)) }}
+        <span :class="getAmountDeltaClass(dailyChange(worstPerformer))">{{ dailyChange(worstPerformer) | percentage }}</span>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -94,7 +91,51 @@ export default {
 
     marketDirection() {
       return this.gspcTodaysGain >= 0 ? 'up' : 'down'
-    }
+    },
+
+    notableMovesUp() {
+
+      const movedUp = []
+
+      this.userData.positions.forEach(position => {
+        const ticker = position.ticker
+        const history = this.$store.state.history[ticker].history
+
+        let day = history.length - 1
+        while (day > 0 && history[day].close > history[day - 1].close) {
+          day--
+        }
+        if (day < history.length - 1) {
+          const dayCount = history.length - 1 - day
+          const percentage = (history[history.length - 1].close - history[day].close) / history[day].close
+          movedUp.push({ ticker, dayCount, percentage })
+        }
+      });
+
+      return movedUp
+    },
+
+    notableMovesDown() {
+
+      const movedDown = []
+
+      this.userData.positions.forEach(position => {
+        const ticker = position.ticker
+        const history = this.$store.state.history[ticker].history
+
+        let day = history.length - 1
+        while (day > 0 && history[day].close < history[day - 1].close) {
+          day--
+        }
+        if (day < history.length - 1) {
+          const dayCount = history.length - 1 - day
+          const percentage = (history[history.length - 1].close - history[day].close) / history[day].close
+          movedDown.push({ ticker, dayCount, percentage })
+        }
+      });
+
+      return movedDown
+    },
   },
 
   methods: {
@@ -116,10 +157,6 @@ export default {
 </script>
 
 <style scoped>
-.daily-summary {
-  margin: 0 auto;
-}
-
 .emphasized {
   font-weight: bold;
 }
