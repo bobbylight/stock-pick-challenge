@@ -15,6 +15,10 @@
         for a total of <span :class="getAmountDeltaClass(moveUp.percentage)">{{moveDown.percentage | percentage}}</span>
       </li>
     </ul>
+
+    <span class="no-movers" v-else>
+      Nothing momentous to report!
+    </span>
   </div>
 </template>
 
@@ -106,8 +110,8 @@ export default {
 </script>
 
 <style scoped>
-.todays-changes {
-  margin: 0 auto;
+.no-movers {
+  margin: 0 1rem;
 }
 
 .emphasized {
