@@ -133,7 +133,7 @@ export default {
       if (this.$vuetify.breakpoint.xs) {
         const lastComma = str.lastIndexOf(',')
         if (lastComma > -1) {
-          str = str.substr(0, lastComma) + '.' + str.charAt(lastComma + 1) + 'K'
+          str = str.substring(0, lastComma) + '.' + str.charAt(lastComma + 1) + 'K'
         }
       }
       else {

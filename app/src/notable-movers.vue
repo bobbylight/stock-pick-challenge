@@ -12,7 +12,7 @@
       <li v-for="moveDown in notableMovesDown" :key="'move-down-' + moveDown.ticker">
         <span class="emphasized ticker">{{moveDown.ticker}}</span> has been going down the past
         <span class="emphasized">{{moveDown.dayCount}} trading days</span>
-        for a total of <span :class="getAmountDeltaClass(moveUp.percentage)">{{moveDown.percentage | percentage}}</span>
+        for a total of <span :class="getAmountDeltaClass(moveDown.percentage)">{{moveDown.percentage | percentage}}</span>
       </li>
     </ul>
 
