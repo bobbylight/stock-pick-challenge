@@ -32,7 +32,10 @@ for (const file of files) {
         json.pop()
     }
 
-    const ticker = file.substr(0, file.lastIndexOf('.'))
+    // Remove records with null values, e.g. znga was bought out mid-year
+    json = json.filter(row => row.open !== 'null')
+
+    const ticker = file.substring(0, file.lastIndexOf('.'))
     history[ticker] = {
         name: displayNames[ticker] || ticker,
         history: json

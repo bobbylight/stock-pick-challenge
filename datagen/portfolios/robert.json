@@ -1,12 +1,13 @@
 {
+  "cash": 49.08,
   "positions": [
     {
       "ticker": "amzn",
       "contributions": [
         {
           "date": "2022-01-03",
-          "price": 3334.34,
-          "count": 1
+          "price": 166.72,
+          "count": 20
         }
       ]
     },
@@ -77,16 +78,6 @@
           "date": "2022-01-03",
           "price": 21.19,
           "count": 53
-        }
-      ]
-    },
-    {
-      "ticker": "znga",
-      "contributions": [
-        {
-          "date": "2022-01-03",
-          "price": 6.40,
-          "count": 6
         }
       ]
     }

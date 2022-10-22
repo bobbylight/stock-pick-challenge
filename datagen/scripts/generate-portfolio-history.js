@@ -41,7 +41,7 @@ const getNextTradingDay = (date) => {
 
 // Computes the initial value of a portfolio from the investments on day 1
 const getInitialPortfolioValue = () => {
-    let initialValue = 0
+    let initialValue = data.cash || 0
     data.positions.forEach((position) => {
         // Should be 0 or 1 contributions on the first day
         const contribution = position.contributions.find(contribution => contribution.date === FIRST_DAY)
@@ -70,7 +70,7 @@ date = getNextTradingDay(date)
 const today = new Date()
 while (new Date(date) < today) {
 
-    let value = 0
+    let value = 0 // cash added later to keep logic simpler
 
     data.positions.forEach((position) => {
 
@@ -91,9 +91,9 @@ while (new Date(date) < today) {
         }
     })
 
-    console.log(`${date}: ${value || '(no trades)'}`)
+    console.log(`${date}: ${value ? (value + data.cash) : '(no trades)'}`)
     if (value) {
-        portfolioHistory.push({date, value})
+        portfolioHistory.push({date, value: value + data.cash})
     }
     date = getNextTradingDay(date)
 }
