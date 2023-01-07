@@ -1,0 +1,85 @@
+{
+  "cash": 49.08,
+  "positions": [
+    {
+      "ticker": "amzn",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 166.72,
+          "count": 20
+        }
+      ]
+    },
+    {
+      "ticker": "cat",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 206.74,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "ticker": "dks",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 114.99,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "ticker": "f",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 20.77,
+          "count": 40
+        }
+      ]
+    },
+    {
+      "ticker": "low",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 258.48,
+          "count": 4
+        }
+      ]
+    },
+    {
+      "ticker": "ntdoy",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 58.37,
+          "count": 7
+        }
+      ]
+    },
+    {
+      "ticker": "pep",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 173.71,
+          "count": 6
+        }
+      ]
+    },
+    {
+      "ticker": "uaa",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 21.19,
+          "count": 53
+        }
+      ]
+    }
+  ]
+}

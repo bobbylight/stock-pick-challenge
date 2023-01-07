@@ -57,7 +57,7 @@ export default {
         while (day > 0 && parseFloat(history[day].close) > parseFloat(history[day - 1].close)) {
           day--
         }
-        console.log(`For ${ticker}, day stops at ${day} - ${history[day].close} <= ${history[day - 1].close}`)
+        console.log(`For ${ticker}, day stops at ${day} - ${history[day].close} <= ${history[day - 1]?.close}`)
         if (day <= history.length - 1 - MINIMUM_MOVE_COUNT) {
           const dayCount = history.length - 1 - day
           const percentage = (history[history.length - 1].close - history[day].close) / history[day].close

@@ -2,82 +2,12 @@
   "cash": 0,
   "positions": [
     {
-      "ticker": "aapl",
+      "ticker": "duol",
       "contributions": [
         {
-          "date": "2022-01-03",
-          "price": 177.57,
-          "count": 6
-        }
-      ]
-    },
-    {
-      "ticker": "abnb",
-      "contributions": [
-        {
-          "date": "2022-01-03",
-          "price": 166.49,
-          "count": 5
-        }
-      ]
-    },
-    {
-      "ticker": "bcyc",
-      "contributions": [
-        {
-          "date": "2022-01-03",
-          "price": 60.87,
+          "date": "2023-01-03",
+          "price": 71.13,
           "count": 11
-        }
-      ]
-    },
-    {
-      "ticker": "etsy",
-      "contributions": [
-        {
-          "date": "2022-01-03",
-          "price": 218.94,
-          "count": 5
-        }
-      ]
-    },
-    {
-      "ticker": "lh",
-      "contributions": [
-        {
-          "date": "2022-01-03",
-          "price": 314.21,
-          "count": 5
-        }
-      ]
-    },
-    {
-      "ticker": "low",
-      "contributions": [
-        {
-          "date": "2022-01-03",
-          "price": 258.48,
-          "count": 4
-        }
-      ]
-    },
-    {
-      "ticker": "mq",
-      "contributions": [
-        {
-          "date": "2022-01-03",
-          "price": 17.17,
-          "count": 1
-        }
-      ]
-    },
-    {
-      "ticker": "pton",
-      "contributions": [
-        {
-          "date": "2022-01-03",
-          "price": 35.76,
-          "count": 10
         }
       ]
     },
@@ -85,9 +15,39 @@
       "ticker": "shop",
       "contributions": [
         {
-          "date": "2022-01-03",
-          "price": 1377.39,
-          "count": 1
+          "date": "2023-01-03",
+          "price": 34.71,
+          "count": 12
+        }
+      ]
+    },
+    {
+      "ticker": "mrtx",
+      "contributions": [
+        {
+          "date": "2023-01-03",
+          "price": 45.31,
+          "count": 11
+        }
+      ]
+    },
+    {
+      "ticker": "amzn",
+      "contributions": [
+        {
+          "date": "2023-01-03",
+          "price": 84.00,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "ticker": "dal",
+      "contributions": [
+        {
+          "date": "2023-01-03",
+          "price": 32.86,
+          "count": 11
         }
       ]
     },
@@ -95,19 +55,49 @@
       "ticker": "tgt",
       "contributions": [
         {
-          "date": "2022-01-03",
-          "price": 231.44,
+          "date": "2023-01-03",
+          "price": 149.04,
           "count": 11
         }
       ]
     },
     {
-      "ticker": "zm",
+      "ticker": "brk-b",
       "contributions": [
         {
-          "date": "2022-01-03",
-          "price": 183.91,
-          "count": 4
+          "date": "2023-01-03",
+          "price": 308.90,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "ticker": "nflx",
+      "contributions": [
+        {
+          "date": "2023-01-03",
+          "price": 294.88,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "ticker": "intc",
+      "contributions": [
+        {
+          "date": "2023-01-03",
+          "price": 26.43,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "ticker": "eigr",
+      "contributions": [
+        {
+          "date": "2023-01-03",
+          "price": 1.18,
+          "count": 1
         }
       ]
     }

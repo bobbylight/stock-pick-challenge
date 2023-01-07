@@ -137,7 +137,7 @@ export default {
         switch (this.sortBy) {
           default:
           case 'ticker':
-            return a.ticker - b.ticker
+            return a.ticker.localeCompare(b.ticker)
           case 'dailyGain': // descending
             return b.dailyGain - a.dailyGain
           case 'totalGain': // descending

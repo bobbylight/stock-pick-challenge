@@ -1,83 +1,113 @@
 {
-  "cash": 49.08,
+  "cash": 0,
   "positions": [
     {
-      "ticker": "amzn",
+      "ticker": "luv",
       "contributions": [
         {
-          "date": "2022-01-03",
-          "price": 166.72,
-          "count": 20
+          "date": "2023-01-03",
+          "price": 33.67,
+          "count": 25
         }
       ]
     },
     {
-      "ticker": "cat",
+      "ticker": "wmt",
       "contributions": [
         {
-          "date": "2022-01-03",
-          "price": 206.74,
+          "date": "2023-01-03",
+          "price": 141.79,
+          "count": 8
+        }
+      ]
+    },
+    {
+      "ticker": "mcd",
+      "contributions": [
+        {
+          "date": "2023-01-03",
+          "price": 263.53,
           "count": 5
         }
       ]
     },
     {
-      "ticker": "dks",
+      "ticker": "pg",
       "contributions": [
         {
-          "date": "2022-01-03",
-          "price": 114.99,
-          "count": 10
+          "date": "2023-01-03",
+          "price": 151.56,
+          "count": 5
         }
       ]
     },
     {
-      "ticker": "f",
+      "ticker": "hrl",
       "contributions": [
         {
-          "date": "2022-01-03",
-          "price": 20.77,
-          "count": 40
+          "date": "2023-01-03",
+          "price": 45.55,
+          "count": 21
         }
       ]
     },
     {
-      "ticker": "low",
+      "ticker": "k",
       "contributions": [
         {
-          "date": "2022-01-03",
-          "price": 258.48,
-          "count": 4
-        }
-      ]
-    },
-    {
-      "ticker": "ntdoy",
-      "contributions": [
-        {
-          "date": "2022-01-03",
-          "price": 58.37,
-          "count": 7
-        }
-      ]
-    },
-    {
-      "ticker": "pep",
-      "contributions": [
-        {
-          "date": "2022-01-03",
-          "price": 173.71,
+          "date": "2023-01-03",
+          "price": 71.24,
           "count": 6
         }
       ]
     },
     {
-      "ticker": "uaa",
+      "ticker": "lly",
       "contributions": [
         {
-          "date": "2022-01-03",
-          "price": 21.19,
-          "count": 53
+          "date": "2023-01-03",
+          "price": 365.84,
+          "count": 3
+        }
+      ]
+    },
+    {
+      "ticker": "jnj",
+      "contributions": [
+        {
+          "date": "2023-01-03",
+          "price": 176.65,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "ticker": "goog",
+      "contributions": [
+        {
+          "date": "2023-01-03",
+          "price": 88.73,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "ticker": "aapl",
+      "contributions": [
+        {
+          "date": "2023-01-03",
+          "price": 129.93,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "ticker": "vz",
+      "contributions": [
+        {
+          "date": "2023-01-03",
+          "price": 39.40,
+          "count": 40
         }
       ]
     }

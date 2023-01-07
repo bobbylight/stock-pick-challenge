@@ -1,0 +1,115 @@
+{
+  "cash": 0,
+  "positions": [
+    {
+      "ticker": "aapl",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 177.57,
+          "count": 6
+        }
+      ]
+    },
+    {
+      "ticker": "abnb",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 166.49,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "ticker": "bcyc",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 60.87,
+          "count": 11
+        }
+      ]
+    },
+    {
+      "ticker": "etsy",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 218.94,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "ticker": "lh",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 314.21,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "ticker": "low",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 258.48,
+          "count": 4
+        }
+      ]
+    },
+    {
+      "ticker": "mq",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 17.17,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "ticker": "pton",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 35.76,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "ticker": "shop",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 137.74,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "ticker": "tgt",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 231.44,
+          "count": 11
+        }
+      ]
+    },
+    {
+      "ticker": "zm",
+      "contributions": [
+        {
+          "date": "2022-01-03",
+          "price": 183.91,
+          "count": 4
+        }
+      ]
+    }
+  ]
+}

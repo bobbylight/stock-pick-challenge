@@ -9,8 +9,8 @@
 
 benchmarks=( "^gspc" "^ixic" "^dji" "^rut" "arkg" "arkk")
 investments_2022=()
-robert=("amzn" "cat" "dks" "f" "low" "ntdoy" "pep" "uaa" "znga")
-carrow=("aapl" "abnb" "bcyc" "etsy" "lh" "low" "mq" "pton" "shop" "tgt" "zm")
+robert=("luv" "wmt" "mcd" "pg" "hrl" "k" "lly" "jnj" "goog" "aapl" "vz")
+carrow=("duol" "shop" "mrtx" "amzn" "dal" "tgt" "brk-b" "nflx" "intc" "eigr")
 extra_interesting=("gthx" "pbw" "gld")
 
 all_securities=("${benchmarks[@]}" "${investments_2022[@]}" "${robert[@]}" "${carrow[@]}" "${extra_interesting[@]}")
@@ -25,7 +25,9 @@ dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 csv_dir="${dir}/../csv"
 mkdir "${csv_dir}"
 
-start=1640998800
+# January 1, 2022: 1640998800
+# January 1, 2023: 1672578000
+start=1672578000
 end=1815496000  # 2027-07-13T04:26:40Z
 
 for s in "${all_securities[@]}" ; do
