@@ -3,21 +3,21 @@
     <ul>
       <li>
         Today the overall market went <span class="emphasized">{{ marketDirection }}</span>&nbsp;
-        <span :class="getAmountDeltaClass(gspcTodaysGain)">{{ gspcTodaysGain | percentage }}</span>
+        <span :class="getAmountDeltaClass(gspcTodaysGain)">{{ $filters.percentage(gspcTodaysGain) }}</span>
       </li>
       <li>
         Today you <span class="emphasized">{{ todayVersusTheMarketVerb }}</span>
-        the market by <span :class="getAmountDeltaClass(todayBeatMarketBy)">{{ todayBeatMarketBy | percentage }}</span>
+        the market by <span :class="getAmountDeltaClass(todayBeatMarketBy)">{{ $filters.percentage(todayBeatMarketBy) }}</span>
       </li>
       <li>
         Your best performer today was <span class="emphasized ticker">{{ bestPerformer }}</span>,
         which went {{ upOrDown(dailyChange(bestPerformer)) }}
-        <span :class="getAmountDeltaClass(dailyChange(bestPerformer))">{{ dailyChange(bestPerformer) | percentage }}</span>
+        <span :class="getAmountDeltaClass(dailyChange(bestPerformer))">{{ $filters.percentage(dailyChange(bestPerformer)) }}</span>
       </li>
       <li>
         Your worst performer today was <span class="emphasized ticker">{{ worstPerformer }}</span>,
         which went {{ upOrDown(dailyChange(worstPerformer)) }}
-        <span :class="getAmountDeltaClass(dailyChange(worstPerformer))">{{ dailyChange(worstPerformer) | percentage }}</span>
+        <span :class="getAmountDeltaClass(dailyChange(worstPerformer))">{{ $filters.percentage(dailyChange(worstPerformer)) }}</span>
       </li>
     </ul>
   </div>

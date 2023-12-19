@@ -14,7 +14,7 @@
 <script>
 import Chart from 'chart.js'
 import { currency, percentage } from './app-filters'
-import PortfolioGrowthChartTooltip from './portfolio-growth-chart-tooltip'
+import PortfolioGrowthChartTooltip from './portfolio-growth-chart-tooltip.vue'
 import benchmarkData from '@/benchmark-data';
 
 const percentageYAxisLabelCallback = (value) => {
@@ -130,7 +130,7 @@ export default {
     currencyYAxisLabelCallback(value) {
       // We assume our value will never drop below $1000 or go above $1 million
       let str = currency(value)
-      if (this.$vuetify.breakpoint.xs) {
+      if (this.$vuetify.display.xs) {
         const lastComma = str.lastIndexOf(',')
         if (lastComma > -1) {
           str = str.substring(0, lastComma) + '.' + str.charAt(lastComma + 1) + 'K'

@@ -7,11 +7,11 @@
 
           <nav-banner/>
 
-          <transition name="fade">
-            <keep-alive>
-              <router-view :key="$route.path"/>
-            </keep-alive>
-          </transition>
+          <router-view v-slot="{ Component, route }">
+            <transition name="fade" mode="out-in">
+              <component :is="Component" :key="route.path"/>
+            </transition>
+          </router-view>
         </v-container>
       </v-main>
     </v-app>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import NavBanner from './nav-banner'
+import NavBanner from './nav-banner.vue'
 
 export default {
 
@@ -32,5 +32,11 @@ export default {
 <style>
 .main-container {
   max-width: 1024px !important;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>

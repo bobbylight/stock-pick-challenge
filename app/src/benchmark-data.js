@@ -21,7 +21,7 @@ export default [
     },
     {
         ticker: 'arkg',
-        name: 'ARK Genmic ETF',
+        name: 'ARK Genomic ETF',
         color: '#893168',
     },
     {

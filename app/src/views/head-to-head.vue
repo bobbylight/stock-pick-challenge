@@ -5,30 +5,27 @@
     <v-row>
       <v-col>
         <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
-        <v-card class="user-card" v-if="!$store.state.loading">
+        <v-card class="user-card" title="Head to Head!" v-if="!$store.state.loading">
 
-          <v-card-title>
-            Head to Head!
-            <v-spacer/>
+          <template v-slot:append>
             <v-menu
                 :close-on-content-click="false"
-                offset-y>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" v-on="on">
-                  <v-icon>mdi-settings</v-icon>
-                </v-btn>
+            >
+              <template v-slot:activator="{ props }">
+                <v-btn flat icon="mdi-settings" v-bind="props"></v-btn>
               </template>
-              <v-card>
-                <v-card-title>Options</v-card-title>
+              <v-card title="Options">
                 <v-card-text>
                   <v-container>
                     <v-row>
                       <v-switch v-model="chartType" true-value="area" false-value="line"
+                                color="primary"
                                 @change="storePreferences"
                                 label="Area Chart"/>
                     </v-row>
                     <v-row>
                       <v-switch v-model="chartDataType" true-value="dollars" false-value="percent"
+                                color="primary"
                                 @change="storePreferences"
                                 label="Show Investment Growth"/>
                     </v-row>
@@ -36,7 +33,7 @@
                 </v-card-text>
               </v-card>
             </v-menu>
-          </v-card-title>
+          </template>
           <v-card-text>
             <div class="chart-wrapper">
               <comparison-chart :user-infos="userInfos"
@@ -51,7 +48,7 @@
 </template>
 
 <script>
-import ComparisonChart from "../comparison-chart"
+import ComparisonChart from "../comparison-chart.vue"
 
 const LATEST_PREFERENCES_VERSION = 1
 

@@ -5,10 +5,8 @@
       :items="items"
       :single-expand="true"
       item-key="name"
-      :show-expand="!$vuetify.breakpoint.xs"
-      dense
+      density="comfortable"
       :items-per-page="100"
-      hide-default-footer
   >
 
     <template v-slot:item.ticker="{ item }">
@@ -16,24 +14,24 @@
     </template>
 
     <template v-slot:item.costPerShare="{ item }">
-      {{ item.costPerShare | currency }}
+      {{ $filters.currency(item.costPerShare) }}
     </template>
 
     <template v-slot:item.currentCostPerShare="{ item }">
-      {{ item.currentCostPerShare | currency }}
+      {{ $filters.currency(item.currentCostPerShare) }}
     </template>
 
     <template v-slot:item.marketValue="{ item }">
-      {{ item.marketValue | currency }}
+      {{ $filters.currency(item.marketValue) }}
     </template>
 
     <template v-slot:item.dailyGain="{ item }">
       <div>
         <div :class="getPercentageClass(item.dailyGain)">
-          {{ getDailyPercentageGain(item) | percentage }}
+          {{ $filters.percentage(getDailyPercentageGain(item)) }}
         </div>
         <div :class="getAmountDeltaClass(item.dailyGain)">
-          {{ item.dailyGain | currency }}
+          {{ $filters.currency(item.dailyGain) }}
         </div>
       </div>
     </template>
@@ -41,40 +39,41 @@
     <template v-slot:item.totalGain="{ item }">
       <div>
         <div :class="getPercentageClass(item.totalGain)">
-          {{ getTotalPercentageGain(item) | percentage }}
+          {{ $filters.percentage(getTotalPercentageGain(item)) }}
         </div>
         <div :class="getAmountDeltaClass(item.totalGain)">
-          {{ item.totalGain | currency }}
+          {{ $filters.currency(item.totalGain) }}
         </div>
       </div>
     </template>
 
     <template v-slot:body.append="{ }">
-      <tr class="text--primary lot-table-footer-row" v-if="!$vuetify.breakpoint.xs">
-        <td></td>
+      <tr class="text--primary lot-table-footer-row" v-if="!$vuetify.display.xs">
         <td class="text-start">Total</td>
         <td></td>
         <td></td>
         <td></td>
-        <td class="text-end">{{ currentValue | currency }}</td>
+        <td class="text-end">{{ $filters.currency(currentValue) }}</td>
         <td class="text-end">
           <div :class="getPercentageClass(averageDailyPercentageChange)">
-            {{ averageDailyPercentageChange | percentage }}
+            {{ $filters.percentage(averageDailyPercentageChange) }}
           </div>
           <div :class="getAmountDeltaClass(totalDailyGain)">
-            {{ totalDailyGain | currency }}
+            {{ $filters.currency(totalDailyGain) }}
           </div>
         </td>
         <td class="text-end">
           <div :class="getPercentageClass(averageTotalPercentageChange)">
-            {{ averageTotalPercentageChange | percentage }}
+            {{ $filters.percentage(averageTotalPercentageChange) }}
           </div>
           <div :class="getAmountDeltaClass(totalGain)">
-            {{ totalGain | currency }}
+            {{ $filters.currency(totalGain) }}
           </div>
         </td>
       </tr>
     </template>
+
+    <template v-slot:bottom></template>
   </v-data-table>
 </template>
 
@@ -94,36 +93,36 @@ export default {
 
       headers: [
         {
-          text: 'Ticker',
+          title: 'Ticker',
           value: 'ticker'
         },
         {
-          text: 'Shares',
+          title: 'Shares',
           value: 'shares',
           align: 'end',
         },
         {
-          text: 'Avg Cost/Share',
+          title: 'Avg Cost/Share',
           value: 'costPerShare',
           align: 'end',
         },
         {
-          text: 'Current Cost/Share',
+          title: 'Current Cost/Share',
           value: 'currentCostPerShare',
           align: 'end',
         },
         {
-          text: 'Market Value',
+          title: 'Market Value',
           value: 'marketValue',
           align: 'end',
         },
         {
-          text: 'Daily Gain',
+          title: 'Daily Gain',
           value: 'dailyGain',
           align: 'end',
         },
         {
-          text: 'Total Gain',
+          title: 'Total Gain',
           value: 'totalGain',
           align: 'end',
         },

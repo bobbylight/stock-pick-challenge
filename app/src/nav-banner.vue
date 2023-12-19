@@ -1,4 +1,4 @@
-<template functional>
+<template>
   <div class="app-banner">
     <div>
       <img src="/stock-pick-challenge-logo.png" alt="logo">

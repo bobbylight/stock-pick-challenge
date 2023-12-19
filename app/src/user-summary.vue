@@ -5,28 +5,28 @@
         Initial investment:
       </div>
       <div class="user-summary-value">
-        {{ initialInvestment | currency }}
+        {{ $filters.currency(initialInvestment) }}
       </div>
 
       <div class="user-summary-header">
         Current value:
       </div>
       <div class="user-summary-value">
-        {{ currentValue | currency }}
+        {{ $filters.currency(currentValue) }}
       </div>
 
       <div class="user-summary-header">
         Today's gain:
       </div>
       <div class="user-summary-value" :class="getAmountDeltaClass(todaysGain)">
-        {{ todaysGain | currency }}
+        {{ $filters.currency(todaysGain) }}
       </div>
 
       <div class="user-summary-header">
         Net gain:
       </div>
       <div class="user-summary-value" :class="getAmountDeltaClass(currentValue - initialInvestment)">
-        {{ currentValue - initialInvestment | currency }}
+        {{ $filters.currency(currentValue - initialInvestment) }}
       </div>
     </div>
 </template>

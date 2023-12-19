@@ -3,11 +3,19 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
-.theme--light.v-application {
+.v-theme--light.v-application {
     background: #dfe8e8;
     /*background: linear-gradient(0deg, white calc(100% - 400px), #435562 400px);*/
     /*background: url('/stock-pick-challenge.jpg') no-repeat;*/
     /*background-size: 100% 400px;*/
+}
+
+.v-application ul {
+    padding-left: 24px;
+}
+
+.v-application .v-card .v-card-text {
+    line-height: 1.375rem; /* default is 1.25rem */
 }
 
 .primary-delta-gain {

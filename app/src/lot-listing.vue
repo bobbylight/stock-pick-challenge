@@ -16,8 +16,8 @@
               {{ item.ticker }}
             </span>
             <span class="lot-price-info">
-              {{ item.currentCostPerShare | currency }}
-              <span :class="getSecondaryValueClass(item.dailyPercentGain)">({{ item.dailyPercentGain | percentage }})</span>
+              {{ $filters.currency(item.currentCostPerShare) }}
+              <span :class="getSecondaryValueClass(item.dailyPercentGain)">({{ $filters.percentage(item.dailyPercentGain) }})</span>
             </span>
           </div>
 
@@ -36,7 +36,7 @@
               Market value:
               <v-spacer></v-spacer>
               <span>
-                {{ item.marketValue | currency }}
+                {{ $filters.currency(item.marketValue) }}
               </span>
             </v-row>
           </v-container>
@@ -46,7 +46,7 @@
               Daily gain:
               <v-spacer></v-spacer>
               <span class="delta-value" :class="getPrimaryValueClass(item.dailyGain)">
-                {{ item.dailyGain | currency }}
+                {{ $filters.currency(item.dailyGain) }}
               </span>
             </v-row>
           </v-container>
@@ -56,7 +56,7 @@
               Total gain:
               <v-spacer></v-spacer>
               <span class="delta-value" :class="getPrimaryValueClass(item.totalGain)">
-                {{ item.totalGain | currency }}
+                {{ $filters.currency(item.totalGain) }}
               </span>
             </v-row>
           </v-container>
@@ -82,15 +82,15 @@ export default {
       sortBy: 'ticker',
       sortOptions: [
         {
-          text: 'Ticker',
+          title: 'Ticker',
           value: 'ticker',
         },
         {
-          text: 'Daily Gain',
+          title: 'Daily Gain',
           value: 'dailyGain',
         },
         {
-          text: 'Total Gain',
+          title: 'Total Gain',
           value: 'totalGain',
         },
       ]

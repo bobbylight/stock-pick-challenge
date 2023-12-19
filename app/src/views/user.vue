@@ -46,18 +46,14 @@
     <v-row>
       <v-col>
         <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
-        <v-card class="user-card" v-if="!$store.state.loading && userData">
+        <v-card class="user-card" title="YTD Growth" v-if="!$store.state.loading && userData">
 
-          <v-card-title>
-            YTD Growth
-            <v-spacer/>
+          <template v-slot:append>
             <v-menu
                 :close-on-content-click="false"
                 offset-y>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" v-on="on">
-                  <v-icon>mdi-settings</v-icon>
-                </v-btn>
+              <template v-slot:activator="{ props }">
+                <v-btn flat icon="mdi-settings" v-bind="props"></v-btn>
               </template>
               <v-card>
                 <v-card-title>Options</v-card-title>
@@ -65,18 +61,21 @@
                   <v-container>
                     <v-row>
                       <v-switch v-model="chartType" true-value="area" false-value="line"
+                                color="primary"
                                 @change="storePreferences"
                                 label="Area Chart"/>
                     </v-row>
                     <v-row>
                       <v-switch v-model="chartDataType" true-value="dollars" false-value="percent"
+                                color="primary"
                                 @change="storePreferences"
                                 label="Show Investment Value"/>
                     </v-row>
                     <v-row>
                       <v-select chips v-model="chartComparisons" :items="benchmarks"
+                                color="primary"
                                 label="Compare to..."
-                                item-text="name"
+                                item-title="name"
                                 item-value="ticker"
                                 @change="storePreferences"
                                 multiple/>
@@ -85,7 +84,7 @@
                 </v-card-text>
               </v-card>
             </v-menu>
-          </v-card-title>
+          </template>
           <v-card-text>
             <div class="chart-wrapper">
               <portfolio-growth-chart :history="userData.history"
@@ -105,9 +104,9 @@
 
           <v-card-title>Current Holdings</v-card-title>
           <v-card-text class="pa-0">
-            <lot-table v-if="!$vuetify.breakpoint.xs"
+            <lot-table v-if="!$vuetify.display.xs"
                        :portfolio-name="portfolioName" :user-data="userData"/>
-            <lot-listing v-if="$vuetify.breakpoint.xs"
+            <lot-listing v-if="$vuetify.display.xs"
                          :portfolio-name="portfolioName" :user-data="userData"/>
           </v-card-text>
         </v-card>
@@ -117,13 +116,13 @@
 </template>
 
 <script>
-import LotListing from '@/lot-listing'
-import LotTable from '@/lot-table'
-import PortfolioGrowthChart from '@/portfolio-growth-chart'
-import UserSummary from '@/user-summary'
-import TodaysChanges from '@/todays-changes'
+import LotListing from '@/lot-listing.vue'
+import LotTable from '@/lot-table.vue'
+import PortfolioGrowthChart from '@/portfolio-growth-chart.vue'
+import UserSummary from '@/user-summary.vue'
+import TodaysChanges from '@/todays-changes.vue'
 import benchmarkData from '@/benchmark-data';
-import NotableMovers from '@/notable-movers';
+import NotableMovers from '@/notable-movers.vue'
 
 const LATEST_PREFERENCES_VERSION = 1
 

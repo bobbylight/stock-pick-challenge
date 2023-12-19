@@ -1,9 +1,6 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import User from '../views/user.vue'
-import HeadToHead from '../views/head-to-head'
-
-Vue.use(VueRouter)
+import HeadToHead from '../views/head-to-head.vue'
 
 const routes = [
     {
@@ -22,17 +19,17 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/about.vue'),
+        component: () => import('../views/about.vue'),
     },
     {
-        path: '*',
+        path: '/:pathMatch(.*)*',
         redirect: '/head-to-head',
     },
 ]
 
-const router = new VueRouter({
-    mode: 'history',
-    base: process.env.BASE_URL,
+const router = createRouter({
+    base: import.meta.env.BASE_URL,
+    history: createWebHashHistory(),
     routes,
 })
 

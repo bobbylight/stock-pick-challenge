@@ -1,22 +1,18 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './app.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-import { currency, percentage } from './app-filters'
 import './app.css'
+import { installGlobalFilters } from './app-filters';
 
-Vue.config.productionTip = false
+const app = createApp(App)
+    .use(router)
+    .use(store)
+    .use(vuetify)
 
-Vue.filter('currency', currency)
-Vue.filter('percentage', percentage)
-
-new Vue({
-  router,
-  store,
-  vuetify,
-  render: h => h(App)
-}).$mount('#app')
+installGlobalFilters(app)
+app.mount('#app')
 
 const urls = [
     '/data/carrow.json',

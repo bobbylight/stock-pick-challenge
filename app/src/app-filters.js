@@ -21,3 +21,10 @@ export const percentage = (value) => {
     const arrow = value > 0 ? '\u2191' : (value < 0 ? '\u2193' : '')
     return percentageFormatter.format(value) + arrow
 }
+
+export const installGlobalFilters = (app) => {
+    app.config.globalProperties.$filters = {
+        currency,
+        percentage,
+    }
+}

@@ -1,17 +1,14 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 
 const data = {
     loading: true,
     // Most data is imported lazily
 }
 
-Vue.use(Vuex)
-
 // The day we made our picks
 const FIRST_DAY = '2023-01-03'
 
-export default new Vuex.Store({
+const store = createStore({
     state: data,
     mutations: {
     },
@@ -117,3 +114,5 @@ export default new Vuex.Store({
         }
     }
 })
+
+export default store
