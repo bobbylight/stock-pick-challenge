@@ -1,29 +1,10 @@
 # stock-pick-challenge
+This is the actual source code for the application.
+It's written in Vue 3 using Vuetify and built via Vite.
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## npm tasks
+* `npm install` - Installs dependencies
+* `npm run dev` - Starts local dev environment
+* `npm run build` - Builds minified production artifact to `dist/`
+* `npm run test:unit` - Runs unit tests (note: currently broken)
+* `npm run lint` - Lints and fixes files
