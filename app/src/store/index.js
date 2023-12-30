@@ -2,17 +2,51 @@ import { createStore } from 'vuex'
 
 const data = {
     loading: true,
+    year: 2023,
     // Most data is imported lazily
 }
-
-// The day we made our picks
-const FIRST_DAY = '2023-01-03'
 
 const store = createStore({
     state: data,
     mutations: {
+        setLoading(state, loading) {
+            state.loading = loading
+        }
     },
     actions: {
+        setYear({ commit }, year) {
+            commit('setLoading', true)
+            const urls = [
+                `/data/${year}/carrow.json`,
+                `/data/${year}/portfolio-history-carrow.json`,
+                `/data/${year}/robert.json`,
+                `/data/${year}/portfolio-history-robert.json`,
+                `/data/${year}/ticker-history.json`,
+            ]
+            Promise.all(urls.map(url => fetch(url).then(response => response.json())))
+                .then(responses => {
+
+                    const carrow = responses[0]
+                    const carrowHistory = responses[1]
+                    const robert = responses[2]
+                    const robertHistory = responses[3]
+                    const tickerHistory = responses[4]
+
+                    store.replaceState({
+                        loading: false,
+                        year,
+                        carrow: {
+                            ...carrow,
+                            history: carrowHistory,
+                        },
+                        robert: {
+                            ...robert,
+                            history: robertHistory,
+                        },
+                        history: tickerHistory,
+                    })
+                })
+        },
     },
     modules: {
     },
@@ -20,10 +54,15 @@ const store = createStore({
 
         initialInvestment: state => (portfolioName) => {
 
+            // Note: If we ever start to support mid-year purchaes this isn't guaranteed
+            // to always work
+            const positions = state[portfolioName].positions
+            const firstDay = positions[0].contributions[0].date
+
             let initialValue = 0
-            state[portfolioName].positions.forEach(position => {
+            positions.forEach(position => {
                 // Should be 0 or 1 contributions on the first day
-                const contribution = position.contributions.find(contribution => contribution.date === FIRST_DAY)
+                const contribution = position.contributions.find(contribution => contribution.date === firstDay)
                 if (contribution) {
                     initialValue += contribution.price * contribution.count
                 }

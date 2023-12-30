@@ -11,12 +11,25 @@
         <router-link to="/users/carrow">Carrow</router-link> |
         <router-link to="/about">About</router-link>
       </div>
+      <!--
+      <div id="year">
+        <button @click="setYear('2023')">2023</button> |
+        <button @click="setYear('2022')">2022</button> |
+        <button @click="setYear('2021')">2021</button>
+      </div>
+      -->
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  methods: {
+    setYear(year) {
+      console.log('Setting year to: ' + year)
+      this.$store.dispatch('setYear', year);
+    },
+  },
 }
 </script>
 
