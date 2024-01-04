@@ -118,7 +118,7 @@ export default {
         const tickerHistory = this.$store.state.history[ticker].history
         const currentCostPerShare = tickerHistory[tickerHistory.length - 1].close
         const marketValue = currentCostPerShare * shares
-        const dailyGain = (currentCostPerShare - tickerHistory[tickerHistory.length - 2].close) * shares
+        const dailyGain = (currentCostPerShare - (tickerHistory[tickerHistory.length - 2]?.close ?? 0)) * shares
         const dailyPercentGain = dailyGain / (marketValue - dailyGain)
         const totalGain = (currentCostPerShare - costPerShare) * shares
 
@@ -159,7 +159,7 @@ export default {
 
     getDailyPercentageGain(item) {
       const history = this.$store.state.history[item.ticker].history
-      const previousClose = history[history.length - 2].close * item.shares
+      const previousClose = (history[history.length - 2]?.close ?? 0) * item.shares
       return item.dailyGain / previousClose
     },
 

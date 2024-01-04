@@ -84,7 +84,7 @@ export default {
 
     gspcTodaysGain() {
       const gspcHistory = this.$store.state.history['^gspc'].history
-      const gspcYesterdaysValue = gspcHistory[gspcHistory.length - 2].close
+      const gspcYesterdaysValue = gspcHistory[gspcHistory.length - 2]?.close ?? 0
       const gspcTodaysValue = gspcHistory[gspcHistory.length - 1].close
       return (gspcTodaysValue - gspcYesterdaysValue) / gspcYesterdaysValue
     },

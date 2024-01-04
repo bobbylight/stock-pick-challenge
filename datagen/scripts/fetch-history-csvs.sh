@@ -9,11 +9,12 @@
 
 benchmarks=( "^gspc" "^ixic" "^dji" "^rut" "arkg" "arkk")
 investments_2022=()
-robert=("luv" "wmt" "mcd" "pg" "hrl" "k" "lly" "jnj" "goog" "aapl" "vz")
-carrow=("duol" "shop" "mrtx" "amzn" "dal" "tgt" "brk-b" "nflx" "intc" "eigr")
-extra_interesting=("gthx" "pbw" "gld")
+investments_2023=()
+robert=("dis" "eigr" "gthx" "ko" "msft" "nke" "nvda" "nvo" "vz")  # "tgt" skipped since Carrow's portfolio also has it
+carrow=("aapl" "crgx" "dal" "gps" "lulu" "meta" "otly" "pfe" "tgt" "tsla")
+extra_interesting=("pbw" "gld")
 
-all_securities=("${benchmarks[@]}" "${investments_2022[@]}" "${robert[@]}" "${carrow[@]}" "${extra_interesting[@]}")
+all_securities=("${benchmarks[@]}" "${investments_2022[@]}" "${investments_2023[@]}" "${robert[@]}" "${carrow[@]}" "${extra_interesting[@]}")
 
 # You probably don't want to edit past this line.
 echo "Security count: ${#all_securities[@]}"
@@ -27,7 +28,8 @@ mkdir "${csv_dir}"
 
 # January 1, 2022: 1640998800
 # January 1, 2023: 1672578000
-start=1672578000
+# January 1, 2024: 1704067200
+start=1704067200
 end=1815496000  # 2027-07-13T04:26:40Z
 
 for s in "${all_securities[@]}" ; do

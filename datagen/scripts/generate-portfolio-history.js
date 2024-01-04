@@ -19,7 +19,7 @@ const data = require(`./${dataFile}`)
 const tickerHistory = require('../output/ticker-history.json')
 
 // The day we made our picks
-const FIRST_DAY = '2023-01-03'
+const FIRST_DAY = '2024-01-02'
 
 // Returns the next trading day from a given date.  Really just skips weekends.
 const getNextTradingDay = (date) => {

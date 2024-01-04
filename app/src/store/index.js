@@ -2,9 +2,11 @@ import { createStore } from 'vuex'
 
 const data = {
     loading: true,
-    year: 2023,
+    year: 2024,
     // Most data is imported lazily
 }
+
+const FIRST_DAY = '2024-01-02'
 
 const store = createStore({
     state: data,
@@ -88,7 +90,7 @@ const store = createStore({
 
             const tickerHistory = state.history[ticker].history
             const currentCostPerShare = tickerHistory[tickerHistory.length - 1].close
-            const previousCostPerShare = tickerHistory[tickerHistory.length - 2].close
+            const previousCostPerShare = tickerHistory[tickerHistory.length - 2]?.close ?? 0
 
             let change = currentCostPerShare - previousCostPerShare // Will never overflow with our values
             if (percentage) {
@@ -108,8 +110,9 @@ const store = createStore({
 
                 // TODO: Allow for sold shares
                 const ticker = position.ticker
+                console.log('ticker: ' + ticker)
                 const tickerHistory = state.history[ticker].history
-                const targetDateClose = tickerHistory[tickerHistory.length - 2].close
+                const targetDateClose = tickerHistory[tickerHistory.length - 2]?.close ?? 0
                 position.contributions.forEach(contribution => currentValue += contribution.count * targetDateClose)
             })
             return currentValue
@@ -121,7 +124,7 @@ const store = createStore({
             const history = state.history[ticker].history
             // Get first date after since we "bought" on a Sunday.  Compounding starts on FIRST_DAY's growth
             const initialPriceIndex = history.findIndex(record => record.date > FIRST_DAY) - 1
-            const initialPrice = history[initialPriceIndex].close
+            const initialPrice = history[initialPriceIndex]?.close ?? 0
             const shareCount = startBalance / initialPrice
             console.log(`Initial share count: ${shareCount}`)
 
