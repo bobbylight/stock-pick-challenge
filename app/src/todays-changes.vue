@@ -29,8 +29,14 @@ import Utils from './utils'
 export default {
 
   props: {
-    portfolioName: String,
-    userData: Object,
+    portfolioName: {
+      type: String,
+      required: true,
+    },
+    userData: {
+      type: Object,
+      required: true,
+    },
   },
 
   data() {

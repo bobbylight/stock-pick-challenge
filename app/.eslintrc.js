@@ -5,7 +5,7 @@ module.exports = {
     es2022: true,
   },
   'extends': [
-    'plugin:vue/essential',
+    'plugin:vue/vue3-strongly-recommended',
     'eslint:recommended'
   ],
   parser: 'vue-eslint-parser',

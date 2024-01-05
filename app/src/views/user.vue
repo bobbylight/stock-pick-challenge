@@ -1,29 +1,50 @@
 <template>
-
   <v-container>
-
     <v-row>
-
-      <v-col cols="12" sm="6">
-        <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
-        <v-card class="user-card" v-if="!$store.state.loading && userData">
-
+      <v-col
+        cols="12"
+        sm="6"
+      >
+        <v-skeleton-loader
+          v-if="$store.state.loading"
+          elevation="2"
+          type="article"
+        />
+        <v-card
+          class="user-card"
+          v-if="!$store.state.loading && userData"
+        >
           <v-card-title>Summary</v-card-title>
 
           <v-card-text>
-            <user-summary :portfolio-name="portfolioName" :user-data="userData"/>
+            <user-summary
+              :portfolio-name="portfolioName"
+              :user-data="userData"
+            />
           </v-card-text>
         </v-card>
       </v-col>
 
-      <v-col cols="12" sm="6">
-        <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
-        <v-card class="user-card" v-if="!$store.state.loading && userData">
-
+      <v-col
+        cols="12"
+        sm="6"
+      >
+        <v-skeleton-loader
+          v-if="$store.state.loading"
+          elevation="2"
+          type="article"
+        />
+        <v-card
+          class="user-card"
+          v-if="!$store.state.loading && userData"
+        >
           <v-card-title>Today's Changes</v-card-title>
 
           <v-card-text>
-            <todays-changes :portfolio-name="portfolioName" :user-data="userData"/>
+            <todays-changes
+              :portfolio-name="portfolioName"
+              :user-data="userData"
+            />
           </v-card-text>
         </v-card>
       </v-col>
@@ -31,13 +52,22 @@
 
     <v-row>
       <v-col>
-        <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
-        <v-card class="user-card" v-if="!$store.state.loading && userData">
-
+        <v-skeleton-loader
+          v-if="$store.state.loading"
+          elevation="2"
+          type="article"
+        />
+        <v-card
+          class="user-card"
+          v-if="!$store.state.loading && userData"
+        >
           <v-card-title>Notable Movers</v-card-title>
 
           <v-card-text>
-            <notable-movers :portfolio-name="portfolioName" :user-data="userData"/>
+            <notable-movers
+              :portfolio-name="portfolioName"
+              :user-data="userData"
+            />
           </v-card-text>
         </v-card>
       </v-col>
@@ -45,40 +75,64 @@
 
     <v-row>
       <v-col>
-        <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
-        <v-card class="user-card" title="YTD Growth" v-if="!$store.state.loading && userData">
-
-          <template v-slot:append>
+        <v-skeleton-loader
+          v-if="$store.state.loading"
+          elevation="2"
+          type="article"
+        />
+        <v-card
+          class="user-card"
+          title="YTD Growth"
+          v-if="!$store.state.loading && userData"
+        >
+          <template #append>
             <v-menu
-                :close-on-content-click="false"
-                offset-y>
-              <template v-slot:activator="{ props }">
-                <v-btn flat icon="mdi-settings" v-bind="props"></v-btn>
+              :close-on-content-click="false"
+              offset-y
+            >
+              <template #activator="{ props }">
+                <v-btn
+                  flat
+                  icon="mdi-settings"
+                  v-bind="props"
+                />
               </template>
               <v-card>
                 <v-card-title>Options</v-card-title>
                 <v-card-text>
                   <v-container>
                     <v-row>
-                      <v-switch v-model="chartType" true-value="area" false-value="line"
-                                color="primary"
-                                @change="storePreferences"
-                                label="Area Chart"/>
+                      <v-switch
+                        v-model="chartType"
+                        true-value="area"
+                        false-value="line"
+                        color="primary"
+                        @change="storePreferences"
+                        label="Area Chart"
+                      />
                     </v-row>
                     <v-row>
-                      <v-switch v-model="chartDataType" true-value="dollars" false-value="percent"
-                                color="primary"
-                                @change="storePreferences"
-                                label="Show Investment Value"/>
+                      <v-switch
+                        v-model="chartDataType"
+                        true-value="dollars"
+                        false-value="percent"
+                        color="primary"
+                        @change="storePreferences"
+                        label="Show Investment Value"
+                      />
                     </v-row>
                     <v-row>
-                      <v-select chips v-model="chartComparisons" :items="benchmarks"
-                                color="primary"
-                                label="Compare to..."
-                                item-title="name"
-                                item-value="ticker"
-                                @change="storePreferences"
-                                multiple/>
+                      <v-select
+                        chips
+                        v-model="chartComparisons"
+                        :items="benchmarks"
+                        color="primary"
+                        label="Compare to..."
+                        item-title="name"
+                        item-value="ticker"
+                        @change="storePreferences"
+                        multiple
+                      />
                     </v-row>
                   </v-container>
                 </v-card-text>
@@ -87,10 +141,12 @@
           </template>
           <v-card-text>
             <div class="chart-wrapper">
-              <portfolio-growth-chart :history="userData.history"
-                                      :chart-type="chartType"
-                                      :data-type="chartDataType"
-                                      :comparisons="chartComparisons"/>
+              <portfolio-growth-chart
+                :history="userData.history"
+                :chart-type="chartType"
+                :data-type="chartDataType"
+                :comparisons="chartComparisons"
+              />
             </div>
           </v-card-text>
         </v-card>
@@ -99,15 +155,27 @@
 
     <v-row>
       <v-col>
-        <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="table"/>
-        <v-card class="user-card" v-if="!$store.state.loading && userData">
-
+        <v-skeleton-loader
+          v-if="$store.state.loading"
+          elevation="2"
+          type="table"
+        />
+        <v-card
+          class="user-card"
+          v-if="!$store.state.loading && userData"
+        >
           <v-card-title>Current Holdings</v-card-title>
           <v-card-text class="pa-0">
-            <lot-table v-if="!$vuetify.display.xs"
-                       :portfolio-name="portfolioName" :user-data="userData"/>
-            <lot-listing v-if="$vuetify.display.xs"
-                         :portfolio-name="portfolioName" :user-data="userData"/>
+            <lot-table
+              v-if="!$vuetify.display.xs"
+              :portfolio-name="portfolioName"
+              :user-data="userData"
+            />
+            <lot-listing
+              v-if="$vuetify.display.xs"
+              :portfolio-name="portfolioName"
+              :user-data="userData"
+            />
           </v-card-text>
         </v-card>
       </v-col>

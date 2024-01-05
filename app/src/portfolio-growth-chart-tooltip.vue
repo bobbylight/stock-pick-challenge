@@ -1,21 +1,31 @@
 <template>
-
-  <div class="chart-tooltip-wrapper animated-tooltip" :style="positionStyle()">
-
-    <div class="arrow-wrapper" v-if="onRightSide">
-      <div class="chart-tooltip-arrow left-side"/>
+  <div
+    class="chart-tooltip-wrapper animated-tooltip"
+    :style="positionStyle()"
+  >
+    <div
+      class="arrow-wrapper"
+      v-if="onRightSide"
+    >
+      <div class="chart-tooltip-arrow left-side" />
     </div>
 
     <div class="portfolio-growth-chart-tooltip">
-
       <div class="chart-tooltip-main-content">
-
-        <div class="chart-tooltip-title">{{title()}}</div>
+        <div class="chart-tooltip-title">
+          {{ title() }}
+        </div>
 
         <table class="tooltip-table">
-          <tr v-for="dataPoint of dataPoints()" :key="dataPoint.datasetIndex">
+          <tr
+            v-for="dataPoint of dataPoints()"
+            :key="dataPoint.datasetIndex"
+          >
             <td>
-              <span class="stocky-color-square" :style="getDataPointStyle(dataPoint)"></span>
+              <span
+                class="stocky-color-square"
+                :style="getDataPointStyle(dataPoint)"
+              />
               <span class="stocky-dataset-label">{{ datasets[dataPoint.datasetIndex].label }}:</span>
             </td>
             <td class="stocky-tooltip-value">
@@ -26,8 +36,11 @@
       </div>
     </div>
 
-    <div class="arrow-wrapper" v-if="!onRightSide">
-      <div class="chart-tooltip-arrow right-side"/>
+    <div
+      class="arrow-wrapper"
+      v-if="!onRightSide"
+    >
+      <div class="chart-tooltip-arrow right-side" />
     </div>
   </div>
 </template>
@@ -38,10 +51,19 @@ import { currency, percentage } from './app-filters'
 export default {
 
   props: {
-    model: Object,
-    datasets: Array,
+    model: {
+      type: Object,
+      required: true,
+    },
+    datasets: {
+      type: Array,
+      required: true,
+    },
     percentages: Boolean,
-    canvasRect: Object,
+    canvasRect: {
+      type: Object,
+      required: true,
+    },
     visible: Boolean,
   },
 

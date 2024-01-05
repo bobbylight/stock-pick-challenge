@@ -1,33 +1,50 @@
 <template>
-
   <v-container>
-
     <v-row>
       <v-col>
-        <v-skeleton-loader v-if="$store.state.loading" elevation="2" type="article"/>
-        <v-card class="user-card" title="Head to Head!" v-if="!$store.state.loading">
-
-          <template v-slot:append>
+        <v-skeleton-loader
+          v-if="$store.state.loading"
+          elevation="2"
+          type="article"
+        />
+        <v-card
+          class="user-card"
+          title="Head to Head!"
+          v-if="!$store.state.loading"
+        >
+          <template #append>
             <v-menu
-                :close-on-content-click="false"
+              :close-on-content-click="false"
             >
-              <template v-slot:activator="{ props }">
-                <v-btn flat icon="mdi-settings" v-bind="props"></v-btn>
+              <template #activator="{ props }">
+                <v-btn
+                  flat
+                  icon="mdi-settings"
+                  v-bind="props"
+                />
               </template>
               <v-card title="Options">
                 <v-card-text>
                   <v-container>
                     <v-row>
-                      <v-switch v-model="chartType" true-value="area" false-value="line"
-                                color="primary"
-                                @change="storePreferences"
-                                label="Area Chart"/>
+                      <v-switch
+                        v-model="chartType"
+                        true-value="area"
+                        false-value="line"
+                        color="primary"
+                        @change="storePreferences"
+                        label="Area Chart"
+                      />
                     </v-row>
                     <v-row>
-                      <v-switch v-model="chartDataType" true-value="dollars" false-value="percent"
-                                color="primary"
-                                @change="storePreferences"
-                                label="Show Investment Growth"/>
+                      <v-switch
+                        v-model="chartDataType"
+                        true-value="dollars"
+                        false-value="percent"
+                        color="primary"
+                        @change="storePreferences"
+                        label="Show Investment Growth"
+                      />
                     </v-row>
                   </v-container>
                 </v-card-text>
@@ -36,9 +53,11 @@
           </template>
           <v-card-text>
             <div class="chart-wrapper">
-              <comparison-chart :user-infos="userInfos"
-                                :type="chartType"
-                                :data-type="chartDataType"/>
+              <comparison-chart
+                :user-infos="userInfos"
+                :type="chartType"
+                :data-type="chartDataType"
+              />
             </div>
           </v-card-text>
         </v-card>

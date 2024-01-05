@@ -1,13 +1,18 @@
 <template>
   <div class="stocky-chart-parent">
-    <canvas ref="canvas" width="640" height="480" />
+    <canvas
+      ref="canvas"
+      width="640"
+      height="480"
+    />
     <portfolio-growth-chart-tooltip
-        :title="tipTitle"
-        :model="tooltipModel"
-        :datasets="datasets"
-        :percentages="percentages"
-        :canvas-rect="canvasRect"
-        :visible="visible"/>
+      :title="tipTitle"
+      :model="tooltipModel"
+      :datasets="datasets"
+      :percentages="percentages"
+      :canvas-rect="canvasRect"
+      :visible="visible"
+    />
   </div>
 </template>
 
@@ -25,10 +30,22 @@ const percentageYAxisLabelCallback = (value) => {
 export default {
   components: {PortfolioGrowthChartTooltip},
   props: {
-    history: Array,
-    chartType: String,
-    dataType: String,
-    comparisons: Array,
+    history: {
+      type: Array,
+      required: true,
+    },
+    chartType: {
+      type: String,
+      required: true,
+    },
+    dataType: {
+      type: String,
+      required: true,
+    },
+    comparisons: {
+      type: Array,
+      required: true,
+    },
   },
 
   data() {

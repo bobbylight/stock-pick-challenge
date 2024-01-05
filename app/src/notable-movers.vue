@@ -1,22 +1,29 @@
 <template>
   <div class="notable-moves">
-
     <ul v-if="notableMovesUp.length || notableMovesDown.length">
-
-      <li v-for="moveUp in notableMovesUp" :key="'move-up-' + moveUp.ticker">
-        <span class="emphasized ticker">{{moveUp.ticker}}</span> has been going up the past
-        <span class="emphasized">{{moveUp.dayCount}} trading days</span>
-        for a total of <span :class="getAmountDeltaClass(moveUp.percentage)">{{$filters.percentage(moveUp.percentage)}}</span>
+      <li
+        v-for="moveUp in notableMovesUp"
+        :key="'move-up-' + moveUp.ticker"
+      >
+        <span class="emphasized ticker">{{ moveUp.ticker }}</span> has been going up the past
+        <span class="emphasized">{{ moveUp.dayCount }} trading days</span>
+        for a total of <span :class="getAmountDeltaClass(moveUp.percentage)">{{ $filters.percentage(moveUp.percentage) }}</span>
       </li>
 
-      <li v-for="moveDown in notableMovesDown" :key="'move-down-' + moveDown.ticker">
-        <span class="emphasized ticker">{{moveDown.ticker}}</span> has been going down the past
-        <span class="emphasized">{{moveDown.dayCount}} trading days</span>
-        for a total of <span :class="getAmountDeltaClass(moveDown.percentage)">{{$filters.percentage(moveDown.percentage)}}</span>
+      <li
+        v-for="moveDown in notableMovesDown"
+        :key="'move-down-' + moveDown.ticker"
+      >
+        <span class="emphasized ticker">{{ moveDown.ticker }}</span> has been going down the past
+        <span class="emphasized">{{ moveDown.dayCount }} trading days</span>
+        for a total of <span :class="getAmountDeltaClass(moveDown.percentage)">{{ $filters.percentage(moveDown.percentage) }}</span>
       </li>
     </ul>
 
-    <span class="no-movers" v-else>
+    <span
+      class="no-movers"
+      v-else
+    >
       Nothing momentous to report!
     </span>
   </div>
@@ -30,8 +37,14 @@ const MINIMUM_MOVE_COUNT = 3
 export default {
 
   props: {
-    portfolioName: String,
-    userData: Object,
+    portfolioName: {
+      type: String,
+      required: true,
+    },
+    userData: {
+      type: Object,
+      required: true,
+    },
   },
 
   data() {

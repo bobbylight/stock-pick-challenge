@@ -1,16 +1,18 @@
 <template>
-
   <v-container class="lot-listing">
     <v-row>
-
       <v-col cols="12">
+        <v-select
+          v-model="sortBy"
+          :items="sortOptions"
+          label="Sort by..."
+        />
 
-        <v-select v-model="sortBy" :items="sortOptions"
-                  label="Sort by..."
-                  />
-
-        <div v-for="item in items" :key="item.ticker" class="lot">
-
+        <div
+          v-for="item in items"
+          :key="item.ticker"
+          class="lot"
+        >
           <div class="lot-title">
             <span class="lot-ticker text--primary">
               {{ item.ticker }}
@@ -24,7 +26,7 @@
           <v-container>
             <v-row>
               Shares:
-              <v-spacer></v-spacer>
+              <v-spacer />
               <span>
                 {{ item.shares }}
               </span>
@@ -34,7 +36,7 @@
           <v-container>
             <v-row>
               Market value:
-              <v-spacer></v-spacer>
+              <v-spacer />
               <span>
                 {{ $filters.currency(item.marketValue) }}
               </span>
@@ -44,8 +46,11 @@
           <v-container>
             <v-row>
               Daily gain:
-              <v-spacer></v-spacer>
-              <span class="delta-value" :class="getPrimaryValueClass(item.dailyGain)">
+              <v-spacer />
+              <span
+                class="delta-value"
+                :class="getPrimaryValueClass(item.dailyGain)"
+              >
                 {{ $filters.currency(item.dailyGain) }}
               </span>
             </v-row>
@@ -54,8 +59,11 @@
           <v-container>
             <v-row>
               Total gain:
-              <v-spacer></v-spacer>
-              <span class="delta-value" :class="getPrimaryValueClass(item.totalGain)">
+              <v-spacer />
+              <span
+                class="delta-value"
+                :class="getPrimaryValueClass(item.totalGain)"
+              >
                 {{ $filters.currency(item.totalGain) }}
               </span>
             </v-row>
@@ -72,8 +80,14 @@ import Utils from './utils'
 export default {
 
   props: {
-    portfolioName: String,
-    userData: Object,
+    portfolioName: {
+      type: String,
+      required: true,
+    },
+    userData: {
+      type: Object,
+      required: true,
+    },
   },
 
   data() {

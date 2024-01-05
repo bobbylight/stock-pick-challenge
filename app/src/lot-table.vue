@@ -1,31 +1,36 @@
 <template>
   <v-data-table
-      class="lot-table"
-      :headers="headers"
-      :items="items"
-      :single-expand="true"
-      item-key="name"
-      density="comfortable"
-      :items-per-page="100"
+    class="lot-table"
+    :headers="headers"
+    :items="items"
+    :single-expand="true"
+    item-key="name"
+    density="comfortable"
+    :items-per-page="100"
   >
-
-    <template v-slot:item.ticker="{ item }">
-      <a class="ticker-link" :href="getUrl(item.ticker)" target="_blank">{{ item.ticker }}</a>
+    <template #item.ticker="{ item }">
+      <a
+        class="ticker-link"
+        :href="getUrl(item.ticker)"
+        target="_blank"
+      >
+        {{ item.ticker }}
+      </a>
     </template>
 
-    <template v-slot:item.costPerShare="{ item }">
+    <template #item.costPerShare="{ item }">
       {{ $filters.currency(item.costPerShare) }}
     </template>
 
-    <template v-slot:item.currentCostPerShare="{ item }">
+    <template #item.currentCostPerShare="{ item }">
       {{ $filters.currency(item.currentCostPerShare) }}
     </template>
 
-    <template v-slot:item.marketValue="{ item }">
+    <template #item.marketValue="{ item }">
       {{ $filters.currency(item.marketValue) }}
     </template>
 
-    <template v-slot:item.dailyGain="{ item }">
+    <template #item.dailyGain="{ item }">
       <div>
         <div :class="getPercentageClass(item.dailyGain)">
           {{ $filters.percentage(getDailyPercentageGain(item)) }}
@@ -36,7 +41,7 @@
       </div>
     </template>
 
-    <template v-slot:item.totalGain="{ item }">
+    <template #item.totalGain="{ item }">
       <div>
         <div :class="getPercentageClass(item.totalGain)">
           {{ $filters.percentage(getTotalPercentageGain(item)) }}
@@ -47,13 +52,20 @@
       </div>
     </template>
 
-    <template v-slot:body.append="{ }">
-      <tr class="text--primary lot-table-footer-row" v-if="!$vuetify.display.xs">
-        <td class="text-start">Total</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td class="text-end">{{ $filters.currency(currentValue) }}</td>
+    <template #body.append="{ }">
+      <tr
+        class="text--primary lot-table-footer-row"
+        v-if="!$vuetify.display.xs"
+      >
+        <td class="text-start">
+          Total
+        </td>
+        <td />
+        <td />
+        <td />
+        <td class="text-end">
+          {{ $filters.currency(currentValue) }}
+        </td>
         <td class="text-end">
           <div :class="getPercentageClass(averageDailyPercentageChange)">
             {{ $filters.percentage(averageDailyPercentageChange) }}
@@ -73,7 +85,7 @@
       </tr>
     </template>
 
-    <template v-slot:bottom></template>
+    <template #bottom />
   </v-data-table>
 </template>
 
@@ -83,8 +95,14 @@ import Utils from './utils'
 export default {
 
   props: {
-    portfolioName: String,
-    userData: Object,
+    portfolioName: {
+      type: String,
+      required: true,
+    },
+    userData: {
+      type: Object,
+      required: true,
+    },
   },
 
   data() {

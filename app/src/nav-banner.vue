@@ -1,15 +1,26 @@
 <template>
   <div class="app-banner">
     <div>
-      <img src="/stock-pick-challenge-logo.png" alt="logo">
+      <img
+        src="/stock-pick-challenge-logo.png"
+        alt="logo"
+      >
     </div>
     <div>
       <h1>Stock Market Challenge!</h1>
       <div id="nav">
-        <router-link to="/head-to-head">Comparison</router-link> |
-        <router-link to="/users/robert">Robert</router-link> |
-        <router-link to="/users/carrow">Carrow</router-link> |
-        <router-link to="/about">About</router-link>
+        <router-link to="/head-to-head">
+          Comparison
+        </router-link> |
+        <router-link to="/users/robert">
+          Robert
+        </router-link> |
+        <router-link to="/users/carrow">
+          Carrow
+        </router-link> |
+        <router-link to="/about">
+          About
+        </router-link>
       </div>
       <!--
       <div id="year">

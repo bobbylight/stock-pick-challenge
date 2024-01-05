@@ -2,14 +2,18 @@
   <div id="app">
     <v-app>
       <v-main>
-
         <v-container class="main-container">
-
-          <nav-banner/>
+          <nav-banner />
 
           <router-view v-slot="{ Component, route }">
-            <transition name="fade" mode="out-in">
-              <component :is="Component" :key="route.path"/>
+            <transition
+              name="fade"
+              mode="out-in"
+            >
+              <component
+                :is="Component"
+                :key="route.path"
+              />
             </transition>
           </router-view>
         </v-container>
