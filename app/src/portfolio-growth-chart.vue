@@ -92,7 +92,7 @@ export default {
      * Returns a data set for a benchmark, suitable for passing directly into the chart component.
      */
     createBenchmarkDataset(ticker) {
-      const color = benchmarkData.find(e => ticker === e.ticker).color;
+      const color = benchmarkData.find(e => ticker === e.ticker).color
       return {
         backgroundColor: `${color}90`,
         borderColor: color,

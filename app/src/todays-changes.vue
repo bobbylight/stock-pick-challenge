@@ -110,7 +110,7 @@ export default {
           const percentage = (history[history.length - 1].close - history[day].close) / history[day].close
           movedUp.push({ ticker, dayCount, percentage })
         }
-      });
+      })
 
       return movedUp
     },
@@ -132,7 +132,7 @@ export default {
           const percentage = (history[history.length - 1].close - history[day].close) / history[day].close
           movedDown.push({ ticker, dayCount, percentage })
         }
-      });
+      })
 
       return movedDown
     },

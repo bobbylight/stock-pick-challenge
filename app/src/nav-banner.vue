@@ -27,7 +27,7 @@ export default {
   methods: {
     setYear(year) {
       console.log('Setting year to: ' + year)
-      this.$store.dispatch('setYear', year);
+      this.$store.dispatch('setYear', year)
     },
   },
 }

@@ -121,7 +121,7 @@ import LotTable from '@/lot-table.vue'
 import PortfolioGrowthChart from '@/portfolio-growth-chart.vue'
 import UserSummary from '@/user-summary.vue'
 import TodaysChanges from '@/todays-changes.vue'
-import benchmarkData from '@/benchmark-data';
+import benchmarkData from '@/benchmark-data'
 import NotableMovers from '@/notable-movers.vue'
 
 const LATEST_PREFERENCES_VERSION = 1
