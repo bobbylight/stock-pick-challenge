@@ -10,7 +10,7 @@
     "lint": "eslint --ext .js,.vue --ignore-path ../.gitignore --fix src"
   },
   "dependencies": {
-    "chart.js": "^2.9.4",
+    "chart.js": "4.4.1",
     "vue": "^3.3.12",
     "vue-router": "^4.2.5",
     "vuetify": "^3.4.7",

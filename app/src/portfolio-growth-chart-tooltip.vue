@@ -71,7 +71,7 @@ export default {
 
     getValue(dataPoint) {
       const valueFunc = this.percentages ? percentage : currency
-      return valueFunc(dataPoint.yLabel)
+      return valueFunc(dataPoint.raw)
     },
 
     positionStyle() {
