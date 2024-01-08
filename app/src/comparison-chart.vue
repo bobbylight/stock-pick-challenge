@@ -16,238 +16,228 @@
   </div>
 </template>
 
-<script>
-import { shallowRef } from 'vue'
+<script setup>
+import {computed, onMounted, ref, shallowRef, toRef, watch} from 'vue'
+import { useDisplay } from 'vuetify'
 import Chart from 'chart.js/auto'
-import { currency, percentage } from './app-filters'
+import {currency, percentage} from './app-filters'
 import PortfolioGrowthChartTooltip from './portfolio-growth-chart-tooltip.vue'
+
+const display = useDisplay()
 
 const percentageYAxisLabelCallback = (value) => {
   return percentage(value)
 }
 
-export default {
-  components: {PortfolioGrowthChartTooltip},
-  props: {
-    userInfos: {
-      type: Array,
-      required: true,
-    },
-    type: {
-      type: String,
-      required: true,
-    },
-    dataType: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  userInfos: {
+    type: Array,
+    required: true,
   },
+  type: {
+    type: String,
+    required: true,
+  },
+  dataType: {
+    type: String,
+    required: true,
+  },
+})
 
-  data() {
-    return {
-      armedX: 0,
-      armedY: 0,
-      chart: null,
-      percentages: false,
-      tooltipModel: null,
-      tipTitle: null,
-      datasets: null,
-      visible: false,
-      canvasRect: null,
-      comparisonColors: [ '#e6439f', '#27ba67', '#494f9c', '#d1871f', '#893168', '#f5e616' ],
+// TODO: Some of these may need to be reactive() if they're objects, or simply not ref if they never change
+const armedX = ref(0)
+const armedY = ref(0)
+const chart = shallowRef(null)
+const percentages = ref(false)
+const tooltipModel = ref(null)
+const tipTitle = ref(null)
+const datasets = ref(null)
+const visible = ref(false)
+const canvasRect = ref(null)
+const canvas = ref(null)
+const comparisonColors = ['#e6439f', '#27ba67', '#494f9c', '#d1871f', '#893168', '#f5e616']
+
+const currencyYAxisLabelCallback = (value) => {
+  // We assume our value will never drop below $1000 or go above $1 million
+  let str = currency(value)
+  if (display.xs.value) {
+    const lastComma = str.lastIndexOf(',')
+    if (lastComma > -1) {
+      str = str.substring(0, lastComma) + '.' + str.charAt(lastComma + 1) + 'K'
     }
-  },
-
-  methods: {
-
-    currencyYAxisLabelCallback(value) {
-      // We assume our value will never drop below $1000 or go above $1 million
-      let str = currency(value)
-      if (this.$vuetify.display.xs) {
-        const lastComma = str.lastIndexOf(',')
-        if (lastComma > -1) {
-          str = str.substring(0, lastComma) + '.' + str.charAt(lastComma + 1) + 'K'
-        }
-      }
-      else {
-        str = str.substring(0, str.length - 3)
-      }
-      return str
-    },
-
-    generateLabels() {
-      return this.userInfos[0].history.map(entry => {
-        // Use close of the market to avoid timezone drift of date
-        const date = new Date(`${entry.date}T16:00:00-05:00`)
-        return date.toLocaleDateString('en', {dateStyle: 'medium'})
-      })
-    },
-
-    refreshChartAnnotations(e) {
-
-      const xAxis = this.chart.scales.x
-      if (e.offsetX < xAxis.left || e.offsetX > xAxis.right) {
-        this.armedX = this.armedY = 0
-        return
-      }
-
-      const elem = this.chart.getElementsAtEventForMode(e, 'index', { intersect: false }, false)[0]
-      this.armedX = elem?.element?.x || 0
-      this.armedY = elem?.element?.y || 0
-    },
-
-    updateChartDataForNewDataType() {
-
-      this.userInfos.forEach((userInfo, index) => {
-
-        const history = userInfo.history
-        const portfolioData = this.chart.data.datasets[index].data
-        portfolioData.length = 0
-
-        // Update portfolio data and y-axis to reflect new scale
-        if (this.percentages) {
-          history.forEach(entry => {
-            portfolioData.push((entry.value - history[0].value) / history[0].value)
-          })
-          this.chart.options.scales.y.ticks.callback = percentageYAxisLabelCallback
-        } else {
-          history.forEach(entry => portfolioData.push(entry.value))
-          this.chart.options.scales.y.ticks.callback = this.currencyYAxisLabelCallback
-        }
-      })
-
-      // Refresh the chart to show the changes
-      this.chart.update()
-    },
-  },
-
-  watch: {
-
-    type() {
-      this.chart.data.datasets.forEach(dataset => dataset.fill = this.doFill)
-      this.chart.update()
-    },
-
-    dataType(newVal) {
-      this.percentages = newVal === 'percent'
-      this.updateChartDataForNewDataType()
-    },
-  },
-
-  mounted() {
-
-    const datasets = this.userInfos.map((userInfo, index) => {
-      return {
-        backgroundColor: `${this.comparisonColors[index]}90`,
-        borderColor: this.comparisonColors[index],
-        data: userInfo.history.map(entry => entry.value),
-        label: userInfo.name,
-        fill: this.doFill,
-        lineTension: 0.4,
-      }
-    })
-
-    const canvas = this.$refs.canvas
-    const thisVue = this
-
-    this.chart = shallowRef(new Chart(canvas, {
-      type: 'line',
-      data: {
-        labels: this.generateLabels(),
-        datasets,
-      },
-      plugins: [
-        {
-          afterDatasetsDraw: (chart) => {
-            if (this.armedX) {
-
-              const xAxis = this.chart.scales.x
-              const yAxis = this.chart.scales.y
-              const ctx = chart.canvas.getContext('2d')
-              ctx.strokeStyle = '#606060'
-
-              const origCompositionOperation = ctx.globalCompositeOperation
-              ctx.globalCompositeOperation = 'xor'
-              ctx.setLineDash([ 3, 3 ])
-              ctx.beginPath()
-              ctx.moveTo(this.armedX, yAxis.top)
-              ctx.lineTo(this.armedX, yAxis.bottom)
-              ctx.moveTo(xAxis.left, this.armedY)
-              ctx.lineTo(xAxis.right, this.armedY)
-              ctx.stroke()
-              ctx.globalCompositeOperation = origCompositionOperation
-            }
-          },
-        },
-      ],
-      options: {
-
-        interaction: {
-          mode: 'index',
-          intersect: false,
-        },
-
-        plugins: {
-
-          tooltip: {
-            mode: 'index', // Show all dataset values for this x-coordinate
-            intersect: false,
-            enabled: false,
-            external: function({ chart, tooltip: tooltipModel }) {
-
-              // Hide if no tool tip
-              if (tooltipModel.opacity === 0) {
-                thisVue.visible = false
-                return
-              }
-
-              thisVue.visible = true
-              thisVue.tipTitle = tooltipModel.dataPoints[0].label
-              thisVue.tooltipModel = tooltipModel
-              thisVue.datasets = chart.config.data.datasets
-
-              const position = chart.canvas.getBoundingClientRect()
-              thisVue.canvasRect = { top: position.top, left: position.left, width: position.width, height: position.height, }
-              thisVue.y = position.top + tooltipModel.caretY + 'px'
-            },
-          },
-        },
-
-        scales: {
-          x: {
-            ticks: {
-              maxTicksLimit: 10,
-              callback: function(index, value) {
-                // Abbreviate the year, but keep label array using 4-digit year for tooltip
-                return this.getLabelForValue(value).replace('202', '2')
-              },
-            },
-          },
-          y: {
-            ticks: {
-              callback: this.currencyYAxisLabelCallback,
-            },
-          },
-        },
-
-        onHover: (e) => {
-          this.refreshChartAnnotations(e)
-        },
-
-        annotation: {
-          annotations: [],
-        },
-      },
-    }))
-  },
-
-  computed: {
-
-    doFill() {
-      return this.type === 'area'
-    },
-  },
+  } else {
+    str = str.substring(0, str.length - 3)
+  }
+  return str
 }
+
+const generateLabels = () => {
+  return props.userInfos[0].history.map(entry => {
+    // Use close of the market to avoid timezone drift of date
+    const date = new Date(`${entry.date}T16:00:00-05:00`)
+    return date.toLocaleDateString('en', {dateStyle: 'medium'})
+  })
+}
+
+const refreshChartAnnotations = (e) => {
+
+  const xAxis = chart.value.scales.x
+  if (e.native.offsetX < xAxis.left || e.native.offsetX > xAxis.right) {
+    armedX.value = armedY.value = 0
+    return
+  }
+
+  const elem = chart.value.getElementsAtEventForMode(e, 'index', {intersect: false}, false)[0]
+  armedX.value = elem?.element?.x || 0
+  armedY.value = elem?.element?.y || 0
+}
+
+const updateChartDataForNewDataType = () => {
+
+  props.userInfos.forEach((userInfo, index) => {
+
+    const history = userInfo.history
+    const portfolioData = chart.value.data.datasets[index].data
+    portfolioData.length = 0
+
+    // Update portfolio data and y-axis to reflect new scale
+    if (percentages.value) {
+      history.forEach(entry => {
+        portfolioData.push((entry.value - history[0].value) / history[0].value)
+      })
+      chart.value.options.scales.y.ticks.callback = percentageYAxisLabelCallback
+    } else {
+      history.forEach(entry => portfolioData.push(entry.value))
+      chart.value.options.scales.y.ticks.callback = currencyYAxisLabelCallback
+    }
+  })
+
+  // Refresh the chart to show the changes
+  chart.value.update()
+}
+
+const typeRef = toRef(props, 'type')
+watch(typeRef, () => {
+  chart.value.data.datasets.forEach(dataset => dataset.fill = doFill.value)
+  chart.value.update()
+})
+
+const dataTypeRef = toRef(props, 'dataType')
+watch(dataTypeRef, (newVal) => {
+  percentages.value = newVal === 'percent'
+  updateChartDataForNewDataType()
+})
+
+onMounted(() => {
+
+  const initialDatasets = props.userInfos.map((userInfo, index) => {
+    return {
+      backgroundColor: `${comparisonColors[index]}90`,
+      borderColor: comparisonColors[index],
+      data: userInfo.history.map(entry => entry.value),
+      label: userInfo.name,
+      fill: doFill.value,
+      lineTension: 0.4,
+    }
+  })
+
+  chart.value = new Chart(canvas.value, {
+    type: 'line',
+    data: {
+      labels: generateLabels(),
+      datasets: initialDatasets,
+    },
+    plugins: [
+      {
+        afterDatasetsDraw: (chart) => {
+          if (armedX.value > 0) {
+
+            const xAxis = chart.scales.x
+            const yAxis = chart.scales.y
+            const ctx = chart.canvas.getContext('2d')
+            ctx.strokeStyle = '#606060'
+
+            const origCompositionOperation = ctx.globalCompositeOperation
+            ctx.globalCompositeOperation = 'xor'
+            ctx.setLineDash([3, 3])
+            ctx.beginPath()
+            ctx.moveTo(armedX.value, yAxis.top)
+            ctx.lineTo(armedX.value, yAxis.bottom)
+            ctx.moveTo(xAxis.left, armedY.value)
+            ctx.lineTo(xAxis.right, armedY.value)
+            ctx.stroke()
+            ctx.globalCompositeOperation = origCompositionOperation
+          }
+        },
+      },
+    ],
+    options: {
+
+      interaction: {
+        mode: 'index',
+        intersect: false,
+      },
+
+      plugins: {
+
+        tooltip: {
+          mode: 'index', // Show all dataset values for this x-coordinate
+          intersect: false,
+          enabled: false,
+          external: function ({ chart, tooltip }) {
+
+            // Hide if no tool tip
+            if (tooltip.opacity === 0) {
+              visible.value = false
+              return
+            }
+
+            visible.value = true
+            tipTitle.value = tooltip.dataPoints[0].label
+            tooltipModel.value = tooltip
+            datasets.value = chart.config.data.datasets
+
+            const position = chart.canvas.getBoundingClientRect()
+            canvasRect.value = {
+              top: position.top,
+              left: position.left,
+              width: position.width,
+              height: position.height,
+            }
+            //y.value = position.top + tooltip.caretY + 'px'
+          },
+        },
+      },
+
+      scales: {
+        x: {
+          ticks: {
+            maxTicksLimit: 10,
+            callback: function (index, value) {
+              // Abbreviate the year, but keep label array using 4-digit year for tooltip
+              return this.getLabelForValue(value).replace('202', '2')
+            },
+          },
+        },
+        y: {
+          ticks: {
+            callback: currencyYAxisLabelCallback,
+          },
+        },
+      },
+
+      onHover: (e) => {
+        refreshChartAnnotations(e)
+      },
+
+      annotation: {
+        annotations: [],
+      },
+    },
+  })
+})
+
+const doFill = computed(() => props.type === 'area')
 </script>
 
 <style scoped>

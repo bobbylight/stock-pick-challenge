@@ -9,9 +9,7 @@ const percentageFormatter = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2,
 })
 
-export const currency = (value) => {
-    return value != null ? currencyFormatter.format(value) : ''
-}
+export const currency = (value) => value != null ? currencyFormatter.format(value) : ''
 
 export const percentage = (value) => {
     if (value == null) {

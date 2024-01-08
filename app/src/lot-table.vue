@@ -89,155 +89,127 @@
   </v-data-table>
 </template>
 
-<script>
+<script setup>
+import {computed} from 'vue'
+import {useStore} from 'vuex'
 import Utils from './utils'
 
-export default {
+const store = useStore()
 
-  props: {
-    portfolioName: {
-      type: String,
-      required: true,
-    },
-    userData: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
+  portfolioName: {
+    type: String,
+    required: true,
   },
+  userData: {
+    type: Object,
+    required: true,
+  },
+})
 
-  data() {
+const headers = [
+  {
+    title: 'Ticker',
+    value: 'ticker'
+  },
+  {
+    title: 'Shares',
+    value: 'shares',
+    align: 'end',
+  },
+  {
+    title: 'Avg Cost/Share',
+    value: 'costPerShare',
+    align: 'end',
+  },
+  {
+    title: 'Current Cost/Share',
+    value: 'currentCostPerShare',
+    align: 'end',
+  },
+  {
+    title: 'Market Value',
+    value: 'marketValue',
+    align: 'end',
+  },
+  {
+    title: 'Daily Gain',
+    value: 'dailyGain',
+    align: 'end',
+  },
+  {
+    title: 'Total Gain',
+    value: 'totalGain',
+    align: 'end',
+  },
+]
+
+const averageDailyPercentageChange = computed(() => {
+  const yesterdaysValue = store.getters.yesterdaysValue(props.portfolioName)
+  const todaysValue = currentValue.value
+  return (todaysValue - yesterdaysValue) / yesterdaysValue
+})
+
+const averageTotalPercentageChange = computed(() => {
+  return totalGain.value / store.getters.initialInvestment(props.portfolioName)
+})
+
+const currentValue = computed(() => {
+  return store.getters.currentValue(props.portfolioName)
+})
+
+const items = computed(() => {
+  return props.userData.positions.map(position => {
+
+    let shares = 0
+    let totalCost = 0
+    position.contributions.forEach(c => {
+      shares += c.count
+      totalCost += (c.count * c.price)
+    })
+
+    const costPerShare = totalCost / shares
+
+    const ticker = position.ticker
+    const tickerHistory = store.state.history[ticker].history
+    const currentCostPerShare = tickerHistory[tickerHistory.length - 1].close
+    const marketValue = currentCostPerShare * shares
+    const dailyGain = (currentCostPerShare - (tickerHistory[tickerHistory.length - 2]?.close ?? 0)) * shares
+    const totalGain = (currentCostPerShare - costPerShare) * shares
 
     return {
-
-      headers: [
-        {
-          title: 'Ticker',
-          value: 'ticker'
-        },
-        {
-          title: 'Shares',
-          value: 'shares',
-          align: 'end',
-        },
-        {
-          title: 'Avg Cost/Share',
-          value: 'costPerShare',
-          align: 'end',
-        },
-        {
-          title: 'Current Cost/Share',
-          value: 'currentCostPerShare',
-          align: 'end',
-        },
-        {
-          title: 'Market Value',
-          value: 'marketValue',
-          align: 'end',
-        },
-        {
-          title: 'Daily Gain',
-          value: 'dailyGain',
-          align: 'end',
-        },
-        {
-          title: 'Total Gain',
-          value: 'totalGain',
-          align: 'end',
-        },
-      ],
+      ticker,
+      shares,
+      costPerShare,
+      currentCostPerShare,
+      marketValue,
+      dailyGain,
+      totalGain,
     }
-  },
+  })
+})
 
-  components: {
-  },
+const totalDailyGain = computed(() => items.value.reduce((acc, curr) => acc + curr.dailyGain, 0))
 
-  computed: {
+const totalGain = computed(() => items.value.reduce((acc, curr) => acc + curr.totalGain, 0))
 
-    averageDailyPercentageChange() {
-      const yesterdaysValue = this.$store.getters.yesterdaysValue(this.portfolioName)
-      const todaysValue = this.currentValue
-      return (todaysValue - yesterdaysValue) / yesterdaysValue
-    },
+const getAmountDeltaClass = (value) => Utils.getSecondaryDeltaClass(value)
 
-    averageTotalPercentageChange() {
-      return this.totalGain / this.$store.getters.initialInvestment(this.portfolioName)
-    },
+const getPercentageClass = (value) => Utils.getPrimaryDeltaClass(value)
 
-    currentValue() {
-      return this.$store.getters.currentValue(this.portfolioName)
-    },
-
-    items() {
-      return this.userData.positions.map(position => {
-
-        let shares = 0
-        let totalCost = 0
-        position.contributions.forEach(c => {
-          shares += c.count
-          totalCost += (c.count * c.price)
-        })
-
-        const costPerShare = totalCost / shares
-
-        const ticker = position.ticker
-        const tickerHistory = this.$store.state.history[ticker].history
-        const currentCostPerShare = tickerHistory[tickerHistory.length - 1].close
-        const marketValue = currentCostPerShare * shares
-        const dailyGain = (currentCostPerShare - (tickerHistory[tickerHistory.length - 2]?.close ?? 0)) * shares
-        const totalGain = (currentCostPerShare - costPerShare) * shares
-
-        return {
-          ticker: position.ticker,
-          shares,
-          costPerShare,
-          currentCostPerShare,
-          marketValue,
-          dailyGain,
-          totalGain,
-        }
-      })
-    },
-
-    totalDailyGain() {
-      let total = 0
-      this.items.forEach(item => total += item.dailyGain)
-      return total
-    },
-
-    totalGain() {
-      let total = 0
-      this.items.forEach(item => total += item.totalGain)
-      return total
-    }
-  },
-
-  methods: {
-
-    getAmountDeltaClass(value) {
-      return Utils.getSecondaryDeltaClass(value)
-    },
-
-    getPercentageClass(value) {
-      return Utils.getPrimaryDeltaClass(value)
-    },
-
-    getDailyPercentageGain(item) {
-      const history = this.$store.state.history[item.ticker].history
-      const previousClose = (history[history.length - 2]?.close ?? 0) * item.shares
-      return item.dailyGain / previousClose
-    },
-
-    getTotalPercentageGain(item) {
-      const totalCost = item.costPerShare * item.shares
-      return item.totalGain / totalCost
-    },
-
-    getUrl(ticker) {
-      // Yes, Yahoo Finance has both a positional and request parameter
-      return `https://finance.yahoo.com/quote/${ticker}?p=${ticker}`
-    }
-  }
+const getDailyPercentageGain = (item) => {
+  const history = store.state.history[item.ticker].history
+  const previousClose = (history[history.length - 2]?.close ?? 0) * item.shares
+  return item.dailyGain / previousClose
 }
+
+const getTotalPercentageGain = (item) => {
+  const totalCost = item.costPerShare * item.shares
+  return item.totalGain / totalCost
+}
+
+// Yes, Yahoo Finance has both a positional and request parameter
+const getUrl = (ticker) => `https://finance.yahoo.com/quote/${ticker}?p=${ticker}`
 </script>
 
 <style scoped>

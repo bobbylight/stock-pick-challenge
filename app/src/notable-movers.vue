@@ -29,97 +29,72 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Utils from './utils'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
+
+const props = defineProps({
+  portfolioName: {
+    type: String,
+    required: true,
+  },
+  userData: {
+    type: Object,
+    required: true,
+  },
+})
 
 const MINIMUM_MOVE_COUNT = 3
 
-export default {
+const notableMovesUp = computed(() => {
 
-  props: {
-    portfolioName: {
-      type: String,
-      required: true,
-    },
-    userData: {
-      type: Object,
-      required: true,
-    },
-  },
+  const movedUp = []
 
-  data() {
+  props.userData.positions.forEach(position => {
+    const ticker = position.ticker
+    const history = store.state.history[ticker].history
 
-    return {
+    let day = history.length - 1
+    while (day > 0 && parseFloat(history[day].close) > parseFloat(history[day - 1].close)) {
+      day--
     }
-  },
-
-  components: {
-  },
-
-  computed: {
-
-    notableMovesUp() {
-
-      const movedUp = []
-
-      this.userData.positions.forEach(position => {
-        const ticker = position.ticker
-        const history = this.$store.state.history[ticker].history
-
-        let day = history.length - 1
-        while (day > 0 && parseFloat(history[day].close) > parseFloat(history[day - 1].close)) {
-          day--
-        }
-        console.log(`For ${ticker}, day stops at ${day} - ${history[day].close} <= ${history[day - 1]?.close}`)
-        if (day <= history.length - 1 - MINIMUM_MOVE_COUNT) {
-          const dayCount = history.length - 1 - day
-          const percentage = (history[history.length - 1].close - history[day].close) / history[day].close
-          movedUp.push({ ticker, dayCount, percentage })
-        }
-      })
-
-      return movedUp.sort((a, b) => b.percentage - a.percentage) // Never overflows
-    },
-
-    notableMovesDown() {
-
-      const movedDown = []
-
-      this.userData.positions.forEach(position => {
-        const ticker = position.ticker
-        const history = this.$store.state.history[ticker].history
-
-        let day = history.length - 1
-        while (day > 0 && parseFloat(history[day].close) < parseFloat(history[day - 1].close)) {
-          day--
-        }
-        if (day < history.length - 1 - MINIMUM_MOVE_COUNT) {
-          const dayCount = history.length - 1 - day
-          const percentage = (history[history.length - 1].close - history[day].close) / history[day].close
-          movedDown.push({ ticker, dayCount, percentage })
-        }
-      })
-
-      return movedDown
-    },
-  },
-
-  methods: {
-
-    dailyChange(ticker) {
-      return this.$store.getters.dailyChange(ticker, true)
-    },
-
-    getAmountDeltaClass(value) {
-      return Utils.getPrimaryDeltaClass(value)
-    },
-
-    upOrDown(amount) {
-      // We're OK with 'went up 0%'
-      return amount < 0 ? 'down' : 'up'
+    console.log(`For ${ticker}, day stops at ${day} - ${history[day].close} <= ${history[day - 1]?.close}`)
+    if (day <= history.length - 1 - MINIMUM_MOVE_COUNT) {
+      const dayCount = history.length - 1 - day
+      const percentage = (history[history.length - 1].close - history[day].close) / history[day].close
+      movedUp.push({ticker, dayCount, percentage})
     }
-  }
-}
+  })
+
+  return movedUp.sort((a, b) => b.percentage - a.percentage) // Never overflows
+})
+
+const notableMovesDown = computed(() => {
+
+  const movedDown = []
+
+  props.userData.positions.forEach(position => {
+    const ticker = position.ticker
+    const history = store.state.history[ticker].history
+
+    let day = history.length - 1
+    while (day > 0 && parseFloat(history[day].close) < parseFloat(history[day - 1].close)) {
+      day--
+    }
+    if (day < history.length - 1 - MINIMUM_MOVE_COUNT) {
+      const dayCount = history.length - 1 - day
+      const percentage = (history[history.length - 1].close - history[day].close) / history[day].close
+      movedDown.push({ticker, dayCount, percentage})
+    }
+  })
+
+  return movedDown
+})
+
+const getAmountDeltaClass = (value) => Utils.getPrimaryDeltaClass(value)
 </script>
 
 <style scoped>

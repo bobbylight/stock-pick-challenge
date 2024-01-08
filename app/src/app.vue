@@ -22,15 +22,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import NavBanner from './nav-banner.vue'
-
-export default {
-
-  components: {
-    NavBanner,
-  }
-}
 </script>
 
 <style>

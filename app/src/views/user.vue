@@ -130,7 +130,7 @@
                         label="Compare to..."
                         item-title="name"
                         item-value="ticker"
-                        @change="storePreferences"
+                        @update:model-value="storePreferences"
                         multiple
                       />
                     </v-row>
@@ -167,12 +167,12 @@
           <v-card-title>Current Holdings</v-card-title>
           <v-card-text class="pa-0">
             <lot-table
-              v-if="!$vuetify.display.xs"
+              class="d-none d-sm-flex"
               :portfolio-name="portfolioName"
               :user-data="userData"
             />
             <lot-listing
-              v-if="$vuetify.display.xs"
+              class="d-flex d-sm-none"
               :portfolio-name="portfolioName"
               :user-data="userData"
             />
@@ -183,7 +183,10 @@
   </v-container>
 </template>
 
-<script>
+<script setup>
+import {computed, onBeforeMount, ref} from 'vue'
+import {useStore} from 'vuex'
+import {useRoute} from 'vue-router'
 import LotListing from '@/lot-listing.vue'
 import LotTable from '@/lot-table.vue'
 import PortfolioGrowthChart from '@/portfolio-growth-chart.vue'
@@ -192,107 +195,61 @@ import TodaysChanges from '@/todays-changes.vue'
 import benchmarkData from '@/benchmark-data'
 import NotableMovers from '@/notable-movers.vue'
 
+const store = useStore()
+const route = useRoute()
+
 const LATEST_PREFERENCES_VERSION = 1
 
-export default {
+const chartType = ref('line')
+const chartDataType = ref('dollars')
+const chartComparisons = ref([])
+const benchmarks = ref(benchmarkData)
 
-  components: {
-    NotableMovers,
-    LotListing,
-    LotTable,
-    PortfolioGrowthChart,
-    TodaysChanges,
-    UserSummary,
-  },
+const portfolioName = computed(() => route.params.user)
 
-  data() {
-    return {
-      chartType: 'line',
-      chartDataType: 'dollars',
-      chartComparisons: [],
-      benchmarks: benchmarkData,
-    }
-  },
+const userData = computed(() => store.state[portfolioName.value])
 
-  computed: {
-    portfolio() {
+onBeforeMount(() => loadPreferences())
 
-      const portfolio = []
+const loadPreferences = () => {
 
-      this.userData.positions.forEach((position) => {
+  const key = `portfolio-${portfolioName.value}`
+  console.log('Loading preferences: ' + key)
+  const temp = localStorage.getItem(key)
 
-        let shareCount = 0
-        position.contributions.forEach(share => shareCount += share.count)
+  if (temp) {
+    try {
 
-        portfolio.push({
-          ticker: position.ticker,
-          shareCount,
-        })
-      })
+      const json = JSON.parse(temp)
 
-      return portfolio
-    },
-
-    portfolioName() {
-      return this.$route.params.user
-    },
-
-    userData() {
-      return this.$store.state[this.portfolioName]
-    },
-  },
-
-  beforeMount() {
-    this.loadPreferences()
-  },
-
-  methods: {
-
-    getLabelForBenchmark(ticker) {
-      return this.$store.state.history[ticker].name || ticker
-    },
-
-    loadPreferences() {
-
-      const key = `portfolio-${this.portfolioName}`
-      console.log('Loading preferences: ' + key)
-      const temp = localStorage.getItem(key)
-
-      if (temp) {
-        try {
-
-          const json = JSON.parse(temp)
-
-          const version = json.v || 0
-          if (version !== LATEST_PREFERENCES_VERSION) {
-            localStorage.removeItem(key)
-            return
-          }
-
-          this.chartType = json.chartType || 'line'
-          this.chartDataType = json.chartDataType || 'dollars'
-          this.chartComparisons = json.benchmarks || []
-        } catch (e) {
-          console.error('Error loading preferences', e)
-          localStorage.removeItem(key)
-        }
-      }
-    },
-
-    storePreferences() {
-
-      const key = `portfolio-${this.portfolioName}`
-      const value = {
-        v: LATEST_PREFERENCES_VERSION,
-        chartType: this.chartType,
-        chartDataType: this.chartDataType,
-        benchmarks: this.chartComparisons,
+      const version = json.v || 0
+      if (version !== LATEST_PREFERENCES_VERSION) {
+        localStorage.removeItem(key)
+        return
       }
 
-      localStorage.setItem(key, JSON.stringify(value))
-      console.log('Preferences updated!')
+      chartType.value = json.chartType || 'line'
+      chartDataType.value = json.chartDataType || 'dollars'
+      chartComparisons.value = json.benchmarks || []
+    } catch (e) {
+      console.error('Error loading preferences', e)
+      localStorage.removeItem(key)
     }
   }
+}
+
+const storePreferences = () => {
+
+  const key = `portfolio-${portfolioName.value}`
+  const value = {
+    v: LATEST_PREFERENCES_VERSION,
+    chartType: chartType.value,
+    chartDataType: chartDataType.value,
+    benchmarks: chartComparisons.value,
+  }
+
+  localStorage.setItem(key, JSON.stringify(value))
+  console.log('Preferences updated!')
 }
 </script>
 

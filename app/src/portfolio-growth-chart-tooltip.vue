@@ -2,6 +2,7 @@
   <div
     class="chart-tooltip-wrapper animated-tooltip"
     :style="positionStyle()"
+    ref="root"
   >
     <div
       class="arrow-wrapper"
@@ -45,99 +46,81 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import {computed, ref} from 'vue'
 import { currency, percentage } from './app-filters'
 
-export default {
-
-  props: {
-    model: {
-      type: Object,
-      required: true,
-    },
-    datasets: {
-      type: Array,
-      required: true,
-    },
-    percentages: Boolean,
-    canvasRect: {
-      type: Object,
-      required: true,
-    },
-    visible: Boolean,
+const props = defineProps({
+  model: {
+    type: Object,
+    required: true,
   },
+  datasets: {
+    type: Array,
+    required: true,
+  },
+  percentages: Boolean,
+  canvasRect: {
+    type: Object,
+    required: true,
+  },
+  visible: Boolean,
+})
 
-  data() {
+const lastTitle = ref('')
+const lastDatasets = ref([])
+const lastX = ref(undefined)
+const lastY = ref(undefined)
+const root = ref(null)
+
+const onRightSide = computed(() => props.model ? props.model.caretX < props.canvasRect.width / 2 : true)
+
+  const getDataPointStyle = (dataPoint) => {
     return {
-      lastTitle: '',
-      lastDatasets: [],
-      lastX: undefined,
-      lastY: undefined,
+      background: props.datasets[dataPoint.datasetIndex].borderColor,
     }
-  },
+  }
 
-  computed: {
+  const getValue = (dataPoint) => {
+    const valueFunc = props.percentages ? percentage : currency
+    return valueFunc(dataPoint.raw)
+  }
 
-    onRightSide() {
-      return this.model ? this.model.caretX < this.canvasRect.width / 2 : true
-    },
-  },
+  const positionStyle = () => {
+    return {
+      top: y(),
+      left: x(),
+      opacity: props.visible ? '1' : '0',
+    }
+  }
 
-  methods: {
+  const x = () => {
+    if (!props.visible) {
+      return lastX.value
+    }
 
-    getDataPointStyle(dataPoint) {
-      return {
-        background: this.datasets[dataPoint.datasetIndex].borderColor,
-      }
-    },
+    if (onRightSide.value) {
+      lastX.value = props.model.caretX + 'px'
+      return lastX.value
+    }
+    const tipWidth = root.value.getBoundingClientRect().width
+    lastX.value = (props.model.caretX - tipWidth) + 'px'
+    return lastX.value
+  }
 
-    getValue(dataPoint) {
-      const valueFunc = this.percentages ? percentage : currency
-      return valueFunc(dataPoint.raw)
-    },
+  const y = () => {
+    if (!props.visible) {
+      return lastY.value
+    }
 
-    positionStyle() {
-      return {
-        top: this.y(),
-        left: this.x(),
-        opacity: this.visible ? '1' : '0',
-      }
-    },
+    const tipHeight = root.value.getBoundingClientRect().height
+    lastY.value = (props.model.caretY - tipHeight / 2) + 'px'
+    return lastY.value
+  }
 
-    x() {
+  const dataPoints = () => lastDatasets.value = props.visible ? props.model.dataPoints : lastDatasets.value
 
-      if (!this.visible) {
-        return this.lastX
-      }
-
-      if (this.onRightSide) {
-        this.lastX = this.model.caretX + 'px'
-        return this.lastX
-      }
-      const tipWidth = this.$el.getBoundingClientRect().width
-      this.lastX = (this.model.caretX - tipWidth) + 'px'
-      return this.lastX
-    },
-
-    y() {
-      if (!this.visible) {
-        return this.lastY
-      }
-
-      const tipHeight = this.$el.getBoundingClientRect().height
-      this.lastY = (this.model.caretY - tipHeight / 2) + 'px'
-      return this.lastY
-    },
-
-    dataPoints() {
-      return this.lastDatasets = this.visible ? this.model.dataPoints : this.lastDatasets
-    },
-
-    title() {
-      return this.lastTitle = this.visible ? this.model.dataPoints[0].label : this.lastTitle
-    },
-  },
-}
+  const title = () => lastTitle.value = props.visible ? props.model.dataPoints[0].label : lastTitle.value
 </script>
 
 

@@ -36,53 +36,39 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Utils from './utils'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 
-export default {
+const store = useStore()
 
-  props: {
-    portfolioName: {
-      type: String,
-      required: true,
-    },
-    userData: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
+  portfolioName: {
+    type: String,
+    required: true,
   },
-
-  data() {
-
-    return {
-    }
+  userData: {
+    type: Object,
+    required: true,
   },
+})
 
-  components: {
-  },
+const currentValue = computed(() => {
+  return store.getters.currentValue(props.portfolioName)
+})
 
-  computed: {
+const initialInvestment = computed(() => {
+  return store.getters.initialInvestment(props.portfolioName)
+})
 
-    currentValue() {
-      return this.$store.getters.currentValue(this.portfolioName)
-    },
+const todaysGain = computed(() => {
+  const yesterdaysValue = store.getters.yesterdaysValue(props.portfolioName)
+  return currentValue.value - yesterdaysValue
+})
 
-    initialInvestment() {
-      return this.$store.getters.initialInvestment(this.portfolioName)
-    },
-
-    todaysGain() {
-      const yesterdaysValue = this.$store.getters.yesterdaysValue(this.portfolioName)
-      return this.currentValue - yesterdaysValue
-    }
-  },
-
-  methods: {
-
-    getAmountDeltaClass(value) {
-      return Utils.getPrimaryDeltaClass(value)
-    },
-  }
+const getAmountDeltaClass = (value) => {
+  return Utils.getPrimaryDeltaClass(value)
 }
 </script>
 

@@ -33,15 +33,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  methods: {
-    setYear(year) {
-      console.log('Setting year to: ' + year)
-      this.$store.dispatch('setYear', year)
-    },
-  },
-}
+<script setup>
+// const setYear = (year) => {
+//   console.log('Setting year to: ' + year)
+//   this.$store.dispatch('setYear', year)
+// }
 </script>
 
 <style>
@@ -83,6 +79,7 @@ h1 {
 
 #nav a {
   color: #2c3e50;
+  display: inline-block; /* Avoid issue with trailing space in anchor tag text after linting */
 }
 
 #nav a.router-link-exact-active {

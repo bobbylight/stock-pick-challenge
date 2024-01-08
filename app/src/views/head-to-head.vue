@@ -66,91 +66,73 @@
   </v-container>
 </template>
 
-<script>
+<script setup>
+import {computed, onMounted, ref} from 'vue'
+import { useStore } from 'vuex'
 import ComparisonChart from "../comparison-chart.vue"
+
+const store = useStore()
 
 const LATEST_PREFERENCES_VERSION = 1
 
-export default {
+const chartType = ref('line')
+const chartDataType = ref('dollars')
+const chartComparisons = ref([])
 
-  components: {
-    ComparisonChart,
-  },
-
-  data() {
-    return {
-      chartType: 'line',
-      chartDataType: 'dollars',
-    }
-  },
-
-  computed: {
-    
-    userInfos() {
-      return [
-        {
-          name: 'Robert',
-          history: this.$store.state['robert'].history,
-        },
-        {
-          name: 'Carrow',
-          history: this.$store.state['carrow'].history,
-        },
-      ]
+const userInfos = computed(() => {
+  return [
+    {
+      name: 'Robert',
+      history: store.state['robert'].history,
     },
-  },
-
-  mounted() {
-    this.loadPreferences()
-  },
-
-  methods: {
-
-    getLabelForBenchmark(ticker) {
-      return this.$store.state.history[ticker].name || ticker
+    {
+      name: 'Carrow',
+      history: store.state['carrow'].history,
     },
+  ]
+})
 
-    loadPreferences() {
+onMounted(() => loadPreferences())
 
-      const key = 'comparison-page'
-      console.log('Loading preferences: ' + key)
-      const temp = localStorage.getItem(key)
+const loadPreferences = () => {
 
-      if (temp) {
-        try {
+  const key = 'comparison-page'
+  console.log('Loading preferences: ' + key)
+  const temp = localStorage.getItem(key)
 
-          const json = JSON.parse(temp)
+  if (temp) {
+    try {
 
-          const version = json.v || 0
-          if (version !== LATEST_PREFERENCES_VERSION) {
-            localStorage.removeItem(key)
-            return
-          }
+      const json = JSON.parse(temp)
 
-          this.chartType = json.chartType || 'line'
-          this.chartDataType = json.chartDataType || 'dollars'
-          this.chartComparisons = json.benchmarks || []
-        } catch (e) {
-          console.error('Error loading preferences', e)
-          localStorage.removeItem(key)
-        }
-      }
-    },
-
-    storePreferences() {
-
-      const key = 'comparison-page'
-      const value = {
-        v: LATEST_PREFERENCES_VERSION,
-        chartType: this.chartType,
-        chartDataType: this.chartDataType,
-        benchmarks: this.chartComparisons,
+      const version = json.v || 0
+      if (version !== LATEST_PREFERENCES_VERSION) {
+        localStorage.removeItem(key)
+        return
       }
 
-      localStorage.setItem(key, JSON.stringify(value))
-      console.log('Preferences updated!')
+      chartType.value = json.chartType || 'line'
+      chartDataType.value = json.chartDataType || 'dollars'
+      chartComparisons.value = json.benchmarks || []
+    } catch (e) {
+      console.error('Error loading preferences', e)
+      localStorage.removeItem(key)
     }
   }
+}
+
+const storePreferences = () => {
+
+  const key = 'comparison-page'
+  const value = {
+    v: LATEST_PREFERENCES_VERSION,
+    chartType: chartType.value,
+    chartDataType: chartDataType.value,
+    benchmarks: chartComparisons.value,
+  }
+
+  localStorage.setItem(key, JSON.stringify(value))
+  console.log('Preferences updated!')
 }
 </script>
 
