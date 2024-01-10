@@ -153,7 +153,22 @@ const store = createStore({
                     costPerShare,
                 }
             })
-        }
+        },
+
+        lastUpdated: state => () => {
+            if (!state.history) {
+                return undefined
+            }
+            const historyArray = state.history['^dji'].history
+            // Cheap way to ensure date isn't impacted by time zones, at least anywhere our users are
+            const dateTime = `${historyArray[historyArray.length - 1].date}T12:00:00Z`
+            return new Intl.DateTimeFormat('en-US', {
+                weekday: 'long',
+                month: 'numeric',
+                day: 'numeric',
+                year: 'numeric'
+            }).format(new Date(dateTime))
+        },
     }
 })
 

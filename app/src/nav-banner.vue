@@ -8,6 +8,7 @@
     </div>
     <div>
       <h1>Stock Market Challenge!</h1>
+      <h6> Last updated: {{ $store.getters.lastUpdated() }}</h6>
       <div id="nav">
         <router-link to="/head-to-head">
           Comparison
@@ -34,6 +35,9 @@
 </template>
 
 <script setup>
+import { useStore } from 'vuex'
+
+const store = useStore()
 // const setYear = (year) => {
 //   console.log('Setting year to: ' + year)
 //   this.$store.dispatch('setYear', year)
@@ -52,7 +56,10 @@ h1 {
   font-size: 48px;
   color: #2c3e50;
 }
-
+h6 {
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}
 .app-banner img {
   width: 240px;
   margin-inline-end: 2rem;
