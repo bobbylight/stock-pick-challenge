@@ -19,7 +19,7 @@
 
         <table class="tooltip-table">
           <tr
-            v-for="dataPoint of dataPoints()"
+            v-for="dataPoint of sortedDataPoints()"
             :key="dataPoint.datasetIndex"
           >
             <td>
@@ -75,52 +75,53 @@ const root = ref(null)
 
 const onRightSide = computed(() => props.model ? props.model.caretX < props.canvasRect.width / 2 : true)
 
-  const getDataPointStyle = (dataPoint) => {
-    return {
-      background: props.datasets[dataPoint.datasetIndex].borderColor,
-    }
+const getDataPointStyle = (dataPoint) => {
+  return {
+    background: props.datasets[dataPoint.datasetIndex].borderColor,
   }
+}
 
-  const getValue = (dataPoint) => {
-    const valueFunc = props.percentages ? percentage : currency
-    return valueFunc(dataPoint.raw)
+const getValue = (dataPoint) => {
+  const valueFunc = props.percentages ? percentage : currency
+  return valueFunc(dataPoint.raw)
+}
+
+const positionStyle = () => {
+  return {
+    top: y(),
+    left: x(),
+    opacity: props.visible ? '1' : '0',
   }
+}
 
-  const positionStyle = () => {
-    return {
-      top: y(),
-      left: x(),
-      opacity: props.visible ? '1' : '0',
-    }
-  }
-
-  const x = () => {
-    if (!props.visible) {
-      return lastX.value
-    }
-
-    if (onRightSide.value) {
-      lastX.value = props.model.caretX + 'px'
-      return lastX.value
-    }
-    const tipWidth = root.value.getBoundingClientRect().width
-    lastX.value = (props.model.caretX - tipWidth) + 'px'
+const x = () => {
+  if (!props.visible) {
     return lastX.value
   }
 
-  const y = () => {
-    if (!props.visible) {
-      return lastY.value
-    }
+  if (onRightSide.value) {
+    lastX.value = props.model.caretX + 'px'
+    return lastX.value
+  }
+  const tipWidth = root.value.getBoundingClientRect().width
+  lastX.value = (props.model.caretX - tipWidth) + 'px'
+  return lastX.value
+}
 
-    const tipHeight = root.value.getBoundingClientRect().height
-    lastY.value = (props.model.caretY - tipHeight / 2) + 'px'
+const y = () => {
+  if (!props.visible) {
     return lastY.value
   }
 
-  const dataPoints = () => lastDatasets.value = props.visible ? props.model.dataPoints : lastDatasets.value
+  const tipHeight = root.value.getBoundingClientRect().height
+  lastY.value = (props.model.caretY - tipHeight / 2) + 'px'
+  return lastY.value
+}
 
-  const title = () => lastTitle.value = props.visible ? props.model.dataPoints[0].label : lastTitle.value
+const dataPoints = () => lastDatasets.value = props.visible ? props.model.dataPoints : lastDatasets.value
+const sortedDataPoints = () => dataPoints()?.slice().sort((a, b) => b.raw - a.raw)
+
+const title = () => lastTitle.value = props.visible ? props.model.dataPoints[0].label : lastTitle.value
 </script>
 
 
