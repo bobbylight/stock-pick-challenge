@@ -35,9 +35,9 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex'
-
-const store = useStore()
+// import { useStore } from 'vuex'
+//
+// const store = useStore()
 // const setYear = (year) => {
 //   console.log('Setting year to: ' + year)
 //   this.$store.dispatch('setYear', year)

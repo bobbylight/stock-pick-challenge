@@ -69,9 +69,7 @@ const todayBeatMarketBy = computed(() => {
   return todaysGain - gspcTodaysGain.value
 })
 
-const todayVersusTheMarketVerb = computed(() => {
-  return todayBeatMarketBy.value >= 0 ? 'beat' : 'underperformed'
-})
+const todayVersusTheMarketVerb = computed(() => todayBeatMarketBy.value >= 0 ? 'beat' : 'underperformed')
 
 const gspcTodaysGain = computed(() => {
   const gspcHistory = store.state.history['^gspc'].history
