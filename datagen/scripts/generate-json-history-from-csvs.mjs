@@ -33,7 +33,17 @@ for (const file of files) {
     }
 
     // Remove records with null values, e.g. znga was bought out mid-year
-    json = json.filter(row => row.open !== 'null')
+    json = json.filter(row => row.open !== 'null').map(row => {
+        return {
+            date: row.date,
+            open: parseFloat(row.open),
+            high: parseFloat(row.high),
+            low: parseFloat(row.low),
+            close: parseFloat(row.close),
+            'adj close': parseFloat(row['adj close']),
+            volume: parseFloat(row.volume),
+        }
+    })
 
     const ticker = file.substring(0, file.lastIndexOf('.'))
     history[ticker] = {
