@@ -75,8 +75,8 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
-import {useStore} from './store'
+import { computed, ref } from 'vue'
+import { useStore } from './store'
 import Utils from './utils'
 
 const store = useStore()
@@ -111,7 +111,6 @@ const sortOptions = [
 
 const items = computed(() => {
   return props.userData.positions.map(position => {
-
     let shares = 0
     let totalCost = 0
     position.contributions.forEach(c => {
@@ -140,22 +139,22 @@ const items = computed(() => {
       totalGain,
     }
   })
-      .sort((a, b) => {
-        switch (sortBy.value) {
-          default:
-          case 'ticker':
-            return a.ticker.localeCompare(b.ticker)
-          case 'dailyGain': // descending
-            return b.dailyGain - a.dailyGain
-          case 'totalGain': // descending
-            return b.totalGain - a.totalGain
-        }
-      })
+    .sort((a, b) => {
+      switch (sortBy.value) {
+        default:
+        case 'ticker':
+          return a.ticker.localeCompare(b.ticker)
+        case 'dailyGain': // descending
+          return b.dailyGain - a.dailyGain
+        case 'totalGain': // descending
+          return b.totalGain - a.totalGain
+      }
+    })
 })
 
-const getSecondaryValueClass = (value) => Utils.getSecondaryDeltaClass(value)
+const getSecondaryValueClass = value => Utils.getSecondaryDeltaClass(value)
 
-const getPrimaryValueClass = (value) => Utils.getPrimaryDeltaClass(value)
+const getPrimaryValueClass = value => Utils.getPrimaryDeltaClass(value)
 </script>
 
 <style scoped>

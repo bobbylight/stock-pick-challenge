@@ -17,12 +17,12 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref, shallowRef, toRef, watch} from 'vue'
-import {useStore} from './store'
-import {useRoute} from 'vue-router'
-import {useDisplay} from 'vuetify'
+import { computed, onMounted, ref, shallowRef, toRef, watch } from 'vue'
+import { useStore } from './store'
+import { useRoute } from 'vue-router'
+import { useDisplay } from 'vuetify'
 import Chart from 'chart.js/auto'
-import {currency, percentage} from './app-filters'
+import { currency, percentage } from './app-filters'
 import PortfolioGrowthChartTooltip from './portfolio-growth-chart-tooltip.vue'
 import benchmarkData from '@/benchmark-data'
 
@@ -30,7 +30,7 @@ const store = useStore()
 const route = useRoute()
 const display = useDisplay()
 
-const percentageYAxisLabelCallback = (value) => {
+const percentageYAxisLabelCallback = value => {
   return percentage(value)
 }
 
@@ -70,8 +70,7 @@ const canvas = ref(null)
  * Creates a data array representing a benchmark's data, modified for the current scale
  * (absolute dollar value vs. percentage growth).
  */
-const getBenchmarkData = (ticker) => {
-
+const getBenchmarkData = ticker => {
   let data
 
   const tickerHistory = store.securityHistory(ticker, props.history[0].value)
@@ -92,7 +91,6 @@ const getBenchmarkData = (ticker) => {
  * (absolute dollar value vs. percentage growth).
  */
 const getUserData = () => {
-
   let result
 
   if (percentages.value) {
@@ -108,7 +106,7 @@ const getUserData = () => {
 /**
  * Returns a data set for a benchmark, suitable for passing directly into the chart component.
  */
-const createBenchmarkDataset = (ticker) => {
+const createBenchmarkDataset = ticker => {
   const color = benchmarkData.find(e => ticker === e.ticker).color
   return {
     backgroundColor: `${color}90`,
@@ -125,7 +123,6 @@ const createBenchmarkDataset = (ticker) => {
  * Generates all data (user data + benchmarks) for this chart to display.
  */
 const createAllDatasets = () => {
-
   const datasets = [
     {
       backgroundColor: '#3e6ecf90',
@@ -143,11 +140,12 @@ const createAllDatasets = () => {
 }
 
 const updateYAxis = () => {
-  chart.value.options.scales.y.ticks.callback = percentages.value ? percentageYAxisLabelCallback :
-      currencyYAxisLabelCallback
+  chart.value.options.scales.y.ticks.callback = percentages.value
+    ? percentageYAxisLabelCallback
+    : currencyYAxisLabelCallback
 }
 
-const currencyYAxisLabelCallback = (value) => {
+const currencyYAxisLabelCallback = value => {
   // We assume our value will never drop below $1000 or go above $1 million
   let str = currency(value)
   if (display.xs.value) {
@@ -162,23 +160,22 @@ const currencyYAxisLabelCallback = (value) => {
 }
 
 const generateLabels = () => {
-  //return props.history.map(entry => entry.date)
+  // return props.history.map(entry => entry.date)
   return props.history.map(entry => {
     // Use close of the market to avoid timezone drift of date
     const date = new Date(`${entry.date}T16:00:00-05:00`)
-    return date.toLocaleDateString('en', {dateStyle: 'medium'})
+    return date.toLocaleDateString('en', { dateStyle: 'medium' })
   })
 }
 
-const refreshChartAnnotations = (e) => {
-
+const refreshChartAnnotations = e => {
   const xAxis = chart.value.scales.x
   if (e.native.offsetX < xAxis.left || e.native.offsetX > xAxis.right) {
     armedX.value = armedY.value = 0
     return
   }
 
-  const elem = chart.value.getElementsAtEventForMode(e, 'index', {intersect: false}, false)[0]
+  const elem = chart.value.getElementsAtEventForMode(e, 'index', { intersect: false }, false)[0]
   armedX.value = elem?.element?.x || 0
   armedY.value = elem?.element?.y || 0
 }
@@ -188,7 +185,6 @@ const refreshChartAnnotations = (e) => {
  * specified comparisons. Used when a benchmark is added or removed.
  */
 const updateBenchmarkDatasets = () => {
-
   // Add new benchmarks, and update existing ones
   props.comparisons.forEach(ticker => {
     const index = chart.value.data.datasets.findIndex(dataset => dataset.ticker === ticker)
@@ -201,14 +197,13 @@ const updateBenchmarkDatasets = () => {
 
   // Remove any benchmarks that are no longer in our comparisons array
   chart.value.data.datasets = chart.value.data.datasets
-      .filter((dataset, index) => index === 0 || props.comparisons.indexOf(dataset.ticker) > -1)
+    .filter((dataset, index) => index === 0 || props.comparisons.indexOf(dataset.ticker) > -1)
 }
 
 /**
  * Toggles between "dollar view" and "percentage view".
  */
 const updateChartDataForNewDataType = () => {
-
   // Update portfolio
   const portfolioData = chart.value.data.datasets[0].data
   portfolioData.length = 0
@@ -233,15 +228,15 @@ watch(chartTypeRef, () => {
 })
 
 const dataTypeRef = toRef(props, 'dataType')
-watch(dataTypeRef, (newVal) => {
-      percentages.value = newVal === 'percent'
-      if (chart.value) {
-        updateChartDataForNewDataType()
-      }
-    },
-    {
-      immediate: true, // Force handler to run with initial value
-    }
+watch(dataTypeRef, newVal => {
+  percentages.value = newVal === 'percent'
+  if (chart.value) {
+    updateChartDataForNewDataType()
+  }
+},
+{
+  immediate: true, // Force handler to run with initial value
+},
 )
 
 const comparisonsRef = toRef(props, 'comparisons')
@@ -261,7 +256,6 @@ watch(route, () => {
 })
 
 onMounted(() => {
-
   chart.value = new Chart(canvas.value, {
     type: 'line',
     data: {
@@ -270,9 +264,8 @@ onMounted(() => {
     },
     plugins: [
       {
-        afterDatasetsDraw: (chart) => {
+        afterDatasetsDraw: chart => {
           if (armedX.value > 0) {
-
             const xAxis = chart.scales.x
             const yAxis = chart.scales.y
             const ctx = chart.canvas.getContext('2d')
@@ -305,8 +298,7 @@ onMounted(() => {
           mode: 'index', // Show all dataset values for this x-coordinate
           intersect: false,
           enabled: false,
-          external: function ({chart, tooltip}) {
-
+          external: function ({ chart, tooltip }) {
             // Hide if no tool tip
             if (tooltip.opacity === 0) {
               visible.value = false
@@ -325,7 +317,7 @@ onMounted(() => {
               width: position.width,
               height: position.height,
             }
-            //y.value = position.top + tooltip.caretY + 'px'
+            // y.value = position.top + tooltip.caretY + 'px'
           },
         },
       },
@@ -342,13 +334,14 @@ onMounted(() => {
         },
         y: {
           ticks: {
-            callback: percentages.value ? percentageYAxisLabelCallback :
-                currencyYAxisLabelCallback
+            callback: percentages.value
+              ? percentageYAxisLabelCallback
+              : currencyYAxisLabelCallback,
           },
         },
       },
 
-      onHover: (e) => {
+      onHover: e => {
         refreshChartAnnotations(e)
       },
 

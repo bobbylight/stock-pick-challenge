@@ -50,7 +50,6 @@ const props = defineProps({
 const MINIMUM_MOVE_COUNT = 3
 
 const notableMovesUp = computed(() => {
-
   const movedUp = []
 
   props.userData.positions.forEach(position => {
@@ -65,7 +64,7 @@ const notableMovesUp = computed(() => {
     if (day <= history.length - 1 - MINIMUM_MOVE_COUNT) {
       const dayCount = history.length - 1 - day
       const percentage = (history[history.length - 1].close - history[day].close) / history[day].close
-      movedUp.push({ticker, dayCount, percentage})
+      movedUp.push({ ticker, dayCount, percentage })
     }
   })
 
@@ -73,7 +72,6 @@ const notableMovesUp = computed(() => {
 })
 
 const notableMovesDown = computed(() => {
-
   const movedDown = []
 
   props.userData.positions.forEach(position => {
@@ -87,14 +85,14 @@ const notableMovesDown = computed(() => {
     if (day < history.length - 1 - MINIMUM_MOVE_COUNT) {
       const dayCount = history.length - 1 - day
       const percentage = (history[history.length - 1].close - history[day].close) / history[day].close
-      movedDown.push({ticker, dayCount, percentage})
+      movedDown.push({ ticker, dayCount, percentage })
     }
   })
 
   return movedDown
 })
 
-const getAmountDeltaClass = (value) => Utils.getPrimaryDeltaClass(value)
+const getAmountDeltaClass = value => Utils.getPrimaryDeltaClass(value)
 </script>
 
 <style scoped>

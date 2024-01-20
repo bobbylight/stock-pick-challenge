@@ -9,9 +9,9 @@ import { installGlobalFilters } from './app-filters'
 
 const pinia = createPinia()
 const app = createApp(App)
-    .use(router)
-    .use(pinia)
-    .use(vuetify)
+  .use(router)
+  .use(pinia)
+  .use(vuetify)
 
 installGlobalFilters(app)
 app.mount('#app')

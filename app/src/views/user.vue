@@ -184,10 +184,10 @@
 </template>
 
 <script setup>
-import {computed, onBeforeMount, ref} from 'vue'
-import {useRoute} from 'vue-router'
+import { computed, onBeforeMount, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import {useStore} from '../store'
+import { useStore } from '../store'
 import LotListing from '@/lot-listing.vue'
 import LotTable from '@/lot-table.vue'
 import PortfolioGrowthChart from '@/portfolio-growth-chart.vue'
@@ -214,14 +214,12 @@ const userData = computed(() => store[portfolioName.value])
 onBeforeMount(() => loadPreferences())
 
 const loadPreferences = () => {
-
   const key = `portfolio-${portfolioName.value}`
   console.log('Loading preferences: ' + key)
   const temp = localStorage.getItem(key)
 
   if (temp) {
     try {
-
       const json = JSON.parse(temp)
 
       const version = json.v || 0
@@ -241,7 +239,6 @@ const loadPreferences = () => {
 }
 
 const storePreferences = () => {
-
   const key = `portfolio-${portfolioName.value}`
   const value = {
     v: LATEST_PREFERENCES_VERSION,

@@ -17,15 +17,15 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref, shallowRef, toRef, watch} from 'vue'
+import { computed, onMounted, ref, shallowRef, toRef, watch } from 'vue'
 import { useDisplay } from 'vuetify'
 import Chart from 'chart.js/auto'
-import {currency, percentage} from './app-filters'
+import { currency, percentage } from './app-filters'
 import PortfolioGrowthChartTooltip from './portfolio-growth-chart-tooltip.vue'
 
 const display = useDisplay()
 
-const percentageYAxisLabelCallback = (value) => {
+const percentageYAxisLabelCallback = value => {
   return percentage(value)
 }
 
@@ -57,7 +57,7 @@ const canvasRect = ref(null)
 const canvas = ref(null)
 const comparisonColors = ['#e6439f', '#27ba67', '#494f9c', '#d1871f', '#893168', '#f5e616']
 
-const currencyYAxisLabelCallback = (value) => {
+const currencyYAxisLabelCallback = value => {
   // We assume our value will never drop below $1000 or go above $1 million
   let str = currency(value)
   if (display.xs.value) {
@@ -75,27 +75,24 @@ const generateLabels = () => {
   return props.userInfos[0].history.map(entry => {
     // Use close of the market to avoid timezone drift of date
     const date = new Date(`${entry.date}T16:00:00-05:00`)
-    return date.toLocaleDateString('en', {dateStyle: 'medium'})
+    return date.toLocaleDateString('en', { dateStyle: 'medium' })
   })
 }
 
-const refreshChartAnnotations = (e) => {
-
+const refreshChartAnnotations = e => {
   const xAxis = chart.value.scales.x
   if (e.native.offsetX < xAxis.left || e.native.offsetX > xAxis.right) {
     armedX.value = armedY.value = 0
     return
   }
 
-  const elem = chart.value.getElementsAtEventForMode(e, 'index', {intersect: false}, false)[0]
+  const elem = chart.value.getElementsAtEventForMode(e, 'index', { intersect: false }, false)[0]
   armedX.value = elem?.element?.x || 0
   armedY.value = elem?.element?.y || 0
 }
 
 const updateChartDataForNewDataType = () => {
-
   props.userInfos.forEach((userInfo, index) => {
-
     const history = userInfo.history
     const portfolioData = chart.value.data.datasets[index].data
     portfolioData.length = 0
@@ -123,13 +120,12 @@ watch(typeRef, () => {
 })
 
 const dataTypeRef = toRef(props, 'dataType')
-watch(dataTypeRef, (newVal) => {
+watch(dataTypeRef, newVal => {
   percentages.value = newVal === 'percent'
   updateChartDataForNewDataType()
 })
 
 onMounted(() => {
-
   const initialDatasets = props.userInfos.map((userInfo, index) => {
     return {
       backgroundColor: `${comparisonColors[index]}90`,
@@ -149,9 +145,8 @@ onMounted(() => {
     },
     plugins: [
       {
-        afterDatasetsDraw: (chart) => {
+        afterDatasetsDraw: chart => {
           if (armedX.value > 0) {
-
             const xAxis = chart.scales.x
             const yAxis = chart.scales.y
             const ctx = chart.canvas.getContext('2d')
@@ -185,7 +180,6 @@ onMounted(() => {
           intersect: false,
           enabled: false,
           external: function ({ chart, tooltip }) {
-
             // Hide if no tool tip
             if (tooltip.opacity === 0) {
               visible.value = false
@@ -204,7 +198,7 @@ onMounted(() => {
               width: position.width,
               height: position.height,
             }
-            //y.value = position.top + tooltip.caretY + 'px'
+            // y.value = position.top + tooltip.caretY + 'px'
           },
         },
       },
@@ -226,7 +220,7 @@ onMounted(() => {
         },
       },
 
-      onHover: (e) => {
+      onHover: e => {
         refreshChartAnnotations(e)
       },
 

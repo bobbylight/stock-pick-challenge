@@ -67,10 +67,10 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useStore } from '../store'
-import ComparisonChart from "../comparison-chart.vue"
+import ComparisonChart from '../comparison-chart.vue'
 
 const store = useStore()
 
@@ -97,14 +97,12 @@ const userInfos = computed(() => {
 onMounted(() => loadPreferences())
 
 const loadPreferences = () => {
-
   const key = 'comparison-page'
   console.log('Loading preferences: ' + key)
   const temp = localStorage.getItem(key)
 
   if (temp) {
     try {
-
       const json = JSON.parse(temp)
 
       const version = json.v || 0
@@ -124,7 +122,6 @@ const loadPreferences = () => {
 }
 
 const storePreferences = () => {
-
   const key = 'comparison-page'
   const value = {
     v: LATEST_PREFERENCES_VERSION,

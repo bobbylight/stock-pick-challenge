@@ -1,4 +1,4 @@
-import { createVuetify } from 'vuetify';
+import { createVuetify } from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
 const vuetify = createVuetify({})

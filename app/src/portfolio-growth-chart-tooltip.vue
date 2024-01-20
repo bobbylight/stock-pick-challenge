@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
+import { computed, ref } from 'vue'
 import { currency, percentage } from './app-filters'
 
 const props = defineProps({
@@ -75,13 +75,13 @@ const root = ref(null)
 
 const onRightSide = computed(() => props.model ? props.model.caretX < props.canvasRect.width / 2 : true)
 
-const getDataPointStyle = (dataPoint) => {
+const getDataPointStyle = dataPoint => {
   return {
     background: props.datasets[dataPoint.datasetIndex].borderColor,
   }
 }
 
-const getValue = (dataPoint) => {
+const getValue = dataPoint => {
   const valueFunc = props.percentages ? percentage : currency
   return valueFunc(dataPoint.raw)
 }
@@ -123,7 +123,6 @@ const sortedDataPoints = () => dataPoints()?.slice().sort((a, b) => b.raw - a.ra
 
 const title = () => lastTitle.value = props.visible ? props.model.dataPoints[0].label : lastTitle.value
 </script>
-
 
 <style scoped>
 .chart-tooltip-wrapper {

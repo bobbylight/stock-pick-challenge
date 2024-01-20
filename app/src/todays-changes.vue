@@ -82,12 +82,12 @@ const marketDirection = computed(() => {
   return gspcTodaysGain.value >= 0 ? 'up' : 'down'
 })
 
-const dailyChange = (ticker) => store.dailyChange(ticker, true)
+const dailyChange = ticker => store.dailyChange(ticker, true)
 
-const getAmountDeltaClass = (value) => Utils.getPrimaryDeltaClass(value)
+const getAmountDeltaClass = value => Utils.getPrimaryDeltaClass(value)
 
 // We're OK with 'went up 0%'
-const upOrDown = (amount) => amount < 0 ? 'down' : 'up'
+const upOrDown = amount => amount < 0 ? 'down' : 'up'
 </script>
 
 <style scoped>

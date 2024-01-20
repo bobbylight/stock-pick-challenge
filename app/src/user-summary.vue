@@ -67,7 +67,7 @@ const todaysGain = computed(() => {
   return currentValue.value - yesterdaysValue
 })
 
-const getAmountDeltaClass = (value) => {
+const getAmountDeltaClass = value => {
   return Utils.getPrimaryDeltaClass(value)
 }
 </script>
