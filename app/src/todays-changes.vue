@@ -26,7 +26,7 @@
 <script setup>
 import Utils from './utils'
 import { computed } from 'vue'
-import { useStore } from 'vuex'
+import { useStore } from './store'
 
 const store = useStore()
 
@@ -61,10 +61,10 @@ const worstPerformer = computed(() => {
   return best.ticker
 })
 
-const currentValue = computed(() => store.getters.currentValue(props.portfolioName))
+const currentValue = computed(() => store.currentValue(props.portfolioName))
 
 const todayBeatMarketBy = computed(() => {
-  const yesterdaysValue = store.getters.yesterdaysValue(props.portfolioName)
+  const yesterdaysValue = store.yesterdaysValue(props.portfolioName)
   const todaysGain = (currentValue.value - yesterdaysValue) / yesterdaysValue
   return todaysGain - gspcTodaysGain.value
 })
@@ -72,7 +72,7 @@ const todayBeatMarketBy = computed(() => {
 const todayVersusTheMarketVerb = computed(() => todayBeatMarketBy.value >= 0 ? 'beat' : 'underperformed')
 
 const gspcTodaysGain = computed(() => {
-  const gspcHistory = store.state.history['^gspc'].history
+  const gspcHistory = store.history['^gspc'].history
   const gspcYesterdaysValue = gspcHistory[gspcHistory.length - 2]?.close ?? 0
   const gspcTodaysValue = gspcHistory[gspcHistory.length - 1].close
   return (gspcTodaysValue - gspcYesterdaysValue) / gspcYesterdaysValue
@@ -82,7 +82,7 @@ const marketDirection = computed(() => {
   return gspcTodaysGain.value >= 0 ? 'up' : 'down'
 })
 
-const dailyChange = (ticker) => store.getters.dailyChange(ticker, true)
+const dailyChange = (ticker) => store.dailyChange(ticker, true)
 
 const getAmountDeltaClass = (value) => Utils.getPrimaryDeltaClass(value)
 

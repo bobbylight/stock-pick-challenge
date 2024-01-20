@@ -18,7 +18,7 @@
 
 <script setup>
 import {computed, onMounted, ref, shallowRef, toRef, watch} from 'vue'
-import {useStore} from 'vuex'
+import {useStore} from './store'
 import {useRoute} from 'vue-router'
 import {useDisplay} from 'vuetify'
 import Chart from 'chart.js/auto'
@@ -74,7 +74,7 @@ const getBenchmarkData = (ticker) => {
 
   let data
 
-  const tickerHistory = store.getters.securityHistory(ticker, props.history[0].value)
+  const tickerHistory = store.securityHistory(ticker, props.history[0].value)
   if (percentages.value) {
     data = []
     tickerHistory.forEach(value => {
@@ -115,7 +115,7 @@ const createBenchmarkDataset = (ticker) => {
     borderColor: color,
     data: getBenchmarkData(ticker),
     ticker,
-    label: store.getters.displayName(ticker),
+    label: store.displayName(ticker),
     fill: doFill.value,
     lineTension: 0.4,
   }

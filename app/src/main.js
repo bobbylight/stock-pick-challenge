@@ -1,17 +1,19 @@
 import { createApp } from 'vue'
 import App from './app.vue'
+import { createPinia } from 'pinia'
 import router from './router'
-import store from './store'
 import vuetify from './plugins/vuetify'
 import './app.css'
-import { installGlobalFilters } from './app-filters';
+import { useStore } from './store'
+import { installGlobalFilters } from './app-filters'
 
+const pinia = createPinia()
 const app = createApp(App)
     .use(router)
-    .use(store)
+    .use(pinia)
     .use(vuetify)
 
 installGlobalFilters(app)
 app.mount('#app')
 
-store.dispatch('setYear', 2024)
+useStore().setYear(2024)

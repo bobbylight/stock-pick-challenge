@@ -76,7 +76,7 @@
 
 <script setup>
 import {computed, ref} from 'vue'
-import {useStore} from 'vuex'
+import {useStore} from './store'
 import Utils from './utils'
 
 const store = useStore()
@@ -122,7 +122,7 @@ const items = computed(() => {
     const costPerShare = totalCost / shares
 
     const ticker = position.ticker
-    const tickerHistory = store.state.history[ticker].history
+    const tickerHistory = store.history[ticker].history
     const currentCostPerShare = tickerHistory[tickerHistory.length - 1].close
     const marketValue = currentCostPerShare * shares
     const dailyGain = (currentCostPerShare - (tickerHistory[tickerHistory.length - 2]?.close ?? 0)) * shares

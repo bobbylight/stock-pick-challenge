@@ -91,7 +91,7 @@
 
 <script setup>
 import {computed} from 'vue'
-import {useStore} from 'vuex'
+import {useStore} from './store'
 import Utils from './utils'
 
 const store = useStore()
@@ -145,17 +145,17 @@ const headers = [
 ]
 
 const averageDailyPercentageChange = computed(() => {
-  const yesterdaysValue = store.getters.yesterdaysValue(props.portfolioName)
+  const yesterdaysValue = store.yesterdaysValue(props.portfolioName)
   const todaysValue = currentValue.value
   return (todaysValue - yesterdaysValue) / yesterdaysValue
 })
 
 const averageTotalPercentageChange = computed(() => {
-  return totalGain.value / store.getters.initialInvestment(props.portfolioName)
+  return totalGain.value / store.initialInvestment(props.portfolioName)
 })
 
 const currentValue = computed(() => {
-  return store.getters.currentValue(props.portfolioName)
+  return store.currentValue(props.portfolioName)
 })
 
 const items = computed(() => {
@@ -171,7 +171,7 @@ const items = computed(() => {
     const costPerShare = totalCost / shares
 
     const ticker = position.ticker
-    const tickerHistory = store.state.history[ticker].history
+    const tickerHistory = store.history[ticker].history
     const currentCostPerShare = tickerHistory[tickerHistory.length - 1].close
     const marketValue = currentCostPerShare * shares
     const dailyGain = (currentCostPerShare - (tickerHistory[tickerHistory.length - 2]?.close ?? 0)) * shares
@@ -198,7 +198,7 @@ const getAmountDeltaClass = (value) => Utils.getSecondaryDeltaClass(value)
 const getPercentageClass = (value) => Utils.getPrimaryDeltaClass(value)
 
 const getDailyPercentageGain = (item) => {
-  const history = store.state.history[item.ticker].history
+  const history = store.history[item.ticker].history
   const previousClose = (history[history.length - 2]?.close ?? 0) * item.shares
   return item.dailyGain / previousClose
 }

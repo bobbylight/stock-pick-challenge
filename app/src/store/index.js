@@ -1,23 +1,33 @@
-import { createStore } from 'vuex'
+import { defineStore } from 'pinia'
 
 const data = {
     loading: true,
     year: 2024,
-    // Most data is imported lazily
+    carrow: {
+        cash: 0,
+        positions: [],
+        history: [],
+    },
+    robert: {
+        cash: 0,
+        positions: [],
+        history: [],
+    },
+    history: {},
 }
 
 const FIRST_DAY = '2024-01-02'
 
-const store = createStore({
-    state: data,
+export const useStore = defineStore('store', {
+    state: () => data,
     mutations: {
         setLoading(state, loading) {
             state.loading = loading
         }
     },
     actions: {
-        setYear({ commit }, year) {
-            commit('setLoading', true)
+        setYear(year) {
+            this.loading = true
             const urls = [
                 `/data/${year}/carrow.json`,
                 `/data/${year}/portfolio-history-carrow.json`,
@@ -34,7 +44,7 @@ const store = createStore({
                     const robertHistory = responses[3]
                     const tickerHistory = responses[4]
 
-                    store.replaceState({
+                    this.$patch({
                         loading: false,
                         year,
                         carrow: {
@@ -49,8 +59,6 @@ const store = createStore({
                     })
                 })
         },
-    },
-    modules: {
     },
     getters: {
 
@@ -156,10 +164,10 @@ const store = createStore({
         },
 
         lastUpdated: state => () => {
-            if (!state.history) {
+            const historyArray = state.history?.['^dji']?.history
+            if (!historyArray) {
                 return undefined
             }
-            const historyArray = state.history['^dji'].history
             // Cheap way to ensure date isn't impacted by time zones, at least anywhere our users are
             const dateTime = `${historyArray[historyArray.length - 1].date}T12:00:00Z`
             return new Intl.DateTimeFormat('en-US', {
@@ -171,5 +179,3 @@ const store = createStore({
         },
     }
 })
-
-export default store

@@ -32,7 +32,7 @@
 <script setup>
 import Utils from './utils'
 import { computed } from 'vue'
-import { useStore } from 'vuex'
+import { useStore } from './store'
 
 const store = useStore()
 
@@ -55,7 +55,7 @@ const notableMovesUp = computed(() => {
 
   props.userData.positions.forEach(position => {
     const ticker = position.ticker
-    const history = store.state.history[ticker].history
+    const history = store.history[ticker].history
 
     let day = history.length - 1
     while (day > 0 && parseFloat(history[day].close) > parseFloat(history[day - 1].close)) {
@@ -78,7 +78,7 @@ const notableMovesDown = computed(() => {
 
   props.userData.positions.forEach(position => {
     const ticker = position.ticker
-    const history = store.state.history[ticker].history
+    const history = store.history[ticker].history
 
     let day = history.length - 1
     while (day > 0 && parseFloat(history[day].close) < parseFloat(history[day - 1].close)) {

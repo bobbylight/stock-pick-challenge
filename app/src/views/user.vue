@@ -6,13 +6,13 @@
         sm="6"
       >
         <v-skeleton-loader
-          v-if="$store.state.loading"
+          v-if="loading"
           elevation="2"
           type="article"
         />
         <v-card
           class="user-card"
-          v-if="!$store.state.loading && userData"
+          v-if="!loading && userData"
         >
           <v-card-title>Summary</v-card-title>
 
@@ -30,13 +30,13 @@
         sm="6"
       >
         <v-skeleton-loader
-          v-if="$store.state.loading"
+          v-if="loading"
           elevation="2"
           type="article"
         />
         <v-card
           class="user-card"
-          v-if="!$store.state.loading && userData"
+          v-if="!loading && userData"
         >
           <v-card-title>Today's Changes</v-card-title>
 
@@ -53,13 +53,13 @@
     <v-row>
       <v-col>
         <v-skeleton-loader
-          v-if="$store.state.loading"
+          v-if="loading"
           elevation="2"
           type="article"
         />
         <v-card
           class="user-card"
-          v-if="!$store.state.loading && userData"
+          v-if="!loading && userData"
         >
           <v-card-title>Notable Movers</v-card-title>
 
@@ -76,14 +76,14 @@
     <v-row>
       <v-col>
         <v-skeleton-loader
-          v-if="$store.state.loading"
+          v-if="loading"
           elevation="2"
           type="article"
         />
         <v-card
           class="user-card"
           title="YTD Growth"
-          v-if="!$store.state.loading && userData"
+          v-if="!loading && userData"
         >
           <template #append>
             <v-menu
@@ -156,13 +156,13 @@
     <v-row>
       <v-col>
         <v-skeleton-loader
-          v-if="$store.state.loading"
+          v-if="loading"
           elevation="2"
           type="table"
         />
         <v-card
           class="user-card"
-          v-if="!$store.state.loading && userData"
+          v-if="!loading && userData"
         >
           <v-card-title>Current Holdings</v-card-title>
           <v-card-text class="pa-0">
@@ -185,8 +185,9 @@
 
 <script setup>
 import {computed, onBeforeMount, ref} from 'vue'
-import {useStore} from 'vuex'
 import {useRoute} from 'vue-router'
+import { storeToRefs } from 'pinia'
+import {useStore} from '../store'
 import LotListing from '@/lot-listing.vue'
 import LotTable from '@/lot-table.vue'
 import PortfolioGrowthChart from '@/portfolio-growth-chart.vue'
@@ -204,10 +205,11 @@ const chartType = ref('line')
 const chartDataType = ref('dollars')
 const chartComparisons = ref([])
 const benchmarks = ref(benchmarkData)
+const { loading } = storeToRefs(store)
 
 const portfolioName = computed(() => route.params.user)
 
-const userData = computed(() => store.state[portfolioName.value])
+const userData = computed(() => store[portfolioName.value])
 
 onBeforeMount(() => loadPreferences())
 

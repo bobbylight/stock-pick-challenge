@@ -39,7 +39,7 @@
 <script setup>
 import Utils from './utils'
 import { computed } from 'vue'
-import { useStore } from 'vuex'
+import { useStore } from './store'
 
 const store = useStore()
 
@@ -55,15 +55,15 @@ const props = defineProps({
 })
 
 const currentValue = computed(() => {
-  return store.getters.currentValue(props.portfolioName)
+  return store.currentValue(props.portfolioName)
 })
 
 const initialInvestment = computed(() => {
-  return store.getters.initialInvestment(props.portfolioName)
+  return store.initialInvestment(props.portfolioName)
 })
 
 const todaysGain = computed(() => {
-  const yesterdaysValue = store.getters.yesterdaysValue(props.portfolioName)
+  const yesterdaysValue = store.yesterdaysValue(props.portfolioName)
   return currentValue.value - yesterdaysValue
 })
 

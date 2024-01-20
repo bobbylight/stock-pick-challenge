@@ -3,14 +3,14 @@
     <v-row>
       <v-col>
         <v-skeleton-loader
-          v-if="$store.state.loading"
+          v-if="loading"
           elevation="2"
           type="article"
         />
         <v-card
           class="user-card"
           title="Head to Head!"
-          v-if="!$store.state.loading"
+          v-if="!loading"
         >
           <template #append>
             <v-menu
@@ -68,7 +68,8 @@
 
 <script setup>
 import {computed, onMounted, ref} from 'vue'
-import { useStore } from 'vuex'
+import { storeToRefs } from 'pinia'
+import { useStore } from '../store'
 import ComparisonChart from "../comparison-chart.vue"
 
 const store = useStore()
@@ -78,16 +79,17 @@ const LATEST_PREFERENCES_VERSION = 1
 const chartType = ref('line')
 const chartDataType = ref('dollars')
 const chartComparisons = ref([])
+const { carrow, loading, robert } = storeToRefs(store)
 
 const userInfos = computed(() => {
   return [
     {
       name: 'Robert',
-      history: store.state['robert'].history,
+      history: robert.value.history,
     },
     {
       name: 'Carrow',
-      history: store.state['carrow'].history,
+      history: carrow.value.history,
     },
   ]
 })

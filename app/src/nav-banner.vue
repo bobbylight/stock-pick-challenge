@@ -8,7 +8,7 @@
     </div>
     <div>
       <h1>Stock Market Challenge!</h1>
-      <h6> Last updated: {{ $store.getters.lastUpdated() }}</h6>
+      <h6>Last updated: {{ lastUpdated }}</h6>
       <div id="nav">
         <router-link to="/head-to-head">
           Comparison
@@ -35,12 +35,16 @@
 </template>
 
 <script setup>
-// import { useStore } from 'vuex'
-//
+import { computed } from 'vue'
+import { useStore } from './store'
+
+const store = useStore()
+const lastUpdated = computed(() => store.lastUpdated())
+
 // const store = useStore()
 // const setYear = (year) => {
 //   console.log('Setting year to: ' + year)
-//   this.$store.dispatch('setYear', year)
+//   store.dispatch('setYear', year)
 // }
 </script>
 
