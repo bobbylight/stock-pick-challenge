@@ -24,9 +24,9 @@
 </template>
 
 <script setup>
-import Utils from './utils'
 import { computed } from 'vue'
 import { useStore } from './store'
+import { getPrimaryDeltaClass } from './utils'
 
 const store = useStore()
 
@@ -84,7 +84,7 @@ const marketDirection = computed(() => {
 
 const dailyChange = ticker => store.dailyChange(ticker, true)
 
-const getAmountDeltaClass = value => Utils.getPrimaryDeltaClass(value)
+const getAmountDeltaClass = value => getPrimaryDeltaClass(value)
 
 // We're OK with 'went up 0%'
 const upOrDown = amount => amount < 0 ? 'down' : 'up'

@@ -77,7 +77,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useStore } from './store'
-import Utils from './utils'
+import { getPrimaryDeltaClass, getSecondaryDeltaClass } from './utils'
 
 const store = useStore()
 
@@ -129,7 +129,7 @@ const items = computed(() => {
     const totalGain = (currentCostPerShare - costPerShare) * shares
 
     return {
-      ticker: position.ticker,
+      ticker,
       shares,
       costPerShare,
       currentCostPerShare,
@@ -152,9 +152,9 @@ const items = computed(() => {
     })
 })
 
-const getSecondaryValueClass = value => Utils.getSecondaryDeltaClass(value)
+const getSecondaryValueClass = value => getSecondaryDeltaClass(value)
 
-const getPrimaryValueClass = value => Utils.getPrimaryDeltaClass(value)
+const getPrimaryValueClass = value => getPrimaryDeltaClass(value)
 </script>
 
 <style scoped>

@@ -69,7 +69,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useStore } from '../store'
+import { useStore } from '@/store'
 import ComparisonChart from '../comparison-chart.vue'
 
 const store = useStore()

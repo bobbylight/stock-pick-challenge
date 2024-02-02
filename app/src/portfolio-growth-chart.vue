@@ -64,7 +64,6 @@ const datasets = ref(null)
 const visible = ref(false)
 const canvasRect = ref(null)
 const canvas = ref(null)
-// const comparisonColors = ['#e6439f', '#27ba67', '#494f9c', '#d1871f', '#893168', '#f5e616']
 
 /**
  * Creates a data array representing a benchmark's data, modified for the current scale

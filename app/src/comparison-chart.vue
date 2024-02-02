@@ -55,7 +55,7 @@ const datasets = ref(null)
 const visible = ref(false)
 const canvasRect = ref(null)
 const canvas = ref(null)
-const comparisonColors = ['#e6439f', '#27ba67', '#494f9c', '#d1871f', '#893168', '#f5e616']
+const userColors = ['#e6439f', '#27ba67', '#494f9c', '#d1871f', '#893168', '#f5e616']
 
 const currencyYAxisLabelCallback = value => {
   // We assume our value will never drop below $1000 or go above $1 million
@@ -128,8 +128,8 @@ watch(dataTypeRef, newVal => {
 onMounted(() => {
   const initialDatasets = props.userInfos.map((userInfo, index) => {
     return {
-      backgroundColor: `${comparisonColors[index]}90`,
-      borderColor: comparisonColors[index],
+      backgroundColor: `${userColors[index]}90`,
+      borderColor: userColors[index],
       data: userInfo.history.map(entry => entry.value),
       label: userInfo.name,
       fill: doFill.value,

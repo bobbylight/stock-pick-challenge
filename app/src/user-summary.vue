@@ -37,9 +37,9 @@
 </template>
 
 <script setup>
-import Utils from './utils'
 import { computed } from 'vue'
 import { useStore } from './store'
+import { getPrimaryDeltaClass } from './utils'
 
 const store = useStore()
 
@@ -68,7 +68,7 @@ const todaysGain = computed(() => {
 })
 
 const getAmountDeltaClass = value => {
-  return Utils.getPrimaryDeltaClass(value)
+  return getPrimaryDeltaClass(value)
 }
 </script>
 

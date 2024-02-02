@@ -69,8 +69,8 @@ const props = defineProps({
 
 const lastTitle = ref('')
 const lastDatasets = ref([])
-const lastX = ref(undefined)
-const lastY = ref(undefined)
+const lastX = ref('')
+const lastY = ref('')
 const root = ref(null)
 
 const onRightSide = computed(() => props.model ? props.model.caretX < props.canvasRect.width / 2 : true)

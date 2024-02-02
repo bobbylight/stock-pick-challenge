@@ -20,11 +20,6 @@ const FIRST_DAY = '2024-01-02'
 
 export const useStore = defineStore('store', {
   state: () => data,
-  mutations: {
-    setLoading(state, loading) {
-      state.loading = loading
-    },
-  },
   actions: {
     setYear(year) {
       this.loading = true

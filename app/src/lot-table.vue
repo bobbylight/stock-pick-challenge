@@ -92,7 +92,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useStore } from './store'
-import Utils from './utils'
+import { getPrimaryDeltaClass, getSecondaryDeltaClass } from './utils'
 
 const store = useStore()
 
@@ -192,9 +192,9 @@ const totalDailyGain = computed(() => items.value.reduce((acc, curr) => acc + cu
 
 const totalGain = computed(() => items.value.reduce((acc, curr) => acc + curr.totalGain, 0))
 
-const getAmountDeltaClass = value => Utils.getSecondaryDeltaClass(value)
+const getAmountDeltaClass = value => getSecondaryDeltaClass(value)
 
-const getPercentageClass = value => Utils.getPrimaryDeltaClass(value)
+const getPercentageClass = value => getPrimaryDeltaClass(value)
 
 const getDailyPercentageGain = item => {
   const history = store.history[item.ticker].history

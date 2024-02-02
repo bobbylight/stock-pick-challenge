@@ -30,9 +30,9 @@
 </template>
 
 <script setup>
-import Utils from './utils'
 import { computed } from 'vue'
 import { useStore } from './store'
+import { getPrimaryDeltaClass } from './utils'
 
 const store = useStore()
 
@@ -92,7 +92,7 @@ const notableMovesDown = computed(() => {
   return movedDown
 })
 
-const getAmountDeltaClass = value => Utils.getPrimaryDeltaClass(value)
+const getAmountDeltaClass = value => getPrimaryDeltaClass(value)
 </script>
 
 <style scoped>
