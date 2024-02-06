@@ -53,8 +53,10 @@
           </template>
           <v-card-text>
             <div class="chart-wrapper">
+              <date-range-selector v-model="dayCount" />
               <comparison-chart
                 :user-infos="userInfos"
+                :day-count="dayCount"
                 :type="chartType"
                 :data-type="chartDataType"
               />
@@ -71,6 +73,7 @@ import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useStore } from '@/store'
 import ComparisonChart from '../comparison-chart.vue'
+import DateRangeSelector from '@/date-range-selector.vue'
 
 const store = useStore()
 
@@ -80,6 +83,7 @@ const chartType = ref('line')
 const chartDataType = ref('dollars')
 const chartComparisons = ref([])
 const { carrow, loading, robert } = storeToRefs(store)
+const dayCount = ref(-1)
 
 const userInfos = computed(() => {
   return [

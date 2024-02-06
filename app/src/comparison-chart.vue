@@ -34,6 +34,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  dayCount: {
+    type: Number,
+    required: true,
+  },
   type: {
     type: String,
     required: true,
@@ -72,7 +76,7 @@ const currencyYAxisLabelCallback = value => {
 }
 
 const generateLabels = () => {
-  return props.userInfos[0].history.map(entry => {
+  return truncate(props.userInfos[0].history, props.dayCount).map(entry => {
     // Use close of the market to avoid timezone drift of date
     const date = new Date(`${entry.date}T16:00:00-05:00`)
     return date.toLocaleDateString('en', { dateStyle: 'medium' })
@@ -91,9 +95,13 @@ const refreshChartAnnotations = e => {
   armedY.value = elem?.element?.y || 0
 }
 
+const truncate = (history, dayCount) => {
+  return dayCount <= 0 || history.length <= dayCount ? history : history.slice(history.length - dayCount)
+}
+
 const updateChartDataForNewDataType = () => {
   props.userInfos.forEach((userInfo, index) => {
-    const history = userInfo.history
+    const history = truncate(userInfo.history, props.dayCount)
     const portfolioData = chart.value.data.datasets[index].data
     portfolioData.length = 0
 
@@ -110,7 +118,8 @@ const updateChartDataForNewDataType = () => {
   })
 
   // Refresh the chart to show the changes
-  chart.value.update()
+  armedX.value = armedY.value = 0
+  chart.value.update('none')
 }
 
 const typeRef = toRef(props, 'type')
@@ -124,13 +133,18 @@ watch(dataTypeRef, newVal => {
   percentages.value = newVal === 'percent'
   updateChartDataForNewDataType()
 })
+const dayCountRef = toRef(props, 'dayCount')
+watch(dayCountRef, () => {
+  chart.value.data.labels = generateLabels()
+  updateChartDataForNewDataType()
+})
 
 onMounted(() => {
   const initialDatasets = props.userInfos.map((userInfo, index) => {
     return {
       backgroundColor: `${userColors[index]}90`,
       borderColor: userColors[index],
-      data: userInfo.history.map(entry => entry.value),
+      data: truncate(userInfo.history, props.dayCount).map(entry => entry.value),
       label: userInfo.name,
       fill: doFill.value,
       lineTension: 0.4,
