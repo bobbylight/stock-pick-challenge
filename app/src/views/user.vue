@@ -197,7 +197,7 @@ import UserSummary from '@/user-summary.vue'
 import TodaysChanges from '@/todays-changes.vue'
 import benchmarkData from '@/benchmark-data'
 import NotableMovers from '@/notable-movers.vue'
-import DateRangeSelector from '@/date-range-selector.vue';
+import DateRangeSelector from '@/date-range-selector.vue'
 
 const store = useStore()
 const route = useRoute()
