@@ -51,6 +51,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  dayCount: {
+    type: Number,
+    required: true,
+  },
 })
 
 // TODO: Some of these may need to be reactive() if they're objects, or simply not ref if they never change
@@ -72,7 +76,7 @@ const canvas = ref(null)
 const getBenchmarkData = ticker => {
   let data
 
-  const tickerHistory = store.securityHistory(ticker, props.history[0].value)
+  const tickerHistory = truncate(store.securityHistory(ticker, props.history[0].value), props.dayCount)
   if (percentages.value) {
     data = []
     tickerHistory.forEach(value => {
@@ -90,13 +94,14 @@ const getBenchmarkData = ticker => {
  * (absolute dollar value vs. percentage growth).
  */
 const getUserData = () => {
+  const history = truncate(props.history, props.dayCount)
   let result
 
   if (percentages.value) {
-    const purchasePrice = props.history[0].value
-    result = props.history.map(entry => (entry.value - purchasePrice) / purchasePrice)
+    const purchasePrice = history[0].value
+    result = history.map(entry => (entry.value - purchasePrice) / purchasePrice)
   } else {
-    result = props.history.map(entry => entry.value)
+    result = history.map(entry => entry.value)
   }
 
   return result
@@ -159,8 +164,7 @@ const currencyYAxisLabelCallback = value => {
 }
 
 const generateLabels = () => {
-  // return props.history.map(entry => entry.date)
-  return props.history.map(entry => {
+  return truncate(props.history, props.dayCount).map(entry => {
     // Use close of the market to avoid timezone drift of date
     const date = new Date(`${entry.date}T16:00:00-05:00`)
     return date.toLocaleDateString('en', { dateStyle: 'medium' })
@@ -199,6 +203,10 @@ const updateBenchmarkDatasets = () => {
     .filter((dataset, index) => index === 0 || props.comparisons.indexOf(dataset.ticker) > -1)
 }
 
+const truncate = (history, dayCount) => {
+  return dayCount <= 0 || history.length <= dayCount ? history : history.slice(history.length - dayCount)
+}
+
 /**
  * Toggles between "dollar view" and "percentage view".
  */
@@ -217,6 +225,7 @@ const updateChartDataForNewDataType = () => {
 
   // Refresh the chart to show the changes
   updateYAxis()
+  armedX.value = armedY.value = 0
   chart.value.update()
 }
 
@@ -235,8 +244,12 @@ watch(dataTypeRef, newVal => {
 },
 {
   immediate: true, // Force handler to run with initial value
-},
-)
+})
+const dayCountRef = toRef(props, 'dayCount')
+watch(dayCountRef, () => {
+  chart.value.data.labels = generateLabels()
+  updateChartDataForNewDataType()
+})
 
 const comparisonsRef = toRef(props, 'comparisons')
 watch(comparisonsRef, () => {

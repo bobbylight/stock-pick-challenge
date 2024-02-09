@@ -119,7 +119,7 @@ const updateChartDataForNewDataType = () => {
 
   // Refresh the chart to show the changes
   armedX.value = armedY.value = 0
-  chart.value.update('none')
+  chart.value.update()
 }
 
 const typeRef = toRef(props, 'type')

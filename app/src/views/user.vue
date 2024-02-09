@@ -141,11 +141,13 @@
           </template>
           <v-card-text>
             <div class="chart-wrapper">
+              <date-range-selector v-model="dayCount" />
               <portfolio-growth-chart
                 :history="userData.history"
                 :chart-type="chartType"
                 :data-type="chartDataType"
                 :comparisons="chartComparisons"
+                :day-count="dayCount"
               />
             </div>
           </v-card-text>
@@ -195,6 +197,7 @@ import UserSummary from '@/user-summary.vue'
 import TodaysChanges from '@/todays-changes.vue'
 import benchmarkData from '@/benchmark-data'
 import NotableMovers from '@/notable-movers.vue'
+import DateRangeSelector from '@/date-range-selector.vue';
 
 const store = useStore()
 const route = useRoute()
@@ -205,6 +208,7 @@ const chartType = ref('line')
 const chartDataType = ref('dollars')
 const chartComparisons = ref([])
 const benchmarks = ref(benchmarkData)
+const dayCount = ref(-1)
 const { loading } = storeToRefs(store)
 
 const portfolioName = computed(() => route.params.user)

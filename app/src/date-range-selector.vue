@@ -9,7 +9,7 @@
         style="height: 24px"
     >
       <v-btn size="small" color="primary" style="min-width: 30px" :value=-1>All</v-btn>
-      <v-btn size="small" color="primary" style="min-width: 30px" :value="7">5d</v-btn>
+      <v-btn size="small" color="primary" style="min-width: 30px" :value="5">5d</v-btn>
       <v-btn size="small" color="primary" style="min-width: 30px" :value="14">2w</v-btn>
       <v-btn size="small" color="primary" style="min-width: 30px" :value="30">1m</v-btn>
     </v-btn-toggle>
