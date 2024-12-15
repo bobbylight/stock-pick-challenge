@@ -52,7 +52,20 @@ const getInitialPortfolioValue = () => {
     return initialValue
 }
 
+const getHistoryRecord = (ticker, historyArray, targetDate) => {
+    // TODO: Remove me when we always have at least buyout data as a backup
+    if (!historyArray?.length) {
+        return undefined
+    }
 
+    // ISO-8601 date strings are ordered
+    const lastHistoryRecord = historyArray[historyArray.length - 1]
+    if (targetDate > lastHistoryRecord.date) {
+        // Data ended before today - likely a ticker that was bought out and stopped trading
+        return lastHistoryRecord
+    }
+    return historyArray.find(record => record.date === date)
+}
 
 
 // Initialize variables.  Portfolio history starts with a record for our initial investments.
@@ -71,6 +84,11 @@ const today = new Date()
 while (new Date(date) < today) {
 
     let value = 0 // cash added later to keep logic simpler
+    // Hack to ensure we properly handle buyout, no-longer-traded records.
+    // For holidays we assume a 0 value => no trades that day. But we don't
+    // know how to account for holidays when using the "last" value for
+    // tickers no longer trading
+    let allAdded = true
 
     data.positions.forEach((position) => {
 
@@ -84,15 +102,21 @@ while (new Date(date) < today) {
         //console.log(`Closest contribution: ${JSON.stringify(closestContribution)}`)
 
         const ticker = position.ticker
-        const historyRecord = tickerHistory[ticker].history.find(record => record.date === date)
+        if (!tickerHistory[ticker]) {
+            throw new Error(`${dataFile}: no history for ticker: ${ticker}`)
+        }
+        // If data stopped, say from a buyout, take the last price as the "final" one
+        const historyRecord = getHistoryRecord(ticker, tickerHistory[ticker].history, date)
         if (historyRecord) { // i.e. it wasn't a market holiday
             const price = historyRecord['adj close']
             value += closestContribution.count * price
+        } else {
+            allAdded = false
         }
     })
 
     console.log(`${date}: ${value ? (value + data.cash) : '(no trades)'}`)
-    if (value) {
+    if (value && allAdded) {
         portfolioHistory.push({date, value: value + data.cash})
     }
     date = getNextTradingDay(date)
