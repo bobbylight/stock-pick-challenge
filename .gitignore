@@ -2,6 +2,7 @@
 node_modules
 dist
 datagen/csv/
+datagen/html/
 datagen/output/
 
 # local env files
