@@ -41,8 +41,10 @@ const props = defineProps({
   },
 })
 
+const stillTradingTickers = positions => positions.filter(p => store.stillActivelyTrading(p.ticker))
+
 const bestPerformer = computed(() => {
-  const positions = props.userData.positions.slice()
+  const positions = stillTradingTickers(props.userData.positions)
   const best = positions.sort((a, b) => {
     const dailyChangeA = dailyChange(a.ticker)
     const dailyChangeB = dailyChange(b.ticker)
@@ -52,13 +54,13 @@ const bestPerformer = computed(() => {
 })
 
 const worstPerformer = computed(() => {
-  const positions = props.userData.positions.slice()
-  const best = positions.sort((a, b) => {
+  const positions = stillTradingTickers(props.userData.positions)
+  const worst = positions.sort((a, b) => {
     const dailyChangeA = dailyChange(a.ticker)
     const dailyChangeB = dailyChange(b.ticker)
     return dailyChangeA - dailyChangeB // Will never overflow with our values
   })[0]
-  return best.ticker
+  return worst.ticker
 })
 
 const currentValue = computed(() => store.currentValue(props.portfolioName))

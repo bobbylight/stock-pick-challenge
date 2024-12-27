@@ -124,7 +124,8 @@ const items = computed(() => {
     const tickerHistory = store.history[ticker].history
     const currentCostPerShare = tickerHistory[tickerHistory.length - 1].close
     const marketValue = currentCostPerShare * shares
-    const dailyGain = (currentCostPerShare - (tickerHistory[tickerHistory.length - 2]?.close ?? 0)) * shares
+    const dailyGain = store.stillActivelyTrading(ticker) ?
+      (currentCostPerShare - (tickerHistory[tickerHistory.length - 2]?.close ?? 0)) * shares : 0
     const dailyPercentGain = dailyGain / (marketValue - dailyGain)
     const totalGain = (currentCostPerShare - costPerShare) * shares
 

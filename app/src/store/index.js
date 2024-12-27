@@ -57,7 +57,7 @@ export const useStore = defineStore('store', {
   getters: {
 
     initialInvestment: state => portfolioName => {
-      // Note: If we ever start to support mid-year purchaes this isn't guaranteed
+      // Note: If we ever start to support mid-year purchases this isn't guaranteed
       // to always work
       const positions = state[portfolioName].positions
       const firstDay = positions[0].contributions[0].date
@@ -161,6 +161,14 @@ export const useStore = defineStore('store', {
         day: 'numeric',
         year: 'numeric',
       }).format(new Date(dateTime))
+    },
+
+    // If a company gets bought out, it stops updating mid-year. The only way we
+    // can know that is to compare their data set size to the trading day count
+    stillActivelyTrading: state => ticker => {
+      const tradingDayCount = state.history?.['^dji']?.history?.length ?? 0
+      const tickerTradingDayCount = state.history?.[ticker]?.history?.length ?? 0
+      return tickerTradingDayCount === tradingDayCount
     },
   },
 })
