@@ -38,19 +38,22 @@ export const useStore = defineStore('store', {
           const robertHistory = responses[3]
           const tickerHistory = responses[4]
 
-          this.$patch({
-            loading: false,
-            year,
-            carrow: {
+          const startTime = Date.now()
+          this.$patch(state => {
+            state.loading = false
+            state.year = year
+            state.carrow = {
               ...carrow,
               history: carrowHistory,
-            },
-            robert: {
+            }
+            state.robert = {
               ...robert,
               history: robertHistory,
-            },
-            history: tickerHistory,
+            }
+            state.history = tickerHistory
           })
+          const totalTime = Date.now() - startTime
+          console.log(`Loaded data for year ${year} in ${totalTime}ms`)
         })
     },
   },
