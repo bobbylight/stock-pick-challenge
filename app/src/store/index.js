@@ -23,6 +23,7 @@ export const useStore = defineStore('store', {
   actions: {
     setYear(year) {
       this.loading = true
+      this.year = year
       const urls = [
         `/data/${year}/carrow.json`,
         `/data/${year}/portfolio-history-carrow.json`,
@@ -41,7 +42,6 @@ export const useStore = defineStore('store', {
           const startTime = Date.now()
           this.$patch(state => {
             state.loading = false
-            state.year = year
             state.carrow = {
               ...carrow,
               history: carrowHistory,

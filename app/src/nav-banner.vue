@@ -7,9 +7,28 @@
       >
     </div>
     <div>
-      <h1>Stock Market Challenge!</h1>
+      <h1>
+        <v-menu>
+          <template #activator="{ props }">
+            <a
+                v-bind="props"
+                href="#"
+            >{{ store.year }}</a>
+          </template>
+          <v-list>
+            <v-list-item
+                v-for="year in ['2024', '2023', '2022', '2021']"
+                :key="year"
+                @click="setYear(year)"
+            >
+              <v-list-item-title>{{ year }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+        Stock Market Challenge!
+      </h1>
       <h6>Last updated: {{ lastUpdated }}</h6>
-      <div id="nav">
+      <div class="nav">
         <router-link to="/head-to-head">
           Comparison
         </router-link> |
@@ -23,13 +42,6 @@
           About
         </router-link>
       </div>
-      <!--
-      <div id="year">
-        <button @click="setYear('2023')">2023</button> |
-        <button @click="setYear('2022')">2022</button> |
-        <button @click="setYear('2021')">2021</button>
-      </div>
-      -->
     </div>
   </div>
 </template>
@@ -41,59 +53,68 @@ import { useStore } from './store'
 const store = useStore()
 const lastUpdated = computed(() => store.lastUpdated())
 
-// const store = useStore()
-// const setYear = (year) => {
-//   console.log('Setting year to: ' + year)
-//   store.dispatch('setYear', year)
-// }
+const setYear = year => store.setYear(year)
 </script>
 
 <style>
 .app-banner {
+  --active-link-color: #42b983;
+  --text-color: #2c3e50;
+
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-}
+  color: var(--text-color);
 
-h1 {
-  font-size: 48px;
-  color: #2c3e50;
-}
-h6 {
-  margin-top: -0.5rem;
-  margin-bottom: 1rem;
-}
-.app-banner img {
-  width: 240px;
-  margin-inline-end: 2rem;
-}
-
-@media only screen and (max-width: 960px) {
-
-  .app-banner {
-    display: inherit;
-  }
   h1 {
-    font-size: 32px;
+    font-size: 48px;
+    a {
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
   }
-  .app-banner img {
-    width: 120px;
+
+  h6 {
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  img {
+    width: 240px;
     margin-inline-end: 2rem;
   }
-}
 
-#nav {
-  font-size: larger;
-  font-weight: bold;
-}
+  @media only screen and (max-width: 960px) {
+    display: inherit;
 
-#nav a {
-  color: #2c3e50;
-  display: inline-block; /* Avoid issue with trailing space in anchor tag text after linting */
-}
+    h1 {
+      font-size: 32px;
+    }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+    img {
+      width: 120px;
+      margin-inline-end: 2rem;
+    }
+  }
+
+  a {
+    color: var(--text-color);
+    display: inline-block; /* Avoid issue with trailing space in anchor tag text after linting */
+  }
+  a:hover {
+    color: var(--active-link-color);
+  }
+
+  .nav {
+    font-size: larger;
+    font-weight: bold;
+
+    a.router-link-exact-active {
+      color: var(--active-link-color);
+    }
+  }
 }
 </style>
