@@ -11,7 +11,7 @@
         <v-menu>
           <template #activator="{ props }">
             <a
-                class="year-selector"
+              class="year-selector"
               v-bind="props"
             >{{ store.year }}</a>
           </template>
