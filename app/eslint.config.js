@@ -1,8 +1,8 @@
-import stylistic from "@stylistic/eslint-plugin";
-import vueEslintParser from "vue-eslint-parser";
-import globals from "globals";
-import js from "@eslint/js";
-import pluginVue from "eslint-plugin-vue";
+import stylistic from '@stylistic/eslint-plugin'
+import vueEslintParser from 'vue-eslint-parser'
+import globals from 'globals'
+import js from '@eslint/js'
+import pluginVue from 'eslint-plugin-vue'
 
 export default [
   js.configs.recommended,
@@ -16,9 +16,6 @@ export default [
       globals: {
         ...globals.node,
         ...globals.browser,
-        // vite.config.ts defines
-        __APP_BUILD_DATE__: true,
-        __APP_VERSION__: true,
       },
     },
     rules: {
@@ -30,9 +27,9 @@ export default [
       '@stylistic/comma-dangle': [ 'error', 'always-multiline' ],
       '@stylistic/indent': [ 'error', 2 ],
       '@stylistic/semi': [ 'error', 'never' ],
-      'vue/valid-v-slot': [ 'error', { allowModifiers: true, }, ],
+      'vue/valid-v-slot': [ 'error', { allowModifiers: true } ],
       'vue/multi-word-component-names': 'off', // TODO: Change about.vue and chart.vue to multi-word
     },
     files: [ '**/*.js', '**/*.vue' ],
-  }
+  },
 ]
