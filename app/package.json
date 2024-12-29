@@ -7,7 +7,8 @@
     "build": "vite build",
     "serve": "vite preview",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "eslint --ignore-pattern ../.gitignore --fix src"
+    "lint": "eslint --ignore-pattern ../.gitignore --fix src",
+    "lint:nofix": "eslint --ignore-pattern ../.gitignore --max-warnings=0 src"
   },
   "type": "module",
   "dependencies": {
