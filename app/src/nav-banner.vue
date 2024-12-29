@@ -11,8 +11,8 @@
         <v-menu>
           <template #activator="{ props }">
             <a
+                class="year-selector"
               v-bind="props"
-              href="#"
             >{{ store.year }}</a>
           </template>
           <v-list>
@@ -67,6 +67,10 @@ const setYear = year => store.setYear(year)
   text-align: center;
   color: var(--text-color);
 
+  .year-selector {
+    cursor: pointer;
+  }
+
   h1 {
     font-size: 48px;
     a {
@@ -114,6 +118,15 @@ const setYear = year => store.setYear(year)
 
     a.router-link-exact-active {
       color: var(--active-link-color);
+    }
+  }
+
+  @media only screen and (max-width: 468px) {
+    h1 {
+      font-size: 26px;
+    }
+    .nav {
+      font-size: initial;
     }
   }
 }
