@@ -11,15 +11,15 @@
         <v-menu>
           <template #activator="{ props }">
             <a
-                v-bind="props"
-                href="#"
+              v-bind="props"
+              href="#"
             >{{ store.year }}</a>
           </template>
           <v-list>
             <v-list-item
-                v-for="year in ['2024', '2023', '2022', '2021']"
-                :key="year"
-                @click="setYear(year)"
+              v-for="year in ['2024', '2023', '2022', '2021']"
+              :key="year"
+              @click="setYear(year)"
             >
               <v-list-item-title>{{ year }}</v-list-item-title>
             </v-list-item>
