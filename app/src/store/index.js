@@ -16,7 +16,7 @@ const data = {
   history: {},
 }
 
-const FIRST_DAY = '2024-01-02'
+const FIRST_DAY = '2025-01-02'
 
 export const useStore = defineStore('store', {
   state: () => data,

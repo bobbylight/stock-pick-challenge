@@ -10,11 +10,12 @@
 benchmarks=( "^gspc" "^ixic" "^dji" "^rut" "arkg" "arkk")
 investments_2022=()
 investments_2023=()
-robert=("dis" "eigr" "gthx" "ko" "msft" "nke" "nvda" "nvo" "vz")  # "tgt" skipped since Carrow's portfolio also has it
-carrow=("aapl" "crgx" "dal" "gap" "lulu" "meta" "otly" "pfe" "tgt" "tsla")
-extra_interesting=("pbw" "gld")
+investments_2024=()
+robert=("amzn" "clbt" "gm" "jpm" "ko" "mgm" "msft" "shop" "v" "vz" "wmt")
+carrow=("crl" "dal" "fslr" "googl" "meta" "oxy" "pton" "rtntf" "soun" "spot" "stro" "tem" "tgt")
+extra_interesting=()
 
-all_securities=("${benchmarks[@]}" "${investments_2022[@]}" "${investments_2023[@]}" "${robert[@]}" "${carrow[@]}" "${extra_interesting[@]}")
+all_securities=("${benchmarks[@]}" "${investments_2022[@]}" "${investments_2023[@]}" "${investments_2024[@]}" "${robert[@]}" "${carrow[@]}" "${extra_interesting[@]}")
 
 # You probably don't want to edit past this line.
 echo "Security count: ${#all_securities[@]}"
