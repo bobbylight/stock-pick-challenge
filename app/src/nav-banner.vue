@@ -17,7 +17,7 @@
           </template>
           <v-list>
             <v-list-item
-              v-for="year in ['2024', '2023', '2022', '2021']"
+              v-for="year in ['2025', '2024', '2023', '2022', '2021']"
               :key="year"
               @click="setYear(year)"
             >
