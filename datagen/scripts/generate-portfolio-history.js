@@ -21,6 +21,10 @@ const tickerHistory = require('../output/ticker-history.json')
 // The day we made our picks
 const FIRST_DAY = '2025-01-02'
 
+// If a ticker has some trading days this year, but stopped trading at some point,
+// it likely got sold. We use tradingDayCount to determine this.
+const tradingDayCount = tickerHistory['^dji'].history.length
+
 // Returns the next trading day from a given date.  Really just skips weekends.
 const getNextTradingDay = (date) => {
 
@@ -58,18 +62,21 @@ const getHistoryRecord = (ticker, historyArray, targetDate) => {
         return undefined
     }
 
-    // ISO-8601 date strings are ordered
-    const lastHistoryRecord = historyArray[historyArray.length - 1]
-    if (targetDate > lastHistoryRecord.date) {
-        // Data ended before today - likely a ticker that was bought out and stopped trading
-        return lastHistoryRecord
+    // If the ticker traded for a while, but stopped some time before the most recent
+    // trading day, it was likely sold. In that case, return its last price
+    const tickerTradedDaysCount = historyArray.length
+    if (tickerTradedDaysCount > 0 && tickerTradedDaysCount < tradingDayCount) {
+        return historyArray[historyArray.length - 1]
     }
-    return historyArray.find(record => record.date === date)
+
+    // ISO-8601 date strings are ordered.
+    // Also note this may be undefined if this script is run on the weekend of a market holiday.
+    // That's expected, and the calling code will handle this properly
+    return historyArray.find(record => record.date === targetDate)
 }
 
 
 // Initialize variables.  Portfolio history starts with a record for our initial investments.
-// We "bought" on a Sunday with the prior close's prices just to keep things clean
 let date = FIRST_DAY
 const portfolioHistory = [
     {
@@ -81,6 +88,7 @@ date = getNextTradingDay(date)
 
 // Loop through every trading day up to day
 const today = new Date()
+today.setHours(16) // 4pm ET, the time zone we run in
 while (new Date(date) < today) {
 
     let value = 0 // cash added later to keep logic simpler

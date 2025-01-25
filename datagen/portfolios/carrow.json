@@ -57,7 +57,7 @@
         {
           "date": "2025-01-02",
           "price": 49.41,
-          "count": 5
+          "count": 6
         }
       ]
     },
@@ -72,11 +72,11 @@
       ]
     },
     {
-      "ticker": "rtntf",
+      "ticker": "rio",
       "contributions": [
         {
           "date": "2025-01-02",
-          "price": 71.15,
+          "price": 58.81,
           "count": 4
         }
       ]

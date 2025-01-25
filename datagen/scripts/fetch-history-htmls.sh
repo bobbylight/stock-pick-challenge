@@ -12,7 +12,7 @@ investments_2022=()
 investments_2023=()
 investments_2024=()
 robert=("amzn" "clbt" "gm" "jpm" "ko" "mgm" "msft" "shop" "v" "vz" "wmt")
-carrow=("crl" "dal" "fslr" "googl" "meta" "oxy" "pton" "rtntf" "soun" "spot" "stro" "tem" "tgt")
+carrow=("crl" "dal" "fslr" "googl" "meta" "oxy" "pton" "rio" "soun" "spot" "stro" "tem" "tgt")
 extra_interesting=()
 
 all_securities=("${benchmarks[@]}" "${investments_2022[@]}" "${investments_2023[@]}" "${investments_2024[@]}" "${robert[@]}" "${carrow[@]}" "${extra_interesting[@]}")
@@ -20,7 +20,7 @@ all_securities=("${benchmarks[@]}" "${investments_2022[@]}" "${investments_2023[
 # You probably don't want to edit past this line.
 echo "Security count: ${#all_securities[@]}"
 all_securities=($(tr ' ' '\n' <<< "${all_securities[@]}" | sort -u | tr '\n' ' '))
-echo "Duplicates removed count: ${#all_securities[@]}"
+echo "Security count after duplicate removal: ${#all_securities[@]}"
 
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
