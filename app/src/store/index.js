@@ -16,8 +16,6 @@ const data = {
   history: {},
 }
 
-const FIRST_DAY = '2025-01-02'
-
 export const useStore = defineStore('store', {
   state: () => data,
   actions: {
@@ -120,8 +118,9 @@ export const useStore = defineStore('store', {
     securityHistory: state => (ticker, startBalance) => {
       // Get amount of shares equal the starting balance
       const history = state.history[ticker].history
-      // Get first date after since we "bought" on a Sunday.  Compounding starts on FIRST_DAY's growth
-      const initialPriceIndex = history.findIndex(record => record.date > FIRST_DAY) - 1
+      // Get first date after since we may have "bought" on a Sunday.  Compounding starts on firstDay's growth
+      const firstDay = state.robert.positions[0].contributions[0].date
+      const initialPriceIndex = history.findIndex(record => record.date > firstDay) - 1
       const initialPrice = history[initialPriceIndex]?.close ?? 0
       const shareCount = startBalance / initialPrice
       console.log(`Initial share count: ${shareCount}`)
