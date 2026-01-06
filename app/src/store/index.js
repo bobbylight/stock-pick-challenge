@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 const data = {
   loading: true,
-  year: 2024,
+  year: 2026,
   carrow: {
     cash: 0,
     positions: [],

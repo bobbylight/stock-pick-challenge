@@ -19,7 +19,7 @@ const data = require(`./${dataFile}`)
 const tickerHistory = require('../output/ticker-history.json')
 
 // The day we made our picks
-const FIRST_DAY = '2025-01-02'
+const FIRST_DAY = '2026-01-02'
 
 // If a ticker has some trading days this year, but stopped trading at some point,
 // it likely got sold. We use tradingDayCount to determine this.

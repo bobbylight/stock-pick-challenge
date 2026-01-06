@@ -16,4 +16,4 @@ const app = createApp(App)
 installGlobalFilters(app)
 app.mount('#app')
 
-useStore().setYear(2025)
+useStore().setYear(2026)
