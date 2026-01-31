@@ -1,7 +1,7 @@
 #!/usr/bin/node
 //
 // generate-json-history-from-htmls.mjs - Generates a JSON file
-// containing all data in the ../html/ folder.
+// containing all data in the ${dir} folder.
 //
 
 import fs from 'fs'
@@ -17,7 +17,7 @@ const displayNames = {
     arkk: 'ARK Innovation ETF',
 }
 
-const dir = '../html'
+const dir = '/tmp/html'
 
 const files = fs.readdirSync(dir).sort()
 
@@ -38,7 +38,7 @@ for (const file of files) {
     const tbody = root.querySelector('tbody')
     if (!tbody) {
         // Look for manually-created data, such as last-known data after a buyout
-        const buyoutFile = `${dir}/../buyout-partial-datas/${ticker}.json`
+        const buyoutFile = `${__dirname}/../buyout-partial-datas/${ticker}.json`
         if (fs.existsSync(buyoutFile)) {
             const buyoutData = JSON.parse(fs.readFileSync(buyoutFile, {encoding: 'utf8', flag: 'r'}))
             history[ticker].history = buyoutData.history
@@ -70,5 +70,5 @@ for (const file of files) {
         })
     })
 
-    fs.writeFileSync('../output/ticker-history.json', JSON.stringify(history, null, 2))
+    fs.writeFileSync('/tmp/ticker-history.json', JSON.stringify(history, null, 2))
 }

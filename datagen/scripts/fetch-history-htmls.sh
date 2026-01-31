@@ -25,8 +25,8 @@ echo "Security count after duplicate removal: ${#all_securities[@]}"
 
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-html_dir="${dir}/../html"
-mkdir "${html_dir}"
+html_dir="/tmp/html"
+mkdir -p "${html_dir}"
 
 for s in "${all_securities[@]}" ; do
   ticker=$(echo "$s" | tr '[:lower:]' '[:upper:]')

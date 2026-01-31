@@ -1,11 +1,21 @@
 # datagen
-Scripts that generate the data to display.
+Scripts that generate the data to display. Data is scraped from
+https://finance.yahoo.com, so doesn't require an account or API key.
 
 Note: This used to pull data in CSV format, but they moved that API to behind
 a paywall. So for now we're scraping data from the site's HTML, which is obviously
 fragile and needs to be updated whenever the page is modified. We might consider
-moving to a new API if we can find one cheap enough.
+moving to a new API if we can find one cheap enough, but for now just be aware that
+this might be broken by the time you discover and clone this project.
 
-The top-level script is `scripts/generate-all.sh`.  After running that, all files under
-`datagen/output/` need to be copied to `app/src/data/` for the app to
-consume it.
+## Running locally
+```bash
+npm run generate
+```
+This scrapes the latest data from Yahoo Finance and outputs it to `../app/public/data/2026/`.
+From there, running `npm run dev` in the `app/` directory will let you develop against the
+latest data.
+
+## Deploying the lambda to AWS
+Follow [./DEPLOYMENT_GUIDE.md]() for now. That walks through uploading and configuring the
+lambda. In the future, there will be an npm task for this.
