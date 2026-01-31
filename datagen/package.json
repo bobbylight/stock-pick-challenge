@@ -4,11 +4,14 @@
   "description": "Helper scripts to generate data for our app",
   "main": "main.js",
   "scripts": {
+    "generate": "node lambda-handler.js --local",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "MIT",
-  "devDependencies": {
+  "devDependencies": {},
+  "dependencies": {
+    "@aws-sdk/client-s3": "3.971.0",
     "node-html-parser": "6.1.13"
   }
 }

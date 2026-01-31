@@ -1,18 +1,19 @@
 # stock-pick-challenge
-![Java Build](https://github.com/bobbylight/stock-pick-challenge/actions/workflows/build-app.yml/badge.svg)
+![Build](https://github.com/bobbylight/stock-pick-challenge/actions/workflows/build-app.yml/badge.svg)
 
 A simple application to see who is the better stock picker, me or my wife.
 
 ## What it does
-Currently it simply tracks a static set of stocks we picked at the beginning of the
-year and allows us to compare the performance of our picks.
+Currently it simply tracks a static set of stocks we picked at the beginning of the year and
+allows us to compare the performance of our picks. Prior years are preserved for continued
+humiliation.
 
-The app currently loads the data from flat files that must be regenerated each
-trading data with that day's updates.  A future update will update this data
-in a batch job so things are hands-off.
+The app loads the data from JSON files that are updated each trading day by an AWS lambda.
+The lambda code lives in `datagen/`, and it can be run locally to test the app before pushing
+changes.
 
 ## Project structure
-* `app/` - The web application.  Written in Vue and packaged with Vite
-* `datagen/` - Scripts that fetch the data the app displays
+* `app/` - The web application. Written in Vue and packaged with Vite
+* `datagen/` - The lambda that generates the JSON data the app consumes
 
 See each subproject for more information.

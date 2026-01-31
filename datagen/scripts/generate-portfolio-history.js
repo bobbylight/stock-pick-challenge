@@ -15,8 +15,8 @@ if (!fs.existsSync(dataFile)) {
     console.error(`Input file does not exist: ${dataFile}`)
     process.exit(2)
 }
-const data = require(`./${dataFile}`)
-const tickerHistory = require('../output/ticker-history.json')
+const data = require(dataFile)
+const tickerHistory = require('/tmp/ticker-history.json')
 
 // The day we made our picks
 const FIRST_DAY = '2026-01-02'
@@ -132,4 +132,4 @@ while (new Date(date) < today) {
 
 //console.log(JSON.stringify(portfolioHistory, null, 2))
 const portfolioName = dataFile.substring(dataFile.lastIndexOf('/') + 1, dataFile.lastIndexOf('.'))
-fs.writeFileSync(`../output/portfolio-history-${portfolioName}.json`, JSON.stringify(portfolioHistory, null, 2))
+fs.writeFileSync(`/tmp/portfolio-history-${portfolioName}.json`, JSON.stringify(portfolioHistory, null, 2))
