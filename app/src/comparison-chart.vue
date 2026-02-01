@@ -55,9 +55,14 @@ const chart = shallowRef(null)
 const percentages = ref(false)
 const tooltipModel = ref(null)
 const tipTitle = ref(null)
-const datasets = ref(null)
+const datasets = ref([])
 const visible = ref(false)
-const canvasRect = ref(null)
+const canvasRect = ref({
+  top: 0,
+  left: 0,
+  width: 0,
+  height: 0,
+})
 const canvas = ref(null)
 const userColors = ['#e6439f', '#27ba67', '#494f9c', '#d1871f', '#893168', '#f5e616']
 
@@ -212,7 +217,6 @@ onMounted(() => {
               width: position.width,
               height: position.height,
             }
-            // y.value = position.top + tooltip.caretY + 'px'
           },
         },
       },

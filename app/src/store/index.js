@@ -107,7 +107,6 @@ export const useStore = defineStore('store', {
       state[portfolioName].positions.forEach(position => {
         // TODO: Allow for sold shares
         const ticker = position.ticker
-        console.log('ticker: ' + ticker)
         const tickerHistory = state.history[ticker].history
         const targetDateClose = tickerHistory[tickerHistory.length - 2]?.close ?? 0
         position.contributions.forEach(contribution => currentValue += contribution.count * targetDateClose)
