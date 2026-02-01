@@ -165,12 +165,21 @@ export const useStore = defineStore('store', {
       }).format(new Date(dateTime))
     },
 
-    // If a company gets bought out, it stops updating mid-year. The only way we
-    // can know that is to compare their data set size to the trading day count
+    // If a company gets bought out, it stops updating mid-year. The only way we can know that is to look at
+    // its last trading date. Note that stocks trading on foreign exchanges, e.g. LUN.TO, might trade on days
+    // when the US market is closed (and vice versa for US stocks) which means we can't take more obvious
+    // approaches:
+    //   * We can't compare the history lengths for equality since a foreign exchange may trade on US holidays
+    //   * We can't compare the last trade date in the histories for the same reason
     stillActivelyTrading: state => ticker => {
-      const tradingDayCount = state.history?.['^dji']?.history?.length ?? 0
-      const tickerTradingDayCount = state.history?.[ticker]?.history?.length ?? 0
-      return tickerTradingDayCount === tradingDayCount
+      const tradingDayCount = state.history['^dji']?.history?.length ?? 0
+      const tickerTradingDayCount = state.history[ticker]?.history?.length ?? 0
+      if (tradingDayCount === 0 || tickerTradingDayCount === 0) {
+        return false
+      }
+      const lastUSTradingDate = state.history['^dji'].history[tradingDayCount - 1].date
+      const lastTickerTradingDate = state.history[ticker].history[tickerTradingDayCount - 1].date
+      return lastTickerTradingDate >= lastUSTradingDate
     },
   },
 })
