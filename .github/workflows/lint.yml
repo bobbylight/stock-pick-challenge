@@ -1,0 +1,33 @@
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Lint
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  lint:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ 24.x, 25.x ]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      # We wrap the task in a shell script rather than built-in actions since our project is
+      # in a subfolder and GitHub CI no longer supports "working-dir"
+      - name: Lint the main app
+        run: |
+          chmod 755 ./.github/scripts/lint.sh
+          ./.github/scripts/lint.sh
+        shell: bash
