@@ -1,5 +1,5 @@
 # stock-pick-challenge
-![Build](https://github.com/bobbylight/stock-pick-challenge/actions/workflows/build-app.yml/badge.svg)
+![Build](https://github.com/bobbylight/stock-pick-challenge/actions/workflows/build.yml/badge.svg)
 
 A simple application to see who is the better stock picker, me or my wife.
 

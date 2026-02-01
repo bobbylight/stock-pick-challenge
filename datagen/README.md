@@ -10,12 +10,14 @@ this might be broken by the time you discover and clone this project.
 
 ## Running locally
 ```bash
-npm run generate
+npm run generate-local-data
 ```
 This scrapes the latest data from Yahoo Finance and outputs it to `../app/public/data/2026/`.
 From there, running `npm run dev` in the `app/` directory will let you develop against the
 latest data.
 
 ## Deploying the lambda to AWS
-Follow [./DEPLOYMENT_GUIDE.md]() for now. That walks through uploading and configuring the
-lambda. In the future, there will be an npm task for this.
+* First, follow [./DEPLOYMENT_GUIDE.md]() to set up and configure your AWS account and do
+  the initial setup for the lambda function.
+* Then run `npm run deploy-lambda` to deploy the latest version. This packages up any changes
+  and updates the production lambda.
