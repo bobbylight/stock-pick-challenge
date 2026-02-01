@@ -1,10 +1,11 @@
 {
   "name": "datagen",
   "version": "1.0.0",
-  "description": "Helper scripts to generate data for our app",
+  "description": "A lambda function that generates/updates the data for the main app",
   "main": "main.js",
   "scripts": {
-    "generate": "node lambda-handler.js --local",
+    "deploy-lambda": "bash scripts/deploy.sh",
+    "generate-local-data": "node lambda-handler.js --local",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

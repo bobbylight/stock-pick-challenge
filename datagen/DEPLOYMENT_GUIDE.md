@@ -1,7 +1,8 @@
 # AWS Lambda Deployment Guide
 
 This guide provides step-by-step instructions to package and deploy the data generation service as
-an AWS Lambda function.
+an AWS Lambda function. After doing so, you can run `npm run deploy-lambda` with changes to keep
+it up to date.
 
 ## Prerequisites
 
@@ -9,7 +10,11 @@ an AWS Lambda function.
 - AWS CLI configured locally (optional, for command-line deployment).
 - An S3 bucket where the output files will be stored.
 
-## Step 1: Package the Application
+## Initial Setup
+This section walks through manually setting up the Lambda function the first time,
+including giving it permission to write to the S3 bucket the app will live in.
+
+### Step 1: Package the Application
 
 The Lambda function needs a .zip file containing all its code and dependencies.
 
@@ -33,12 +38,7 @@ The Lambda function needs a .zip file containing all its code and dependencies.
     zip -r deployment-package.zip . -x ".*" "*/.DS_Store" "csv/*" "html/*" "deployment-package.zip*"
     ```
 
-    or:
-    ```bash
-    zip -r deployment-package.zip . -x ".*" "*/.DS_Store" "deployment-package.zip"
-    ```
-
-## Step 2: Create an IAM Role for the Lambda Function
+### Step 2: Create an IAM Role for the Lambda Function
 
 The Lambda function needs permissions to write logs to CloudWatch and to write objects to your
 S3 bucket.
@@ -70,19 +70,20 @@ S3 bucket.
 9.  Click **Next**, give the policy a name (e.g., `S3PutObjectPolicy`), and click
     **Create policy**.
 
-## Step 3: Create the Lambda Function
+### Step 3: Create the Lambda Function
 
 1.  Navigate to the **Lambda** service in the AWS Console.
 2.  Click **Create function**.
 3.  Select **Author from scratch**.
-4.  **Function name:** Enter a name (e.g., `stock-data-generator`).
+4.  **Function name:** Enter `stock-pick-challenge-data-generator`. (This must match the
+    name in `scripts/deploy.sh`)
 5.  **Runtime:** Select **Node.js 20.x**.
 6.  **Architecture:** Choose **x86_64**.
 7.  **Permissions:** Expand "Change default execution role" and select **Use an existing role**.
     Choose the `DataGenLambdaRole` you created in the previous step.
 8.  Click **Create function**.
 
-## Step 4: Configure the Lambda Function
+### Step 4: Configure the Lambda Function
 
 1.  **Upload Code:** In the **Code source** section, click **Upload from** and select
     **.zip file**. Upload the `deployment-package.zip` file you created.
@@ -104,7 +105,7 @@ S3 bucket.
     - **Memory:** You can start with the default (128 MB) and increase it if the function runs
       out of memory.
 
-## Step 5: Schedule the Lambda Function with EventBridge
+### Step 5: Schedule the Lambda Function with EventBridge
 
 To run the function automatically on a schedule:
 
@@ -120,3 +121,26 @@ To run the function automatically on a schedule:
 Your Lambda function is now fully configured and will run on the schedule you defined, generating
 the data and uploading it to your S3 bucket. You can test it manually at any time by clicking the
 **Test** button in the Lambda console.
+
+## Updating the lambda function
+
+If you find a bug or add a new feature to the lambda, you can update it as follows:
+
+1. Ensure the AWS CLI is installed and configured locally.
+2. Ensure your IAM user has the necessary permissions to update the lambda function.
+   This can either be the managed policy `AWSLambda_FullAccess`, or you can add the
+   following inline policy to grant the minimum permission needed instead:
+
+```json
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": "lambda:UpdateFunctionCode",
+        "Resource": "<full-function-arn>"
+      }
+    ]
+  }
+```
+3. Run `npm run deploy-lambda` to package, update and deploy the lambda function.

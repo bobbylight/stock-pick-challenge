@@ -12,7 +12,7 @@ to date.
 nvm use
 cd datagen/
 npm install
-npm run generate
+npm run generate-local-data
 cd ../app/
 npm install
 npm run dev
