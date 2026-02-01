@@ -53,7 +53,7 @@ import { currency, percentage } from './app-filters'
 const props = defineProps({
   model: {
     type: Object,
-    required: true,
+    default: () => ({}),
   },
   datasets: {
     type: Array,
@@ -95,7 +95,7 @@ const positionStyle = () => {
 }
 
 const x = () => {
-  if (!props.visible) {
+  if (!props.visible || !props.model) {
     return lastX.value
   }
 
@@ -109,7 +109,7 @@ const x = () => {
 }
 
 const y = () => {
-  if (!props.visible) {
+  if (!props.visible || !props.model) {
     return lastY.value
   }
 
@@ -118,10 +118,10 @@ const y = () => {
   return lastY.value
 }
 
-const dataPoints = () => lastDatasets.value = props.visible ? props.model.dataPoints : lastDatasets.value
+const dataPoints = () => lastDatasets.value = props.visible && props.model ? props.model.dataPoints : lastDatasets.value
 const sortedDataPoints = () => dataPoints()?.slice().sort((a, b) => b.raw - a.raw)
 
-const title = () => lastTitle.value = props.visible ? props.model.dataPoints[0].label : lastTitle.value
+const title = () => lastTitle.value = props.visible && props.model ? props.model.dataPoints[0].label : lastTitle.value
 </script>
 
 <style scoped>

@@ -64,9 +64,14 @@ const chart = shallowRef(null)
 const percentages = ref(false)
 const tooltipModel = ref(null)
 const tipTitle = ref(null)
-const datasets = ref(null)
+const datasets = ref([])
 const visible = ref(false)
-const canvasRect = ref(null)
+const canvasRect = ref({
+  top: 0,
+  left: 0,
+  width: 0,
+  height: 0,
+})
 const canvas = ref(null)
 
 /**
