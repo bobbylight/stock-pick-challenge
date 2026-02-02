@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "test:unit": "vue-cli-service test:unit",
+    "test:unit": "vitest --coverage src/",
     "lint": "eslint --ignore-pattern ../.gitignore --fix src",
     "lint:nofix": "eslint --ignore-pattern ../.gitignore --max-warnings=0 src"
   },

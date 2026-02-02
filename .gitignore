@@ -1,9 +1,9 @@
 .DS_Store
 node_modules
 dist
-datagen/csv/
-datagen/html/
-datagen/output/
+updater-lambda/html/
+updater-lambda/output/
+npm-debug.log*
 
 # Generated lambda artifacts
 deployment-package.zip
@@ -11,12 +11,6 @@ deployment-package.zip
 # local env files
 .env.local
 .env.*.local
-
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
 
 # Editor directories and files
 .idea

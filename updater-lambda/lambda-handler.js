@@ -62,7 +62,7 @@ exports.handler = async (event) => {
     const generatedFiles = fs.readdirSync(tempOutputDir).filter(f => f.endsWith('.json'));
 
     if (event.localMode) {
-      // Local mode: copy files to datagen/output/ and app/public/data/2026/
+      // Local mode: copy files to updater-lambda/output/ and app/public/data/2026/
       console.log('Running in local mode, copying files locally...');
       const datagenOutputDir = path.resolve(__dirname, 'output');
       const appDataDir = path.resolve(__dirname, '..', 'app', 'public', 'data', '2026');
@@ -126,7 +126,7 @@ if (require.main === module) {
   const localMode = process.argv.includes('--local');
   if (!localMode) {
     console.error('Usage: node lambda-handler.js --local');
-    console.error('  --local    Copy output to datagen/output/ and app/public/data/2026/');
+    console.error('  --local    Copy output to updater-lambda/output/ and app/public/data/2026/');
     console.error('             (Without --local, S3_BUCKET_NAME env var is required)');
     process.exit(1);
   }
