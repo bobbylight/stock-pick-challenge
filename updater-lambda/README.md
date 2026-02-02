@@ -1,4 +1,4 @@
-# datagen
+# updater-lambda
 Scripts that generate the data to display. Data is scraped from
 https://finance.yahoo.com, so doesn't require an account or API key.
 
@@ -17,7 +17,7 @@ From there, running `npm run dev` in the `app/` directory will let you develop a
 latest data.
 
 ## Deploying the lambda to AWS
-* First, follow [./DEPLOYMENT_GUIDE.md]() to set up and configure your AWS account and do
+* First, follow [./DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) to set up and configure your AWS account and do
   the initial setup for the lambda function.
 * Then run `npm run deploy-lambda` to deploy the latest version. This packages up any changes
   and updates the production lambda.

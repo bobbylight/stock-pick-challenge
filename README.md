@@ -9,11 +9,11 @@ allows us to compare the performance of our picks. Prior years are preserved for
 humiliation.
 
 The app loads the data from JSON files that are updated each trading day by an AWS lambda.
-The lambda code lives in `datagen/`, and it can be run locally to test the app with the
+The lambda code lives in `updater-lambda/`, and it can be run locally to test the app with the
 latest data before pushing changes.
 
 ## Project structure
 * `app/` - The web application. Written in Vue and packaged with Vite
-* `datagen/` - The lambda that generates the JSON data the app consumes
+* `updater-lambda/` - The lambda that generates the JSON data the app consumes
 
 See each subproject for more information.

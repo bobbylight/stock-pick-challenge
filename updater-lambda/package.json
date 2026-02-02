@@ -1,5 +1,5 @@
 {
-  "name": "datagen",
+  "name": "updater-lambda",
   "version": "1.0.0",
   "description": "A lambda function that generates/updates the data for the main app",
   "main": "main.js",

@@ -35,7 +35,7 @@ The Lambda function needs a .zip file containing all its code and dependencies.
 
     You can create the zip file with the following command:
     ```bash
-    zip -r deployment-package.zip . -x ".*" "*/.DS_Store" "csv/*" "html/*" "deployment-package.zip*"
+    zip -r deployment-package.zip . -x ".*" "*/.DS_Store" "html/*" "deployment-package.zip*"
     ```
 
 ### Step 2: Create an IAM Role for the Lambda Function

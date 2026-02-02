@@ -11,10 +11,10 @@ set -e
 
 FUNCTION_NAME="stock-pick-challenge-data-generator"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DATAGEN_DIR="$(dirname "$SCRIPT_DIR")"
+UPDATER_LAMBDA_DIR="$(dirname "$SCRIPT_DIR")"
 PACKAGE_FILE="deployment-package.zip"
 
-cd "$DATAGEN_DIR"
+cd "$UPDATER_LAMBDA_DIR"
 
 echo "Creating deployment package..."
 rm -f "$PACKAGE_FILE"
@@ -26,7 +26,7 @@ zip -r "$PACKAGE_FILE" \
   scripts \
   portfolios \
   buyout-partial-datas \
-  -x "*.DS_Store" "scripts/deploy.sh" "csv/*" "html/*"
+  -x "*.DS_Store" "scripts/deploy.sh" "html/*"
 
 echo "Uploading to Lambda function: $FUNCTION_NAME..."
 aws lambda update-function-code \
