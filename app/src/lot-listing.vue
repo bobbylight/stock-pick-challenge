@@ -176,8 +176,10 @@ const getPrimaryValueClass = value => getPrimaryDeltaClass(value)
     text-transform: uppercase;
     .ticker-link {
       text-decoration: none;
+      transition: color 0.2s ease;
       &:hover {
-        text-decoration: inherit;
+        text-decoration: underline;
+        color: #1a1a1a;
       }
     }
   }
