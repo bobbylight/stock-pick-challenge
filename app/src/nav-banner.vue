@@ -107,6 +107,7 @@ const setYear = year => store.setYear(year)
   a {
     color: var(--text-color);
     display: inline-block; /* Avoid issue with trailing space in anchor tag text after linting */
+    transition: color 0.2s ease;
   }
   a:hover {
     color: var(--active-link-color);

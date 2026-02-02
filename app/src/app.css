@@ -6,8 +6,6 @@ body {
 .v-theme--light.v-application {
     background: #dfe8e8;
     /*background: linear-gradient(0deg, white calc(100% - 400px), #435562 400px);*/
-    /*background: url('/stock-pick-challenge.jpg') no-repeat;*/
-    /*background-size: 100% 400px;*/
 }
 
 .v-application ul {
@@ -44,4 +42,13 @@ body {
 
 .secondary-delta-none {
     font-size: smaller;
+}
+
+/* Link hover transitions */
+a {
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+a:hover {
+    color: #1a1a1a;
 }
