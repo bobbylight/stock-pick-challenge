@@ -17,3 +17,6 @@ export const getSecondaryDeltaClass = value => {
   }
   return 'secondary-delta-none'
 }
+
+// Yes, Yahoo Finance has both a positional and request parameter
+export const getYahooFinanceUrl = ticker => `https://finance.yahoo.com/quote/${ticker}?p=${ticker}`

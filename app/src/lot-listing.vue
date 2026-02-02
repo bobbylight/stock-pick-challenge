@@ -14,9 +14,13 @@
           class="lot"
         >
           <div class="lot-title">
-            <span class="lot-ticker text--primary">
+            <a
+              class="ticker-link"
+              :href="getYahooFinanceUrl(item.ticker)"
+              target="_blank"
+            >
               {{ item.ticker }}
-            </span>
+            </a>
             <span class="lot-price-info">
               {{ $filters.currency(item.currentCostPerShare) }}
               <span :class="getSecondaryValueClass(item.dailyPercentGain)">({{ $filters.percentage(item.dailyPercentGain) }})</span>
@@ -77,7 +81,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useStore } from './store'
-import { getPrimaryDeltaClass, getSecondaryDeltaClass } from './utils'
+import {getPrimaryDeltaClass, getSecondaryDeltaClass, getYahooFinanceUrl} from './utils'
 
 const store = useStore()
 
@@ -159,17 +163,24 @@ const getPrimaryValueClass = value => getPrimaryDeltaClass(value)
 </script>
 
 <style scoped>
-.lot-ticker {
-  font-size: large;
-  font-weight: bolder;
-  text-transform: uppercase;
-}
 .lot-price-info {
   margin-left: 0.5rem;
   font-weight: bolder;
 }
 .lot {
   padding: 1rem;
+
+  .lot-title {
+    font-size: large;
+    font-weight: bolder;
+    text-transform: uppercase;
+    .ticker-link {
+      text-decoration: none;
+      &:hover {
+        text-decoration: inherit;
+      }
+    }
+  }
 }
 .lot:not(:last-child) {
   border-bottom: 1px solid lightgray;

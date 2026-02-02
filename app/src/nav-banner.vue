@@ -51,7 +51,7 @@ import { computed } from 'vue'
 import { useStore } from './store'
 
 const store = useStore()
-const lastUpdated = computed(() => store.lastUpdated())
+const lastUpdated = computed(() => store.lastUpdated)
 
 const setYear = year => store.setYear(year)
 </script>
