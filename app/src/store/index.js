@@ -149,7 +149,7 @@ export const useStore = defineStore('store', {
       })
     },
 
-    lastUpdated: state => () => {
+    lastUpdated: state => {
       const historyArray = state.history?.['^dji']?.history
       if (!historyArray) {
         return undefined

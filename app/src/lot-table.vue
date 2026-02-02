@@ -11,7 +11,7 @@
     <template #item.ticker="{ item }">
       <a
         class="ticker-link"
-        :href="getUrl(item.ticker)"
+        :href="getYahooFinanceUrl(item.ticker)"
         target="_blank"
       >
         {{ item.ticker }}
@@ -92,7 +92,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useStore } from './store'
-import { getPrimaryDeltaClass, getSecondaryDeltaClass } from './utils'
+import {getPrimaryDeltaClass, getSecondaryDeltaClass, getYahooFinanceUrl} from './utils'
 
 const store = useStore()
 
@@ -207,9 +207,6 @@ const getTotalPercentageGain = item => {
   const totalCost = item.costPerShare * item.shares
   return item.totalGain / totalCost
 }
-
-// Yes, Yahoo Finance has both a positional and request parameter
-const getUrl = ticker => `https://finance.yahoo.com/quote/${ticker}?p=${ticker}`
 </script>
 
 <style scoped>
