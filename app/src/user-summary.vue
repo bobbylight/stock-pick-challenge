@@ -91,4 +91,13 @@ const getAmountDeltaClass = value => {
 .user-summary-value {
   text-align:right;
 }
+
+@media only screen and (max-width: 960px) {
+  .user-summary-header {
+    font-size: large;
+  }
+  .user-summary-value {
+    font-size: 0.95rem;
+  }
+}
 </style>

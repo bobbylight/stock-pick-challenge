@@ -221,10 +221,19 @@ const getTotalPercentageGain = item => {
 .ticker-link {
   text-transform: uppercase;
   text-decoration: none;
+  color: #0ea5e9;
+  font-weight: 500;
   transition: color 0.2s ease;
   &:hover {
     text-decoration: underline;
-    color: #1a1a1a;
+    color: #0284c7;
+  }
+}
+
+.v-theme--dark .ticker-link {
+  color: #38bdf8;
+  &:hover {
+    color: #7dd3fc;
   }
 }
 </style>

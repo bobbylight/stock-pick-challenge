@@ -137,7 +137,7 @@ const title = () => lastTitle.value = props.visible && props.model ? props.model
   vertical-align: middle;
 }
 .chart-tooltip-arrow {
-  background: #000000c0;
+  background: #1e293be8;
   width: 1rem;
   height: 1rem;
 }
@@ -150,10 +150,11 @@ const title = () => lastTitle.value = props.visible && props.model ? props.model
 
 .portfolio-growth-chart-tooltip {
   display:table-cell;
-  background: #000000c0;
+  background: #1e293be8;
   color: white;
-  padding: .5rem;
-  border-radius: 4px;
+  padding: .5rem .75rem;
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
 }
 
 .animated-tooltip {
@@ -170,7 +171,7 @@ const title = () => lastTitle.value = props.visible && props.model ? props.model
   height: 1rem;
   display: inline-block;
   vertical-align: text-bottom;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #e0e0e080;
 }
 
 .stocky-dataset-label {

@@ -176,15 +176,27 @@ const getPrimaryValueClass = value => getPrimaryDeltaClass(value)
     text-transform: uppercase;
     .ticker-link {
       text-decoration: none;
+      color: #0ea5e9;
       transition: color 0.2s ease;
       &:hover {
         text-decoration: underline;
-        color: #1a1a1a;
+        color: #0284c7;
       }
     }
   }
 }
 .lot:not(:last-child) {
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.v-theme--dark .lot:not(:last-child) {
+  border-bottom: 1px solid #334155;
+}
+
+.v-theme--dark .lot .ticker-link {
+  color: #38bdf8;
+  &:hover {
+    color: #7dd3fc;
+  }
 }
 </style>

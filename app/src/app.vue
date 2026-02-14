@@ -2,6 +2,7 @@
   <div id="app">
     <v-app>
       <v-main>
+        <theme-toggle />
         <v-container class="main-container">
           <nav-banner />
 
@@ -24,6 +25,7 @@
 
 <script setup>
 import NavBanner from './nav-banner.vue'
+import ThemeToggle from './theme-toggle.vue'
 </script>
 
 <style>

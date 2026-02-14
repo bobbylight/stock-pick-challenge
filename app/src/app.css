@@ -1,3 +1,13 @@
+:root {
+    --color-gain: #16a34a;
+    --color-loss: #dc2626;
+}
+
+.v-theme--dark {
+    --color-gain: #22c55e;
+    --color-loss: #f87171;
+}
+
 body {
     /* Match font used by Vuetify for DOM elements programmatically-added to body */
     font-family: 'Roboto', sans-serif;
@@ -5,7 +15,10 @@ body {
 
 .v-theme--light.v-application {
     background: #dfe8e8;
-    /*background: linear-gradient(0deg, white calc(100% - 400px), #435562 400px);*/
+}
+
+.v-theme--dark.v-application {
+    background: #0f172a;
 }
 
 .v-application ul {
@@ -16,13 +29,36 @@ body {
     line-height: 1.375rem; /* default is 1.25rem */
 }
 
+.v-application .v-card {
+    border-radius: 12px !important;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+}
+
+.v-theme--dark .v-application .v-card,
+.v-application .v-theme--dark.v-card {
+    border: 1px solid #334155;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.v-application .v-card .v-card-title {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: #1e293b;
+}
+
+.v-theme--dark .v-application .v-card .v-card-title,
+.v-application .v-theme--dark .v-card-title {
+    color: #e2e8f0;
+}
+
 .primary-delta-gain {
-    color: #1b5e20;
+    color: var(--color-gain);
     font-weight: bold;
 }
 
 .primary-delta-loss {
-    color: #bf360c;
+    color: var(--color-loss);
     font-weight: bold;
 }
 
@@ -31,12 +67,12 @@ body {
 }
 
 .secondary-delta-gain {
-    color: #1b5e20;
+    color: var(--color-gain);
     font-size: smaller;
 }
 
 .secondary-delta-loss {
-    color: #bf360c;
+    color: var(--color-loss);
     font-size: smaller;
 }
 
@@ -50,5 +86,20 @@ a {
 }
 
 a:hover {
-    color: #1a1a1a;
+    color: #0ea5e9;
+}
+
+.v-theme--dark a:hover {
+    color: #38bdf8;
+}
+
+/* Slightly larger fonts on mobile */
+@media only screen and (max-width: 960px) {
+    .v-application .v-card .v-card-text {
+        font-size: 0.95rem;
+        line-height: 1.5rem;
+    }
+    .v-application ul {
+        font-size: 0.95rem;
+    }
 }
