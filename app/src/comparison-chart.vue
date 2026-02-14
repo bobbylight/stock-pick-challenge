@@ -18,12 +18,13 @@
 
 <script setup>
 import { computed, onMounted, ref, shallowRef, toRef, watch } from 'vue'
-import { useDisplay } from 'vuetify'
+import { useDisplay, useTheme } from 'vuetify'
 import Chart from 'chart.js/auto'
 import { currency, percentage } from './app-filters'
 import PortfolioGrowthChartTooltip from './portfolio-growth-chart-tooltip.vue'
 
 const display = useDisplay()
+const vuetifyTheme = useTheme()
 
 const percentageYAxisLabelCallback = value => {
   return percentage(value)
@@ -64,7 +65,7 @@ const canvasRect = ref({
   height: 0,
 })
 const canvas = ref(null)
-const userColors = ['#e6439f', '#27ba67', '#494f9c', '#d1871f', '#893168', '#f5e616']
+const userColors = ['#8b5cf6', '#0ea5e9', '#f43f5e', '#f59e0b', '#10b981', '#6366f1']
 
 const currencyYAxisLabelCallback = value => {
   // We assume our value will never drop below $1000 or go above $1 million
@@ -169,7 +170,7 @@ onMounted(() => {
             const xAxis = chart.scales.x
             const yAxis = chart.scales.y
             const ctx = chart.canvas.getContext('2d')
-            ctx.strokeStyle = '#606060'
+            ctx.strokeStyle = vuetifyTheme.global.name.value === 'dark' ? '#94a3b8' : '#606060'
 
             const origCompositionOperation = ctx.globalCompositeOperation
             ctx.globalCompositeOperation = 'xor'

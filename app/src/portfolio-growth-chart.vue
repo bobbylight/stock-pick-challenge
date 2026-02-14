@@ -20,7 +20,7 @@
 import { computed, onMounted, ref, shallowRef, toRef, watch } from 'vue'
 import { useStore } from './store'
 import { useRoute } from 'vue-router'
-import { useDisplay } from 'vuetify'
+import { useDisplay, useTheme } from 'vuetify'
 import Chart from 'chart.js/auto'
 import { currency, percentage } from './app-filters'
 import PortfolioGrowthChartTooltip from './portfolio-growth-chart-tooltip.vue'
@@ -29,6 +29,7 @@ import benchmarkData from '@/benchmark-data'
 const store = useStore()
 const route = useRoute()
 const display = useDisplay()
+const vuetifyTheme = useTheme()
 
 const percentageYAxisLabelCallback = value => {
   return percentage(value)
@@ -134,8 +135,8 @@ const createBenchmarkDataset = ticker => {
 const createAllDatasets = () => {
   const datasets = [
     {
-      backgroundColor: '#3e6ecf90',
-      borderColor: '#3e6ecf',
+      backgroundColor: '#8b5cf690',
+      borderColor: '#8b5cf6',
       data: getUserData(),
       label: 'Your Picks',
       fill: doFill.value,
@@ -286,7 +287,7 @@ onMounted(() => {
             const xAxis = chart.scales.x
             const yAxis = chart.scales.y
             const ctx = chart.canvas.getContext('2d')
-            ctx.strokeStyle = '#606060'
+            ctx.strokeStyle = vuetifyTheme.global.name.value === 'dark' ? '#94a3b8' : '#606060'
 
             const origCompositionOperation = ctx.globalCompositeOperation
             ctx.globalCompositeOperation = 'xor'

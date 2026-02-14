@@ -2,7 +2,7 @@
   <div class="app-banner">
     <div>
       <img
-        src="/stock-pick-challenge-logo.png"
+        :src="isDark ? '/stock-pick-challenge-logo-dark-mode.png' : '/stock-pick-challenge-logo.png'"
         alt="logo"
       >
     </div>
@@ -48,19 +48,22 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useTheme } from 'vuetify'
 import { useStore } from './store'
 
 const store = useStore()
+const theme = useTheme()
 const lastUpdated = computed(() => store.lastUpdated)
+
+const isDark = computed(() => theme.global.name.value === 'dark')
 
 const setYear = year => store.setYear(year)
 </script>
 
 <style>
 .app-banner {
-  --active-link-color: #42b983;
-  --text-color: #2c3e50;
-
+  --active-link-color: #0ea5e9;
+  --text-color: #1e293b;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -130,5 +133,10 @@ const setYear = year => store.setYear(year)
       font-size: initial;
     }
   }
+}
+
+.v-theme--dark .app-banner {
+  --text-color: #e2e8f0;
+  --active-link-color: #38bdf8;
 }
 </style>
