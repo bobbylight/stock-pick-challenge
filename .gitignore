@@ -12,6 +12,9 @@ deployment-package.zip
 .env.local
 .env.*.local
 
+# claude files not to be committed
+.claude/settings.local.json
+
 # Editor directories and files
 .idea
 *.iml

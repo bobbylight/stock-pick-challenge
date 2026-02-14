@@ -67,3 +67,12 @@ cd ../app && npm run dev
 - The 2026 data in the repo may be stale; run `generate-local-data` for latest
 - App is 100% static, deployed to S3
 - Lambda needs S3 PutObject access to `data/<year>/*`
+
+## Submitting PRs
+
+- Use conventional commit syntax (feat:, fix:, chore:, docs:, refactor:, test:, etc.)
+- Ensure tests pass before committing and fix anything if necessary. If any tests
+  needed fixing, let me review the changes before proceeding with the commit.
+- Commit messages don't need to mention tests being added. Only mention tests when a
+  large amount of tests were added for previously uncovered code, or there was a
+  major refactoring of test code.
