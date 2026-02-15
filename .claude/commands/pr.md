@@ -21,6 +21,7 @@ Create a branch (if needed), commit staged/unstaged changes, push, and open a PR
      - Use "build(deps)" for dependency bumps
      - Besides dependencies, don't worry too much about adding a scope to the commit type unless it's a larger
        change concentrated on a specific component or area
+   - Do NOT run `npm run test` as this project doesn't yet have unit tests
    - Include `Co-Authored-By: Claude <noreply@anthropic.com>` in the commit
 
 4. **Push**: Run `git push -u origin <branch-name>`
