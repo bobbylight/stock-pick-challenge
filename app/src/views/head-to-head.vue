@@ -10,6 +10,7 @@
         <v-card
           class="user-card"
           title="Head to Head!"
+          subtitle="Overall portfolio performance this year."
           v-if="!loading"
         >
           <template #append>
@@ -69,6 +70,23 @@
       <v-col>
         <v-card
           class="user-card"
+          :title="dailyChangeTitle"
+          :subtitle="dailyChangeSubtitle"
+        >
+          <v-card-text>
+            <div class="chart-wrapper">
+              <daily-change-chart
+                :user-infos="userInfos"
+              />
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row v-if="!loading">
+      <v-col>
+        <v-card
+          class="user-card"
           title="Lead Tracker"
           :subtitle="leadSubtitle"
         >
@@ -113,6 +131,7 @@ import { storeToRefs } from 'pinia'
 import { useStore } from '@/store'
 import ComparisonChart from '../comparison-chart.vue'
 import DateRangeSelector from '@/date-range-selector.vue'
+import DailyChangeChart from '../daily-change-chart.vue'
 import LeadTrackerChart from '../lead-tracker-chart.vue'
 
 const store = useStore()
@@ -127,13 +146,51 @@ const dayCount = ref(-1)
 const leadTrackerRef = ref(null)
 const leadPerspective = ref(0)
 
+const dailyChangeTitle = computed(() => {
+  const history = robert.value.history
+  if (!history.length) return 'Daily Change'
+  const date = new Date(`${history[history.length - 1].date}T16:00:00-05:00`)
+  const formatted = date.toLocaleDateString('en', { dateStyle: 'medium' })
+  return `Daily Change (${formatted})`
+})
+
+const dailyChangeSubtitle = computed(() => {
+  const histories = userInfos.value.map(u => u.history)
+  if (histories.some(h => h.length < 2)) return ''
+
+  const changes = histories.map(h => {
+    const prev = h[h.length - 2].value
+    const curr = h[h.length - 1].value
+    return (curr - prev) / prev
+  })
+
+  const djiHistory = store.history['^dji']?.history
+  const marketChange = djiHistory?.length >= 2
+    ? (djiHistory[djiHistory.length - 1].close - djiHistory[djiHistory.length - 2].close) / djiHistory[djiHistory.length - 2].close
+    : 0
+
+  const [name0, name1] = userInfos.value.map(u => u.name)
+
+  if (changes[0] === changes[1]) {
+    return `${name0} and ${name1} had the same gains today!`
+  }
+
+  const [winner, loser] = changes[0] > changes[1] ? [name0, name1] : [name1, name0]
+  const winnerChange = Math.max(changes[0], changes[1])
+
+  if (winnerChange > marketChange) {
+    return `${winner} outperformed ${loser} today, and also beat the market.`
+  }
+  return `${winner} outperformed ${loser} today, but underperformed the market.`
+})
+
 const leadSubtitle = computed(() => {
   const lead = leadTrackerRef.value?.currentLead
   if (!lead) return ''
   if (lead.leader === 'Tied') return 'Currently tied!'
   const perspectiveName = userInfos.value[leadPerspective.value].name
   const verb = lead.leader === perspectiveName ? 'leads' : 'trails'
-  return `${perspectiveName} ${verb} by ${lead.amount}`
+  return `${perspectiveName} currently ${verb} by ${lead.amount}.`
 })
 
 const userInfos = computed(() => {
