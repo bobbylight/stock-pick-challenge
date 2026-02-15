@@ -5,18 +5,15 @@
         cols="12"
         sm="6"
       >
-        <v-skeleton-loader
-          v-if="loading"
-          elevation="2"
-          type="article"
-        />
         <v-card
           class="user-card"
-          v-if="!loading && userData"
+          title="Summary"
         >
-          <v-card-title>Summary</v-card-title>
-
-          <v-card-text>
+          <v-skeleton-loader
+            v-if="loading"
+            type="text@4"
+          />
+          <v-card-text v-if="!loading && userData">
             <user-summary
               :portfolio-name="portfolioName"
               :user-data="userData"
@@ -29,18 +26,15 @@
         cols="12"
         sm="6"
       >
-        <v-skeleton-loader
-          v-if="loading"
-          elevation="2"
-          type="article"
-        />
         <v-card
           class="user-card"
-          v-if="!loading && userData"
+          title="Today's Changes"
         >
-          <v-card-title>Today's Changes</v-card-title>
-
-          <v-card-text>
+          <v-skeleton-loader
+            v-if="loading"
+            type="text@4"
+          />
+          <v-card-text v-if="!loading && userData">
             <todays-changes
               :portfolio-name="portfolioName"
               :user-data="userData"
@@ -52,18 +46,17 @@
 
     <v-row>
       <v-col>
-        <v-skeleton-loader
-          v-if="loading"
-          elevation="2"
-          type="article"
-        />
         <v-card
           class="user-card"
-          v-if="!loading && userData"
+          title="Notable Movers"
         >
-          <v-card-title>Notable Movers</v-card-title>
-
-          <v-card-text>
+          <v-skeleton-loader
+            v-if="loading"
+            type="list-item-three-line"
+          />
+          <v-card-text
+            v-if="!loading && userData"
+          >
             <notable-movers
               :portfolio-name="portfolioName"
               :user-data="userData"
@@ -75,15 +68,9 @@
 
     <v-row>
       <v-col>
-        <v-skeleton-loader
-          v-if="loading"
-          elevation="2"
-          type="article"
-        />
         <v-card
           class="user-card"
           title="YTD Growth"
-          v-if="!loading && userData"
         >
           <template #append>
             <v-menu
@@ -140,7 +127,14 @@
             </v-menu>
           </template>
           <v-card-text>
-            <div class="chart-wrapper">
+            <v-skeleton-loader
+              v-if="loading"
+              type="image"
+            />
+            <div
+              class="chart-wrapper"
+              v-if="!loading && userData"
+            >
               <date-range-selector v-model="dayCount" />
               <portfolio-growth-chart
                 :history="userData.history"
@@ -157,26 +151,26 @@
 
     <v-row>
       <v-col>
-        <v-skeleton-loader
-          v-if="loading"
-          elevation="2"
-          type="table"
-        />
         <v-card
           class="user-card"
-          v-if="!loading && userData"
+          title="Current Holdings"
         >
-          <v-card-title>Current Holdings</v-card-title>
           <v-card-text class="pa-0">
+            <v-skeleton-loader
+              v-if="loading"
+              type="table"
+            />
             <lot-table
               class="d-none d-sm-flex"
               :portfolio-name="portfolioName"
               :user-data="userData"
+              v-if="!loading && userData"
             />
             <lot-listing
               class="d-flex d-sm-none"
               :portfolio-name="portfolioName"
               :user-data="userData"
+              v-if="!loading && userData"
             />
           </v-card-text>
         </v-card>

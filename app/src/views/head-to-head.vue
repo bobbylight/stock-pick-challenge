@@ -2,16 +2,10 @@
   <v-container>
     <v-row>
       <v-col>
-        <v-skeleton-loader
-          v-if="loading"
-          elevation="2"
-          type="article"
-        />
         <v-card
           class="user-card"
           title="Head to Head!"
           subtitle="Overall portfolio performance this year."
-          v-if="!loading"
         >
           <template #append>
             <v-menu
@@ -53,7 +47,14 @@
             </v-menu>
           </template>
           <v-card-text>
-            <div class="chart-wrapper">
+            <v-skeleton-loader
+              v-if="loading"
+              type="article"
+            />
+            <div
+              class="chart-wrapper"
+              v-if="!loading"
+            >
               <date-range-selector v-model="dayCount" />
               <comparison-chart
                 :user-infos="userInfos"
@@ -66,7 +67,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row v-if="!loading">
+    <v-row>
       <v-col>
         <v-card
           class="user-card"
@@ -74,7 +75,14 @@
           :subtitle="dailyChangeSubtitle"
         >
           <v-card-text>
-            <div class="chart-wrapper">
+            <v-skeleton-loader
+              v-if="loading"
+              type="article"
+            />
+            <div
+              class="chart-wrapper"
+              v-if="!loading"
+            >
               <daily-change-chart
                 :user-infos="userInfos"
               />
@@ -83,7 +91,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row v-if="!loading">
+    <v-row>
       <v-col>
         <v-card
           class="user-card"
@@ -109,7 +117,14 @@
             </v-btn-toggle>
           </template>
           <v-card-text>
-            <div class="chart-wrapper">
+            <v-skeleton-loader
+              v-if="loading"
+              type="article"
+            />
+            <div
+              class="chart-wrapper"
+              v-if="!loading"
+            >
               <lead-tracker-chart
                 ref="leadTrackerRef"
                 :user-infos="userInfos"
