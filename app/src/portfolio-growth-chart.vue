@@ -25,6 +25,7 @@ import Chart from 'chart.js/auto'
 import { currency, percentage } from './app-filters'
 import PortfolioGrowthChartTooltip from './portfolio-growth-chart-tooltip.vue'
 import benchmarkData from '@/benchmark-data'
+import { progressiveLineAnimation, tickColor, gridColor } from './chart-animation'
 
 const store = useStore()
 const route = useRoute()
@@ -263,6 +264,18 @@ watch(comparisonsRef, () => {
   chart.value.update()
 })
 
+watch(() => vuetifyTheme.global.name.value, () => {
+  const isDark = vuetifyTheme.global.name.value === 'dark'
+  const tColor = tickColor(isDark)
+  const gColor = gridColor(isDark)
+  chart.value.options.scales.x.ticks.color = tColor
+  chart.value.options.scales.y.ticks.color = tColor
+  chart.value.options.scales.x.grid.color = gColor
+  chart.value.options.scales.y.grid.color = gColor
+  chart.value.options.plugins.legend.labels.color = tColor
+  chart.value.update()
+})
+
 // We must watch for route updates since our chart isn't bound
 // to data and won't know to rerender when switching between
 // users' pages
@@ -305,12 +318,20 @@ onMounted(() => {
     ],
     options: {
 
+      animation: progressiveLineAnimation,
+
       interaction: {
         mode: 'index',
         intersect: false,
       },
 
       plugins: {
+
+        legend: {
+          labels: {
+            color: tickColor(vuetifyTheme.global.name.value === 'dark'),
+          },
+        },
 
         tooltip: {
           mode: 'index', // Show all dataset values for this x-coordinate
@@ -342,7 +363,11 @@ onMounted(() => {
 
       scales: {
         x: {
+          grid: {
+            color: gridColor(vuetifyTheme.global.name.value === 'dark'),
+          },
           ticks: {
+            color: tickColor(vuetifyTheme.global.name.value === 'dark'),
             maxTicksLimit: 10,
             callback: function (index, value) {
               // Abbreviate the year, but keep label array using 4-digit year for tooltip
@@ -351,7 +376,11 @@ onMounted(() => {
           },
         },
         y: {
+          grid: {
+            color: gridColor(vuetifyTheme.global.name.value === 'dark'),
+          },
           ticks: {
+            color: tickColor(vuetifyTheme.global.name.value === 'dark'),
             callback: percentages.value
               ? percentageYAxisLabelCallback
               : currencyYAxisLabelCallback,
