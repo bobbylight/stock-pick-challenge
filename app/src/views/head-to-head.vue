@@ -65,15 +65,55 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row v-if="!loading">
+      <v-col>
+        <v-card
+          class="user-card"
+          title="Lead Tracker"
+          :subtitle="leadSubtitle"
+        >
+          <template #append>
+            <v-btn-toggle
+              v-model="leadPerspective"
+              mandatory
+              density="compact"
+              color="primary"
+              variant="outlined"
+            >
+              <v-btn
+                v-for="(user, index) in userInfos"
+                :key="user.name"
+                :value="index"
+                size="small"
+              >
+                {{ user.name }}
+              </v-btn>
+            </v-btn-toggle>
+          </template>
+          <v-card-text>
+            <div class="chart-wrapper">
+              <lead-tracker-chart
+                ref="leadTrackerRef"
+                :user-infos="userInfos"
+                :day-count="dayCount"
+                :data-type="chartDataType"
+                :perspective="leadPerspective"
+              />
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useStore } from '@/store'
 import ComparisonChart from '../comparison-chart.vue'
 import DateRangeSelector from '@/date-range-selector.vue'
+import LeadTrackerChart from '../lead-tracker-chart.vue'
 
 const store = useStore()
 
@@ -84,6 +124,17 @@ const chartDataType = ref('dollars')
 const chartComparisons = ref([])
 const { carrow, loading, robert } = storeToRefs(store)
 const dayCount = ref(-1)
+const leadTrackerRef = ref(null)
+const leadPerspective = ref(0)
+
+const leadSubtitle = computed(() => {
+  const lead = leadTrackerRef.value?.currentLead
+  if (!lead) return ''
+  if (lead.leader === 'Tied') return 'Currently tied!'
+  const perspectiveName = userInfos.value[leadPerspective.value].name
+  const verb = lead.leader === perspectiveName ? 'leads' : 'trails'
+  return `${perspectiveName} ${verb} by ${lead.amount}`
+})
 
 const userInfos = computed(() => {
   return [
@@ -118,6 +169,7 @@ const loadPreferences = () => {
       chartType.value = json.chartType || 'line'
       chartDataType.value = json.chartDataType || 'dollars'
       chartComparisons.value = json.benchmarks || []
+      leadPerspective.value = json.leadPerspective || 0
     } catch (e) {
       console.error('Error loading preferences', e)
       localStorage.removeItem(key)
@@ -132,11 +184,14 @@ const storePreferences = () => {
     chartType: chartType.value,
     chartDataType: chartDataType.value,
     benchmarks: chartComparisons.value,
+    leadPerspective: leadPerspective.value,
   }
 
   localStorage.setItem(key, JSON.stringify(value))
   console.log('Preferences updated!')
 }
+
+watch(leadPerspective, storePreferences)
 </script>
 
 <style scoped>
