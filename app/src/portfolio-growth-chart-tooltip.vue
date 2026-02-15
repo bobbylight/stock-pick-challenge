@@ -126,10 +126,21 @@ const title = () => lastTitle.value = props.visible && props.model ? props.model
 
 <style scoped>
 .chart-tooltip-wrapper {
+  --tooltip-bg: #1e293be8;
+  --tooltip-text: #ffffff;
+  --color-square-border: #e0e0e080;
   font-size: smaller;
   position: absolute;
   pointer-events: none;
   display: table;
+}
+
+.v-theme--dark {
+  .chart-tooltip-wrapper {
+    --tooltip-bg: #334155e8;
+    --tooltip-text: #e2e8f0;
+    --color-square-border: #94a3b840;
+  }
 }
 
 .arrow-wrapper {
@@ -137,7 +148,7 @@ const title = () => lastTitle.value = props.visible && props.model ? props.model
   vertical-align: middle;
 }
 .chart-tooltip-arrow {
-  background: #1e293be8;
+  background: var(--tooltip-bg);
   width: 1rem;
   height: 1rem;
 }
@@ -150,8 +161,8 @@ const title = () => lastTitle.value = props.visible && props.model ? props.model
 
 .portfolio-growth-chart-tooltip {
   display:table-cell;
-  background: #1e293be8;
-  color: white;
+  background: var(--tooltip-bg);
+  color: var(--tooltip-text);
   padding: .5rem .75rem;
   border-radius: 8px;
   backdrop-filter: blur(4px);
@@ -171,7 +182,7 @@ const title = () => lastTitle.value = props.visible && props.model ? props.model
   height: 1rem;
   display: inline-block;
   vertical-align: text-bottom;
-  border: 1px solid #e0e0e080;
+  border: 1px solid var(--color-square-border);
 }
 
 .stocky-dataset-label {
