@@ -14,6 +14,7 @@ const data = {
     history: [],
   },
   history: {},
+  sectors: {},
 }
 
 export const useStore = defineStore('store', {
@@ -28,6 +29,7 @@ export const useStore = defineStore('store', {
         `/data/${year}/robert.json`,
         `/data/${year}/portfolio-history-robert.json`,
         `/data/${year}/ticker-history.json`,
+        '/data/sectors.json',
       ]
       Promise.all(urls.map(url => fetch(url).then(response => response.json())))
         .then(responses => {
@@ -36,6 +38,12 @@ export const useStore = defineStore('store', {
           const robert = responses[2]
           const robertHistory = responses[3]
           const tickerHistory = responses[4]
+          const sectorsArray = responses[5]
+
+          const sectors = {}
+          sectorsArray.forEach(entry => {
+            sectors[entry.ticker] = { sector: entry.sector, industry: entry.industry }
+          })
 
           const startTime = Date.now()
           this.$patch(state => {
@@ -49,6 +57,7 @@ export const useStore = defineStore('store', {
               history: robertHistory,
             }
             state.history = tickerHistory
+            state.sectors = sectors
           })
           const totalTime = Date.now() - startTime
           console.log(`Loaded data for year ${year} in ${totalTime}ms`)
@@ -170,6 +179,10 @@ export const useStore = defineStore('store', {
     // approaches:
     //   * We can't compare the history lengths for equality since a foreign exchange may trade on US holidays
     //   * We can't compare the last trade date in the histories for the same reason
+    sectorInfo: state => ticker => {
+      return state.sectors[ticker] || null
+    },
+
     stillActivelyTrading: state => ticker => {
       const tradingDayCount = state.history['^dji']?.history?.length ?? 0
       const tickerTradingDayCount = state.history[ticker]?.history?.length ?? 0
