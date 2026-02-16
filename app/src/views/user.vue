@@ -185,6 +185,27 @@
       >
         <v-card
           class="user-card"
+          title="Top Performers"
+        >
+          <v-card-text>
+            <v-skeleton-loader
+              ref="topPerformersChartRef"
+              v-if="loading || !topPerformersChartInView"
+              type="image"
+            />
+            <top-performers-chart
+              v-if="!loading && topPerformersChartInView && userData"
+              :portfolio-name="portfolioName"
+            />
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <v-card
+          class="user-card"
           title="Sector Allocation"
         >
           <v-card-text>
@@ -220,6 +241,7 @@ import benchmarkData from '@/benchmark-data'
 import NotableMovers from '@/notable-movers.vue'
 import DateRangeSelector from '@/date-range-selector.vue'
 import SectorAllocationChart from '@/sector-allocation-chart.vue'
+import TopPerformersChart from '@/top-performers-chart.vue'
 
 const store = useStore()
 const route = useRoute()
@@ -235,6 +257,7 @@ const { loading } = storeToRefs(store)
 
 const { target: growthChartRef, isInView: growthChartInView } = useInView()
 const { target: sectorChartRef, isInView: sectorChartInView } = useInView()
+const { target: topPerformersChartRef, isInView: topPerformersChartInView } = useInView()
 
 const portfolioName = computed(() => route.params.user)
 
