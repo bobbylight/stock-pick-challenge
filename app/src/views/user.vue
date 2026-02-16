@@ -176,6 +176,29 @@
         </v-card>
       </v-col>
     </v-row>
+
+    <v-row>
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <v-card
+          class="user-card"
+          title="Sector Allocation"
+        >
+          <v-card-text>
+            <v-skeleton-loader
+              v-if="loading"
+              type="image"
+            />
+            <sector-allocation-chart
+              v-if="!loading && userData"
+              :portfolio-name="portfolioName"
+            />
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -192,6 +215,7 @@ import TodaysChanges from '@/todays-changes.vue'
 import benchmarkData from '@/benchmark-data'
 import NotableMovers from '@/notable-movers.vue'
 import DateRangeSelector from '@/date-range-selector.vue'
+import SectorAllocationChart from '@/sector-allocation-chart.vue'
 
 const store = useStore()
 const route = useRoute()
