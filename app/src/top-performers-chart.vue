@@ -1,8 +1,6 @@
 <template>
   <canvas
     ref="canvas"
-    width="640"
-    height="520"
   />
 </template>
 
@@ -78,13 +76,14 @@ onMounted(() => {
       }],
     },
     options: {
+      aspectRatio: 1,
       indexAxis: 'y',
       plugins: {
         legend: { display: false },
         datalabels: {
           anchor: 'end',
-          align: 'end',
-          color: tickColor(isDark),
+          align: 'start',
+          color: '#fff',
           font: { weight: 'bold' },
           formatter: value => `${value.toFixed(1)}%`,
         },
@@ -109,7 +108,7 @@ onMounted(() => {
 watch(() => vuetifyTheme.global.name.value, () => {
   const isDark = vuetifyTheme.global.name.value === 'dark'
   const c = chart.value
-  c.options.plugins.datalabels.color = tickColor(isDark)
+  c.options.plugins.datalabels.color = '#fff'
   c.options.scales.x.ticks.color = tickColor(isDark)
   c.options.scales.x.grid.color = gridColor(isDark)
   c.options.scales.y.ticks.color = tickColor(isDark)
