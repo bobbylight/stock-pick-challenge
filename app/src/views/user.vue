@@ -79,8 +79,8 @@
             >
               <template #activator="{ props }">
                 <v-btn
-                  flat
-                  icon="mdi-settings"
+                  variant="text"
+                  :icon="mdiCog"
                   v-bind="props"
                 />
               </template>
@@ -210,6 +210,7 @@ import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useStore } from '@/store'
 import { useInView } from '@/composables/useInView'
+import { mdiCog } from '@mdi/js'
 import LotListing from '@/lot-listing.vue'
 import LotTable from '@/lot-table.vue'
 import PortfolioGrowthChart from '@/portfolio-growth-chart.vue'

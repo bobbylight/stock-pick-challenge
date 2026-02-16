@@ -13,8 +13,8 @@
             >
               <template #activator="{ props }">
                 <v-btn
-                  flat
-                  icon="mdi-settings"
+                  variant="text"
+                  :icon="mdiCog"
                   v-bind="props"
                 />
               </template>
@@ -148,6 +148,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useStore } from '@/store'
 import { useInView } from '@/composables/useInView'
+import { mdiCog } from '@mdi/js'
 import ComparisonChart from '../comparison-chart.vue'
 import DateRangeSelector from '@/date-range-selector.vue'
 import DailyChangeChart from '../daily-change-chart.vue'
