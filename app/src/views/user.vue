@@ -128,12 +128,13 @@
           </template>
           <v-card-text>
             <v-skeleton-loader
-              v-if="loading"
+              ref="growthChartRef"
+              v-if="loading || !growthChartInView"
               type="image"
             />
             <div
               class="chart-wrapper"
-              v-if="!loading && userData"
+              v-if="!loading && growthChartInView && userData"
             >
               <date-range-selector v-model="dayCount" />
               <portfolio-growth-chart
@@ -188,11 +189,12 @@
         >
           <v-card-text>
             <v-skeleton-loader
-              v-if="loading"
+              ref="sectorChartRef"
+              v-if="loading || !sectorChartInView"
               type="image"
             />
             <sector-allocation-chart
-              v-if="!loading && userData"
+              v-if="!loading && sectorChartInView && userData"
               :portfolio-name="portfolioName"
             />
           </v-card-text>
@@ -207,6 +209,7 @@ import { computed, onBeforeMount, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useStore } from '@/store'
+import { useInView } from '@/composables/useInView'
 import LotListing from '@/lot-listing.vue'
 import LotTable from '@/lot-table.vue'
 import PortfolioGrowthChart from '@/portfolio-growth-chart.vue'
@@ -228,6 +231,9 @@ const chartComparisons = ref([])
 const benchmarks = ref(benchmarkData)
 const dayCount = ref(-1)
 const { loading } = storeToRefs(store)
+
+const { target: growthChartRef, isInView: growthChartInView } = useInView()
+const { target: sectorChartRef, isInView: sectorChartInView } = useInView()
 
 const portfolioName = computed(() => route.params.user)
 
