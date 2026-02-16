@@ -49,7 +49,7 @@ exports.handler = async (event) => {
     const generatePortfolioScript = path.resolve(__dirname, 'scripts/generate-portfolio-history.js');
 
     for (const portfolioFile of portfolioFiles) {
-        if (path.extname(portfolioFile) === '.json') {
+        if (path.extname(portfolioFile) === '.json' && !portfolioFile.startsWith('sectors')) {
             const portfolioPath = path.join(portfolioDir, portfolioFile);
             console.log(`Processing portfolio: ${portfolioPath}`);
             const { stdout: portfolioStdout, stderr: portfolioStderr } = await execShellCommand(`node ${generatePortfolioScript} ${portfolioPath}`);
