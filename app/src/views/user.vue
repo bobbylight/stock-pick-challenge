@@ -48,6 +48,27 @@
       <v-col>
         <v-card
           class="user-card"
+          title="Today's Performance"
+        >
+          <v-card-text>
+            <v-skeleton-loader
+              ref="treemapChartRef"
+              v-if="loading || !treemapChartInView"
+              type="image"
+            />
+            <daily-treemap-chart
+              v-if="!loading && treemapChartInView && userData"
+              :portfolio-name="portfolioName"
+            />
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col>
+        <v-card
+          class="user-card"
           title="Notable Movers"
         >
           <v-skeleton-loader
@@ -242,6 +263,7 @@ import NotableMovers from '@/notable-movers.vue'
 import DateRangeSelector from '@/date-range-selector.vue'
 import SectorAllocationChart from '@/sector-allocation-chart.vue'
 import TopPerformersChart from '@/top-performers-chart.vue'
+import DailyTreemapChart from '@/daily-treemap-chart.vue'
 
 const store = useStore()
 const route = useRoute()
@@ -256,6 +278,7 @@ const dayCount = ref(-1)
 const { loading } = storeToRefs(store)
 
 const { target: growthChartRef, isInView: growthChartInView } = useInView()
+const { target: treemapChartRef, isInView: treemapChartInView } = useInView()
 const { target: sectorChartRef, isInView: sectorChartInView } = useInView()
 const { target: topPerformersChartRef, isInView: topPerformersChartInView } = useInView()
 
