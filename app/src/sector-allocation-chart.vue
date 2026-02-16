@@ -8,14 +8,11 @@
 
 <script setup>
 import { computed, onMounted, ref, shallowRef, watch } from 'vue'
-import { useTheme } from 'vuetify'
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import { useStore } from './store'
-import { tickColor } from './chart-animation'
 
 const store = useStore()
-const vuetifyTheme = useTheme()
 
 const props = defineProps({
   portfolioName: {
@@ -68,8 +65,6 @@ const canvas = ref(null)
 const chart = shallowRef(null)
 
 onMounted(() => {
-  const isDark = vuetifyTheme.global.name.value === 'dark'
-
   chart.value = new Chart(canvas.value, {
     type: 'pie',
     plugins: [ChartDataLabels],
@@ -83,11 +78,7 @@ onMounted(() => {
     },
     options: {
       plugins: {
-        legend: {
-          labels: {
-            color: tickColor(isDark),
-          },
-        },
+        legend: { display: false },
         tooltip: {
           filter: context => {
             const total = context.dataset.data.reduce((sum, val) => sum + val, 0)
@@ -120,12 +111,6 @@ onMounted(() => {
       },
     },
   })
-})
-
-watch(() => vuetifyTheme.global.name.value, () => {
-  const isDark = vuetifyTheme.global.name.value === 'dark'
-  chart.value.options.plugins.legend.labels.color = tickColor(isDark)
-  chart.value.update()
 })
 
 watch(sectorData, newData => {
