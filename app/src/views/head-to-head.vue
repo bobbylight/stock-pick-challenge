@@ -48,12 +48,13 @@
           </template>
           <v-card-text>
             <v-skeleton-loader
-              v-if="loading"
-              type="article"
+              ref="comparisonRef"
+              v-if="loading || !comparisonInView"
+              type="article, image"
             />
             <div
               class="chart-wrapper"
-              v-if="!loading"
+              v-if="!loading && comparisonInView"
             >
               <date-range-selector v-model="dayCount" />
               <comparison-chart
@@ -76,12 +77,13 @@
         >
           <v-card-text>
             <v-skeleton-loader
-              v-if="loading"
-              type="article"
+              ref="dailyChangeRef"
+              v-if="loading || !dailyChangeInView"
+              type="article, image"
             />
             <div
               class="chart-wrapper"
-              v-if="!loading"
+              v-if="!loading && dailyChangeInView"
             >
               <daily-change-chart
                 :user-infos="userInfos"
@@ -118,12 +120,13 @@
           </template>
           <v-card-text>
             <v-skeleton-loader
-              v-if="loading"
-              type="article"
+              ref="leadTrackerCardRef"
+              v-if="loading || !leadTrackerInView"
+              type="article, image"
             />
             <div
               class="chart-wrapper"
-              v-if="!loading"
+              v-if="!loading && leadTrackerInView"
             >
               <lead-tracker-chart
                 ref="leadTrackerRef"
@@ -144,6 +147,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useStore } from '@/store'
+import { useInView } from '@/composables/useInView'
 import ComparisonChart from '../comparison-chart.vue'
 import DateRangeSelector from '@/date-range-selector.vue'
 import DailyChangeChart from '../daily-change-chart.vue'
@@ -160,6 +164,10 @@ const { carrow, loading, robert } = storeToRefs(store)
 const dayCount = ref(-1)
 const leadTrackerRef = ref(null)
 const leadPerspective = ref(0)
+
+const { target: comparisonRef, isInView: comparisonInView } = useInView()
+const { target: dailyChangeRef, isInView: dailyChangeInView } = useInView()
+const { target: leadTrackerCardRef, isInView: leadTrackerInView } = useInView()
 
 const dailyChangeTitle = computed(() => {
   const history = robert.value.history

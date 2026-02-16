@@ -20,7 +20,7 @@ nvm use                    # Switch to Node 24.13.0
 npm install                # Install dependencies
 npm run dev                # Start dev server
 npm run build              # Build to dist/
-npm run test:unit          # Run unit tests with coverage
+npm run test:unit          # Run unit tests with coverage (currently fails, no tests)
 npm run lint               # Lint and auto-fix
 npm run lint:nofix         # Lint without fixing (CI mode, fails on warnings)
 ```
