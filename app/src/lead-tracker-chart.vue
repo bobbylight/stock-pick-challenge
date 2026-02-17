@@ -146,8 +146,44 @@ onMounted(() => {
   const delta = computeDelta()
   const isDark = vuetifyTheme.global.name.value === 'dark'
 
+  // Plugin that creates a vertical gradient for the line color, transitioning from green
+  // to red at the y=0 crossing point. Without this, the data curve can only change colors
+  // at data points, not in between them.
+  const zeroLineGradientPlugin = {
+    id: 'zeroLineGradient',
+    beforeDatasetsDraw(chart) {
+      const yScale = chart.scales.y
+      const { top, bottom } = chart.chartArea
+      if (top >= bottom) return
+      const zeroPixel = yScale.getPixelForValue(0)
+      const ctx = chart.ctx
+      const gradient = ctx.createLinearGradient(0, top, 0, bottom)
+
+      if (zeroPixel <= top) {
+        gradient.addColorStop(0, RED)
+        gradient.addColorStop(1, RED)
+      } else if (zeroPixel >= bottom) {
+        gradient.addColorStop(0, GREEN)
+        gradient.addColorStop(1, GREEN)
+      } else {
+        const zeroStop = (zeroPixel - top) / (bottom - top)
+        gradient.addColorStop(0, GREEN)
+        gradient.addColorStop(zeroStop, GREEN)
+        gradient.addColorStop(zeroStop, RED)
+        gradient.addColorStop(1, RED)
+      }
+
+      // Apply gradient directly to the line element
+      const meta = chart.getDatasetMeta(0)
+      if (meta.dataset) {
+        meta.dataset.options.borderColor = gradient
+      }
+    },
+  }
+
   chart.value = new Chart(canvas.value, {
     type: 'line',
+    plugins: [zeroLineGradientPlugin],
     data: {
       labels: generateLabels(),
       datasets: [
@@ -158,6 +194,8 @@ onMounted(() => {
           backgroundColor: `${GREEN}40`,
           fill: { target: 'origin', above: `${GREEN}40`, below: 'transparent' },
           pointRadius: 0,
+          pointHoverBackgroundColor: ctx => ctx.raw >= 0 ? GREEN : RED,
+          pointHoverBorderColor: ctx => ctx.raw >= 0 ? GREEN : RED,
           lineTension: 0.4,
         },
         {
@@ -197,11 +235,12 @@ onMounted(() => {
 
             visible.value = true
             tooltipModel.value = tooltip
+            const personAhead = tooltip.dataPoints[0].raw >= 0
 
             // Provide a single synthetic dataset for the tooltip display
             tooltipDatasets.value = [{
-              label: `${props.userInfos[props.perspective].name} lead`,
-              borderColor: tooltip.dataPoints[0].raw >= 0 ? GREEN : RED,
+              label: `${props.userInfos[props.perspective].name} ${personAhead ? 'leading' : 'trailing'}`,
+              borderColor: personAhead ? GREEN : RED,
             }]
 
             const position = c.canvas.getBoundingClientRect()

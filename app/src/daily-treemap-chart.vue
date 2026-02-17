@@ -50,8 +50,8 @@ const treemapLogoPlugin = {
       const hasLogo = width >= MIN_LOGO_CELL && height >= MIN_LOGO_CELL
       const offsetFromCenter = 2
 
-      // Draw logo above center
-      if (hasLogo) {
+      // Draw logo above center (skip in dev mode to avoid API calls)
+      if (hasLogo && !import.meta.env.DEV) {
         const img = getLogoImage(data.ticker, chart)
         if (img?.complete && img.naturalWidth) {
           const imgSize = Math.min(width, height) * 0.2
@@ -182,11 +182,12 @@ onMounted(() => {
               const data = ctx.raw?._data
               if (!data) return ''
               const sign = data.dailyChangePct >= 0 ? '+' : ''
-              const changeLine = `Daily: ${sign}${(data.dailyChangePct * 100).toFixed(2)}%`
-              const valueLine = `Value: $${data.marketValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+              const changeLine = `Change: ${sign}${(data.dailyChangePct * 100).toFixed(2)}%`
+              const valueLine = `Value: $${data.marketValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
               return [changeLine, valueLine]
             },
           },
+          displayColors: false,
         },
       },
     },

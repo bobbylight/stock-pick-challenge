@@ -96,7 +96,7 @@ onMounted(() => {
         tooltip: {
           callbacks: {
             title: () => getLatestDate(),
-            label: ctx => `${ctx.label}: ${percentage(ctx.raw)}`,
+            label: ctx => ` ${ctx.label}: ${percentage(ctx.raw)}`,
           },
         },
       },

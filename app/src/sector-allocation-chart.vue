@@ -77,9 +77,13 @@ onMounted(() => {
       }],
     },
     options: {
+      layout: {
+        padding: 20,
+      },
       plugins: {
         legend: { display: false },
         tooltip: {
+          displayColors: false,
           filter: context => {
             const total = context.dataset.data.reduce((sum, val) => sum + val, 0)
             const pct = (context.parsed / total) * 100
@@ -89,7 +93,7 @@ onMounted(() => {
             label: context => {
               const total = context.dataset.data.reduce((sum, val) => sum + val, 0)
               const pct = ((context.parsed / total) * 100).toFixed(1)
-              return ` ${context.label}: ${pct}%`
+              return `${pct}%`
             },
           },
         },
