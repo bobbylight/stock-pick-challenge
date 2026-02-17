@@ -52,6 +52,10 @@ body {
     color: #e2e8f0;
 }
 
+.v-application .v-card .v-card-subtitle {
+    white-space: normal;
+}
+
 .primary-delta-gain {
     color: var(--color-gain);
     font-weight: bold;

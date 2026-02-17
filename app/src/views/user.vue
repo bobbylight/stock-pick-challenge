@@ -172,34 +172,6 @@
     </v-row>
 
     <v-row>
-      <v-col>
-        <v-card
-          class="user-card"
-          title="Current Holdings"
-        >
-          <v-card-text class="pa-0">
-            <v-skeleton-loader
-              v-if="loading"
-              type="table"
-            />
-            <lot-table
-              class="d-none d-sm-flex"
-              :portfolio-name="portfolioName"
-              :user-data="userData"
-              v-if="!loading && userData"
-            />
-            <lot-listing
-              class="d-flex d-sm-none"
-              :portfolio-name="portfolioName"
-              :user-data="userData"
-              v-if="!loading && userData"
-            />
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-
-    <v-row>
       <v-col
         cols="12"
         md="6"
@@ -238,6 +210,34 @@
             <sector-allocation-chart
               v-if="!loading && sectorChartInView && userData"
               :portfolio-name="portfolioName"
+            />
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col>
+        <v-card
+          class="user-card"
+          title="Current Holdings"
+        >
+          <v-card-text class="pa-0">
+            <v-skeleton-loader
+              v-if="loading"
+              type="table"
+            />
+            <lot-table
+              class="d-none d-sm-flex"
+              :portfolio-name="portfolioName"
+              :user-data="userData"
+              v-if="!loading && userData"
+            />
+            <lot-listing
+              class="d-flex d-sm-none"
+              :portfolio-name="portfolioName"
+              :user-data="userData"
+              v-if="!loading && userData"
             />
           </v-card-text>
         </v-card>

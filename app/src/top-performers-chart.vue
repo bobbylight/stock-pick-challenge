@@ -87,6 +87,12 @@ onMounted(() => {
           font: { weight: 'bold' },
           formatter: value => `${value.toFixed(1)}%`,
         },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.raw.toFixed(1)}%`,
+          },
+          displayColors: false,
+        },
       },
       scales: {
         x: {
