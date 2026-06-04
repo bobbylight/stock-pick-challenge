@@ -94,13 +94,18 @@ date = getNextTradingDay(date)
 // Loop through every trading day up to day
 const today = new Date()
 today.setHours(16) // 4pm ET, the time zone we run in
+const djiHistory = tickerHistory['^dji'].history
+
 while (new Date(date) < today) {
 
+    // Skip US market holidays. getNextTradingDay only skips weekends, so we
+    // check DJI as the authoritative signal that US markets were open that day.
+    if (!djiHistory.find(r => r.date === date)) {
+        date = getNextTradingDay(date)
+        continue
+    }
+
     let value = 0 // cash added later to keep logic simpler
-    // Hack to ensure we properly handle buyout, no-longer-traded records.
-    // For holidays we assume a 0 value => no trades that day. But we don't
-    // know how to account for holidays when using the "last" value for
-    // tickers no longer trading
     let allAdded = true
 
     data.positions.forEach((position) => {
