@@ -41,10 +41,10 @@ const computeLatestChange = userIndex => {
 }
 
 const computeMarketChange = () => {
-  const djiHistory = store.history['^dji']?.history
-  if (!djiHistory || djiHistory.length < 2) return 0
-  const prev = djiHistory[djiHistory.length - 2].close
-  const curr = djiHistory[djiHistory.length - 1].close
+  const gspcHistory = store.history['^gspc']?.history
+  if (!gspcHistory || gspcHistory.length < 2) return 0
+  const prev = gspcHistory[gspcHistory.length - 2].close
+  const curr = gspcHistory[gspcHistory.length - 1].close
   return (curr - prev) / prev
 }
 
