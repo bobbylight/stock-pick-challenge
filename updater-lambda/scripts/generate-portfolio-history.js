@@ -70,9 +70,14 @@ const getHistoryRecord = (ticker, historyArray, targetDate) => {
     }
 
     // ISO-8601 date strings are ordered.
-    // Also note this may be undefined if this script is run on the weekend of a market holiday.
-    // That's expected, and the calling code will handle this properly
-    return historyArray.find(record => record.date === targetDate)
+    // Use the most recent prior record if the exact date isn't found — handles tickers on
+    // foreign exchanges with different holiday calendars (e.g. lun.to missing Victoria Day).
+    const exact = historyArray.find(record => record.date === targetDate)
+    if (exact) {
+        return exact
+    }
+    const prior = historyArray.filter(record => record.date < targetDate)
+    return prior.length ? prior[prior.length - 1] : undefined
 }
 
 
