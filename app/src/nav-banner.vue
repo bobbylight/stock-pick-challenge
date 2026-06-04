@@ -76,6 +76,7 @@ const setYear = year => store.setYear(year)
 
   h1 {
     font-size: 48px;
+    margin: 0;
     a {
       text-decoration: none;
     }
